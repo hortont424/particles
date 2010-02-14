@@ -1,6 +1,6 @@
 #import <Cocoa/Cocoa.h>
 
-@interface IPControlPointView : NSObject
+@interface IPControlPointView : NSView
 {
 
 }
