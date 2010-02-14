@@ -6,6 +6,8 @@
 @interface IPControlPointView : NSView
 {
     NSMutableArray * controlPoints;
+    IPControlPoint * selectedControlPoint;
+    IPControlPoint * highlightedControlPoint;
 }
 
 @end

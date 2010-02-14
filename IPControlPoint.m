@@ -86,16 +86,16 @@
     
     switch(type)
     {
-        IP_CONTROL_POINT_SMOOTH:
+        case IP_CONTROL_POINT_SMOOTH:
             otherPolarPoint.y = thisPolarPoint.y + M_PI;
             controlPoints[!index] = NSPolarToCartesian(otherPolarPoint);
             break;
-        IP_CONTROL_POINT_SMOOTH_SYMMETRIC:
+        case IP_CONTROL_POINT_SMOOTH_SYMMETRIC:
             otherPolarPoint.x = thisPolarPoint.x;
             otherPolarPoint.y = thisPolarPoint.y + M_PI;
             controlPoints[!index] = NSPolarToCartesian(otherPolarPoint);
             break;
-        IP_CONTROL_POINT_CORNER:
+        case IP_CONTROL_POINT_CORNER:
             break;
         default:
             NSLog(@"Invalid control point type: %d.", type);
@@ -119,13 +119,13 @@
     
     switch(type)
     {
-        IP_CONTROL_POINT_SMOOTH:
+        case IP_CONTROL_POINT_SMOOTH:
             break;
-        IP_CONTROL_POINT_SMOOTH_SYMMETRIC:
+        case IP_CONTROL_POINT_SMOOTH_SYMMETRIC:
             otherPolarPoint.x = newWeight;
             controlPoints[!index] = NSPolarToCartesian(otherPolarPoint);
             break;
-        IP_CONTROL_POINT_CORNER:
+        case IP_CONTROL_POINT_CORNER:
             break;
         default:
             NSLog(@"Invalid control point type: %d.", type);
