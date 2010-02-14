@@ -15,6 +15,7 @@
             valueOptions:NSMapTableStrongMemory
             capacity:32];
         
+        dragPoint = NSFarAwayPoint;
         controlPoints = [[NSMutableArray alloc] init];
         highlightedControlPoint = nil;
         
@@ -97,11 +98,17 @@
     trackingArea = [event trackingArea];
     hitPoint = [self convertPoint:[event locationInWindow] fromView:nil];
 
+    if(!NSComparePoint(dragPoint, NSFarAwayPoint))
+        [NSCursor hide];
+    else
+        [NSCursor unhide];
+    
     if ([self mouse:hitPoint inRect:[trackingArea rect]] ||
         highlightedControlPoint)
     {
         [[NSCursor crosshairCursor] set];
-    } else
+    }
+    else
     {
         [[NSCursor arrowCursor] set];
     }
@@ -129,6 +136,8 @@
 - (void)mouseUp:(NSEvent *) event
 {
     dragPoint = NSFarAwayPoint;
+    
+    [NSCursor unhide];
     
     if(selectedControlPoint == nil)
         return;
@@ -192,15 +201,15 @@
         if(controlPoint == selectedControlPoint &&
            selectedSubpoint == index)
         {
-            CGContextSetRGBStrokeColor(ctx, 0.6, 0.6, 0.2, 1.0);
-            CGContextSetRGBFillColor(ctx, 1.0, 1.0, 0.8, 1.0);
+            CGContextSetRGBStrokeColor(ctx, 0.788, 0.714, 0.110, 1.0);
+            CGContextSetRGBFillColor(ctx, 0.988, 0.914, 0.310, 1.0);
             CGContextSetLineWidth(ctx, 1.5);
         }
         else if(controlPoint == highlightedControlPoint &&
                 highlightedSubpoint == index)
         {
-            CGContextSetRGBStrokeColor(ctx, 0.2, 0.2, 0.6, 1.0);
-            CGContextSetRGBFillColor(ctx, 0.6, 0.6, 1.0, 1.0);
+            CGContextSetRGBStrokeColor(ctx, 0.247, 0.424, 0.612, 1.0);
+            CGContextSetRGBFillColor(ctx, 0.447, 0.624, 0.812, 1.0);
             CGContextSetLineWidth(ctx, 1.5);
         }
         else
