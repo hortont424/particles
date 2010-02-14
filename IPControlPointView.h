@@ -17,8 +17,7 @@
     NSPoint dragPoint;
 }
 
-- (void)createTrackingAreasForControlPoint:(IPControlPoint *)controlPoint
-    inside:(BOOL)inside;
+- (void)createTrackingAreasForControlPoint:(IPControlPoint *)controlPoint;
 - (void)drawPoint:(IPControlPoint *)controlPoint;
 
 @end

@@ -25,19 +25,19 @@
         [pt setControlPoint:1 toPoint:NSMakePoint(-2, -12)];
         
         [controlPoints addObject:pt];
-        [self createTrackingAreasForControlPoint:pt inside:NO];
+        [self createTrackingAreasForControlPoint:pt];
     }
     return self;
 }
 
 - (void)createTrackingAreasForControlPoint:(IPControlPoint *)controlPoint
-    inside:(BOOL)inside
 {
     NSTrackingAreaOptions trackingOptions;
     trackingOptions = (NSTrackingMouseEnteredAndExited | 
                        NSTrackingMouseMoved |
                        NSTrackingActiveInActiveApp |
-                       NSTrackingEnabledDuringMouseDrag);
+                       NSTrackingEnabledDuringMouseDrag |
+                       NSTrackingCursorUpdate);
     
     NSPoint pt;
     NSRect rect;
@@ -54,18 +54,13 @@
         if(index < 2)
         {
             pt = [controlPoint absoluteControlPoint:index];
-            rect = NSRectAroundPoint(pt, 2, 2);
+            rect = NSRectAroundPoint(pt, 4, 4);
         }
         else
         {
             pt = [controlPoint point];
-            rect = NSRectAroundPoint(pt, 3, 3);
+            rect = NSRectAroundPoint(pt, 6, 6);
             [controlPointSubareas setObject:subareas forKey:controlPoint];
-        }
-        
-        if(index == 2 && inside)
-        {
-            trackingOptions = trackingOptions | NSTrackingAssumeInside;
         }
         
         ta = [[NSTrackingArea alloc] initWithRect:rect options:trackingOptions
@@ -81,6 +76,17 @@
     selectedControlPoint = highlightedControlPoint;
     selectedSubpoint = highlightedSubpoint;
     dragPoint = [NSEvent mouseLocation];
+    
+    if(selectedControlPoint != nil)
+    {
+        NSArray * areas;
+        areas = [controlPointSubareas objectForKey:selectedControlPoint];
+        for(NSTrackingArea * ta in areas)
+        {
+            [self removeTrackingArea:ta];
+        }
+    }
+    
     [self setNeedsDisplay:YES];
 }
 
@@ -91,13 +97,7 @@
     if(selectedControlPoint == nil)
         return;
     
-    NSArray * areas = [controlPointSubareas objectForKey:selectedControlPoint];
-    for(NSTrackingArea * ta in areas)
-    {
-        [self removeTrackingArea:ta];
-    }
-    
-    [self createTrackingAreasForControlPoint:selectedControlPoint inside:YES];
+    [self createTrackingAreasForControlPoint:selectedControlPoint];
 }
 
 - (void)mouseEntered:(NSEvent *)event
