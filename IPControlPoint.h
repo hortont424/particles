@@ -4,7 +4,9 @@ typedef enum
 {
     IP_CONTROL_POINT_SMOOTH,
     IP_CONTROL_POINT_SMOOTH_SYMMETRIC,
-    IP_CONTROL_POINT_CORNER
+    IP_CONTROL_POINT_CORNER,
+    
+    IP_CONTROL_POINT_SENTRY
 } IPControlPointType;
 
 @interface IPControlPoint : NSObject
