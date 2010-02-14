@@ -89,6 +89,24 @@
     }
 }
 
+- (void)cursorUpdate:(NSEvent *)event
+{
+    NSPoint hitPoint;
+    NSTrackingArea *trackingArea;
+
+    trackingArea = [event trackingArea];
+    hitPoint = [self convertPoint:[event locationInWindow] fromView:nil];
+
+    if ([self mouse:hitPoint inRect:[trackingArea rect]] ||
+        highlightedControlPoint)
+    {
+        [[NSCursor crosshairCursor] set];
+    } else
+    {
+        [[NSCursor arrowCursor] set];
+    }
+}
+
 - (void)mouseDown:(NSEvent *) event
 {
     selectedControlPoint = highlightedControlPoint;
@@ -155,9 +173,7 @@
 
 - (void)mouseExited:(NSEvent *)event
 {
-    if(NSComparePoint(dragPoint, NSFarAwayPoint))
-        highlightedControlPoint = nil;
-    
+    highlightedControlPoint = nil;
     [self setNeedsDisplay:YES];
 }
 
