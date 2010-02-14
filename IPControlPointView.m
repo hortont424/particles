@@ -10,6 +10,11 @@
     {
         IPControlPoint * pt;
         
+        controlPointSubareas = [[NSMapTable alloc]
+            initWithKeyOptions:NSMapTableStrongMemory
+            valueOptions:NSMapTableStrongMemory
+            capacity:32];
+        
         controlPoints = [[NSMutableArray alloc] init];
         highlightedControlPoint = nil;
         
@@ -20,37 +25,121 @@
         [pt setControlPoint:1 toPoint:NSMakePoint(-2, -12)];
         
         [controlPoints addObject:pt];
-        NSRect rect = NSMakeRect([pt point].x, [pt point].y, 0.0, 0.0);
-        rect = NSInsetRect(rect, -3, -3);
-        // TODO: UNMESSIFY
-        NSTrackingArea * ta;
-        ta = [[NSTrackingArea alloc] initWithRect:rect
-            options:(NSTrackingMouseEnteredAndExited | 
-                     NSTrackingMouseMoved |
-                     NSTrackingActiveInActiveApp)
-            owner:self
-            userInfo:[NSDictionary dictionaryWithObjectsAndKeys:pt,@"point",
-                    [NSNumber numberWithInt:-1], @"subpoint", nil]];
-        [self addTrackingArea:ta];
+        [self createTrackingAreasForControlPoint:pt inside:NO];
     }
     return self;
 }
 
-- (void) mouseDown: (NSEvent *) event
+- (void)createTrackingAreasForControlPoint:(IPControlPoint *)controlPoint
+    inside:(BOOL)inside
+{
+    NSTrackingAreaOptions trackingOptions;
+    trackingOptions = (NSTrackingMouseEnteredAndExited | 
+                       NSTrackingMouseMoved |
+                       NSTrackingActiveInActiveApp |
+                       NSTrackingEnabledDuringMouseDrag);
+    
+    NSPoint pt;
+    NSRect rect;
+    NSMutableDictionary * userInfo;
+    NSTrackingArea * ta;
+    NSMutableArray * subareas = [[NSMutableArray alloc] init];
+
+    for(int index = 0; index <= 2; index++)
+    {
+        userInfo = [[NSMutableDictionary alloc] init];
+        [userInfo setObject:controlPoint forKey:@"point"];
+        [userInfo setObject:[NSNumber numberWithInt:index] forKey:@"subpoint"];
+        
+        if(index < 2)
+        {
+            pt = [controlPoint absoluteControlPoint:index];
+            rect = NSRectAroundPoint(pt, 2, 2);
+        }
+        else
+        {
+            pt = [controlPoint point];
+            rect = NSRectAroundPoint(pt, 3, 3);
+            [controlPointSubareas setObject:subareas forKey:controlPoint];
+        }
+        
+        if(index == 2 && inside)
+        {
+            trackingOptions = trackingOptions | NSTrackingAssumeInside;
+        }
+        
+        ta = [[NSTrackingArea alloc] initWithRect:rect options:trackingOptions
+            owner:self userInfo:userInfo];
+        
+        [self addTrackingArea:ta];
+        [subareas addObject:ta];
+    }
+}
+
+- (void)mouseDown:(NSEvent *) event
 {
     selectedControlPoint = highlightedControlPoint;
+    selectedSubpoint = highlightedSubpoint;
+    dragPoint = [NSEvent mouseLocation];
     [self setNeedsDisplay:YES];
+}
+
+- (void)mouseUp:(NSEvent *) event
+{
+    dragPoint = NSFarAwayPoint;
+    
+    if(selectedControlPoint == nil)
+        return;
+    
+    NSArray * areas = [controlPointSubareas objectForKey:selectedControlPoint];
+    for(NSTrackingArea * ta in areas)
+    {
+        [self removeTrackingArea:ta];
+    }
+    
+    [self createTrackingAreasForControlPoint:selectedControlPoint inside:YES];
 }
 
 - (void)mouseEntered:(NSEvent *)event
 {
-    highlightedControlPoint = [[event userData] objectForKey:@"point"];
+    NSDictionary * userInfo = [event userData];
+    highlightedControlPoint = [userInfo objectForKey:@"point"];
+    highlightedSubpoint = [[userInfo objectForKey:@"subpoint"] intValue];
     [self setNeedsDisplay:YES];
+}
+
+- (void)mouseDragged:(NSEvent *)event
+{
+    if(selectedControlPoint == nil)
+        return;
+    
+    NSPoint delta = NSSubtractPoints([NSEvent mouseLocation], dragPoint);
+    NSPoint point;
+    
+    if(selectedSubpoint == 2)
+    {
+        point = [selectedControlPoint point];
+        point = NSAddPoints(point, delta);
+        [selectedControlPoint setPoint:point];
+    }
+    else
+    {
+        point = [selectedControlPoint absoluteControlPoint:selectedSubpoint];
+        point = NSAddPoints(point, delta);
+        [selectedControlPoint setAbsoluteControlPoint:selectedSubpoint
+            toPoint:point];
+    }
+    
+    [self setNeedsDisplay:YES];
+    
+    dragPoint = [NSEvent mouseLocation];
 }
 
 - (void)mouseExited:(NSEvent *)event
 {
-    highlightedControlPoint = nil;
+    if(NSComparePoint(dragPoint, NSFarAwayPoint))
+        highlightedControlPoint = nil;
+    
     [self setNeedsDisplay:YES];
 }
 
@@ -59,48 +148,58 @@
     CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
     
     NSPoint point = [controlPoint point];
-    CGRect ell = CGRectMake(point.x, point.y, 0.0, 0.0);
-    ell = CGRectInset(ell, -3, -3);
+    CGRect ell;
     
-    CGContextSetRGBFillColor(ctx, 0.8, 0.8, 0.8, 1.0);
-    CGContextSetRGBStrokeColor(ctx, 0.2, 0.2, 0.2, 1.0);
-    CGContextSetLineWidth(ctx, 1.0);
-    
-    // Draw handles and sub-control-points
-    for(int index = 0; index < 2; index++)
+    // Draw handles and control points
+    for(int index = 0; index <= 2; index++)
     {
-        NSPoint subpoint = [controlPoint absoluteControlPoint:index];
-        CGRect ell = CGRectMake(subpoint.x, subpoint.y, 0.0, 0.0);
-        ell = CGRectInset(ell, -2, -2);
+        NSPoint subpoint;
+        
+        if(controlPoint == selectedControlPoint &&
+           selectedSubpoint == index)
+        {
+            CGContextSetRGBStrokeColor(ctx, 0.6, 0.6, 0.2, 1.0);
+            CGContextSetRGBFillColor(ctx, 1.0, 1.0, 0.8, 1.0);
+            CGContextSetLineWidth(ctx, 1.5);
+        }
+        else if(controlPoint == highlightedControlPoint &&
+                highlightedSubpoint == index)
+        {
+            CGContextSetRGBStrokeColor(ctx, 0.2, 0.2, 0.6, 1.0);
+            CGContextSetRGBFillColor(ctx, 0.6, 0.6, 1.0, 1.0);
+            CGContextSetLineWidth(ctx, 1.5);
+        }
+        else
+        {
+            CGContextSetRGBFillColor(ctx, 0.8, 0.8, 0.8, 1.0);
+            CGContextSetRGBStrokeColor(ctx, 0.2, 0.2, 0.2, 1.0);
+            CGContextSetLineWidth(ctx, 1.0);
+        }
+        
+        if(index < 2)
+        {
+            subpoint = [controlPoint absoluteControlPoint:index];
+            ell = CGRectAroundPoint(subpoint, 2, 2);
+        }
+        else
+        {
+            subpoint = point;
+            ell = CGRectAroundPoint(subpoint, 3, 3);
+        }
     
-        CGContextMoveToPoint(ctx, point.x, point.y);
-        CGContextAddLineToPoint(ctx, subpoint.x, subpoint.y);
-        CGContextStrokePath(ctx);
+        // Draw handles
+        if(index < 2)
+        {
+            CGContextMoveToPoint(ctx, point.x, point.y);
+            CGContextAddLineToPoint(ctx, subpoint.x, subpoint.y);
+            CGContextStrokePath(ctx);
+        }
     
         CGContextAddEllipseInRect(ctx, ell);
         CGContextFillPath(ctx);
         CGContextAddEllipseInRect(ctx, ell);
         CGContextStrokePath(ctx);
     }
-    
-    if(controlPoint == selectedControlPoint)
-    {
-        CGContextSetRGBStrokeColor(ctx, 0.6, 0.6, 0.2, 1.0);
-        CGContextSetRGBFillColor(ctx, 1.0, 1.0, 0.8, 1.0);
-        CGContextSetLineWidth(ctx, 1.5);
-    }
-    else if(controlPoint == highlightedControlPoint)
-    {
-        CGContextSetRGBStrokeColor(ctx, 0.2, 0.2, 0.6, 1.0);
-        CGContextSetRGBFillColor(ctx, 0.6, 0.6, 1.0, 1.0);
-        CGContextSetLineWidth(ctx, 1.5);
-    }
-    
-    // Draw actual control point
-    CGContextAddEllipseInRect(ctx, ell);
-    CGContextFillPath(ctx);
-    CGContextAddEllipseInRect(ctx, ell);
-    CGContextStrokePath(ctx);
 }
 
 - (void)drawRect:(NSRect)dirtyRect

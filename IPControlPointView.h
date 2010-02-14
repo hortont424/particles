@@ -6,8 +6,19 @@
 @interface IPControlPointView : NSView
 {
     NSMutableArray * controlPoints;
+    NSMapTable * controlPointSubareas;
+    
     IPControlPoint * selectedControlPoint;
+    int selectedSubpoint;
+    
     IPControlPoint * highlightedControlPoint;
+    int highlightedSubpoint;
+    
+    NSPoint dragPoint;
 }
+
+- (void)createTrackingAreasForControlPoint:(IPControlPoint *)controlPoint
+    inside:(BOOL)inside;
+- (void)drawPoint:(IPControlPoint *)controlPoint;
 
 @end

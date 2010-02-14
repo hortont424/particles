@@ -7,7 +7,7 @@
 #import <math.h>
 #import <float.h> /* Standard C lib that contains some constants, look at http://www.acm.uiuc.edu/webmonkeys/book/c_guide/2.4.html -- JP */
 
-const NSPoint NSFarAwayPoint = {FLT_MAX, FLT_MAX}; // FLT_MAX = 1E+27.  -- JP
+extern const NSPoint NSFarAwayPoint; // FLT_MAX = 1E+27.  -- JP
 
 static inline NSPoint NSAddPoints(NSPoint firstPoint, NSPoint secondPoint)
 {
@@ -52,4 +52,21 @@ static inline NSPoint NSCartesianToPolar(NSPoint cartesianPoint)
 static inline NSPoint NSPolarToCartesian(NSPoint polarPoint)
 {
     return NSMakePoint(polarPoint.x*cosf(polarPoint.y), polarPoint.x*sinf(polarPoint.y));
+}
+
+// Everything below is covered under toplevel license and written by me
+
+static inline NSRect NSRectAroundPoint(NSPoint point, CGFloat x, CGFloat y)
+{
+    return NSInsetRect(NSMakeRect(point.x, point.y, 0.0, 0.0), -x, -y);
+}
+
+static inline CGRect CGRectAroundPoint(NSPoint point, CGFloat x, CGFloat y)
+{
+    return CGRectInset(CGRectMake(point.x, point.y, 0.0, 0.0), -x, -y);
+}
+
+static inline BOOL NSComparePoint(NSPoint a, NSPoint b)
+{
+    return a.x == b.x && a.y == b.y;
 }

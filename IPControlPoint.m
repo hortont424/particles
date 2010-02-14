@@ -1,5 +1,4 @@
 #import "IPControlPoint.h"
-#import "NSPointFunctions_CocoaDevUsersAdditions.h"
 
 @implementation IPControlPoint
 
@@ -101,6 +100,18 @@
             NSLog(@"Invalid control point type: %d.", type);
             return;
     }
+}
+
+- (void)setAbsoluteControlPoint:(uint)index toPoint:(NSPoint)newPoint
+{
+    if(index < 0 || index >= 2)
+    {
+        NSLog(@"Invalid control point index: %d.", index);
+        return;
+    }
+    
+    [self setControlPoint:index
+        toPoint:NSSubtractPoints(newPoint, point)];
 }
 
 - (void)setControlWeight:(uint)index toValue:(double)newWeight

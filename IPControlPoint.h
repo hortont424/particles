@@ -1,5 +1,7 @@
 #import <Cocoa/Cocoa.h>
 
+#import "NSPointFunctions_CocoaDevUsersAdditions.h"
+
 typedef enum
 {
     IP_CONTROL_POINT_SMOOTH,
@@ -28,6 +30,7 @@ typedef enum
 - (void)setPoint:(NSPoint)newPoint;
 - (void)setType:(IPControlPointType)newType;
 - (void)setControlPoint:(uint)index toPoint:(NSPoint)newPoint;
+- (void)setAbsoluteControlPoint:(uint)index toPoint:(NSPoint)newPoint;
 - (void)setControlWeight:(uint)index toValue:(double)newWeight;
 
 @end
