@@ -34,6 +34,7 @@
 		359726F81127CACC00B0427E /* IPControlPointController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPControlPointController.m; sourceTree = "<group>"; };
 		359726FA1127CADC00B0427E /* IPControlPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPControlPoint.h; sourceTree = "<group>"; };
 		359726FB1127CADC00B0427E /* IPControlPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPControlPoint.m; sourceTree = "<group>"; };
+		35AE00391127D3FA0014DCC6 /* NSPointFunctions_CocoaDevUsersAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSPointFunctions_CocoaDevUsersAdditions.h; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Interpolator-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Interpolator-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Interpolator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Interpolator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -61,6 +62,7 @@
 				359726F81127CACC00B0427E /* IPControlPointController.m */,
 				359726FA1127CADC00B0427E /* IPControlPoint.h */,
 				359726FB1127CADC00B0427E /* IPControlPoint.m */,
+				35AE00391127D3FA0014DCC6 /* NSPointFunctions_CocoaDevUsersAdditions.h */,
 			);
 			name = Classes;
 			sourceTree = "<group>";

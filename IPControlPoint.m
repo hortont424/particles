@@ -1,4 +1,5 @@
 #import "IPControlPoint.h"
+#import "NSPointFunctions_CocoaDevUsersAdditions.h"
 
 @implementation IPControlPoint
 
@@ -19,10 +20,21 @@
     if(index < 0 || index >= 2)
     {
         NSLog(@"Invalid control point index: %d.", index);
-        return NSZeroPoint; // This could be valid; need a better sentry
+        return NSFarAwayPoint;
     }
     
     return controlPoints[index];
+}
+
+- (NSPoint)absoluteControlPoint:(uint)index
+{
+    if(index < 0 || index >= 2)
+    {
+        NSLog(@"Invalid control point index: %d.", index);
+        return NSFarAwayPoint;
+    }
+    
+    return NSAddPoints(point, controlPoints[index]);
 }
 
 - (double)controlWeights:(uint)index
@@ -30,7 +42,7 @@
     if(index < 0 || index >= 2)
     {
         NSLog(@"Invalid control weight index: %d.", index);
-        return 0.0; // This could be valid; need a better sentry
+        return -1.0;
     }
     
     return controlWeights[index];
