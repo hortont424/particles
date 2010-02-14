@@ -45,7 +45,8 @@
         return -1.0;
     }
     
-    return controlWeights[index];
+    NSPoint polarPoint = NSCartesianToPolar(controlPoints[index]);
+    return polarPoint.x;
 }
 
 // Mutators
@@ -65,7 +66,9 @@
     
     type = newType;
     
-    // TODO: Update control points, if necessary
+    // Update control points, in case behavior changes
+    [self setControlPoint:0 toPoint:[self controlPoint:0]];
+    [self setControlPoint:1 toPoint:[self controlPoint:1]];
 }
 
 - (void)setControlPoint:(uint)index toPoint:(NSPoint)newPoint
@@ -78,11 +81,19 @@
     
     controlPoints[index] = newPoint;
     
+    NSPoint thisPolarPoint = NSCartesianToPolar(controlPoints[index]);
+    NSPoint otherPolarPoint = NSCartesianToPolar(controlPoints[!index]);
+    
     switch(type)
     {
         IP_CONTROL_POINT_SMOOTH:
+            otherPolarPoint.y = thisPolarPoint.y + M_PI;
+            controlPoints[!index] = NSPolarToCartesian(otherPolarPoint);
+            break;
         IP_CONTROL_POINT_SMOOTH_SYMMETRIC:
-            // TODO: keep other control point in sync
+            otherPolarPoint.x = thisPolarPoint.x;
+            otherPolarPoint.y = thisPolarPoint.y + M_PI;
+            controlPoints[!index] = NSPolarToCartesian(otherPolarPoint);
             break;
         IP_CONTROL_POINT_CORNER:
             break;
@@ -100,14 +111,19 @@
         return;
     }
     
-    controlWeights[index] = newWeight;
+    NSPoint thisPolarPoint = NSCartesianToPolar(controlPoints[index]);
+    NSPoint otherPolarPoint = NSCartesianToPolar(controlPoints[!index]);
+    
+    thisPolarPoint.x = newWeight;
+    controlPoints[index] = NSPolarToCartesian(thisPolarPoint);
     
     switch(type)
     {
         IP_CONTROL_POINT_SMOOTH:
             break;
         IP_CONTROL_POINT_SMOOTH_SYMMETRIC:
-            controlWeights[!index] = controlWeights[index];
+            otherPolarPoint.x = newWeight;
+            controlPoints[!index] = NSPolarToCartesian(otherPolarPoint);
             break;
         IP_CONTROL_POINT_CORNER:
             break;
