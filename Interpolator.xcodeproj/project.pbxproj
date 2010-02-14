@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		1DDD58160DA1D0A300B32029 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 1DDD58140DA1D0A300B32029 /* MainMenu.xib */; };
 		256AC3DA0F4B6AC300CF3369 /* InterpolatorAppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = 256AC3D90F4B6AC300CF3369 /* InterpolatorAppDelegate.m */; };
+		359726F61127CAC000B0427E /* IPControlPointView.m in Sources */ = {isa = PBXBuildFile; fileRef = 359726F51127CAC000B0427E /* IPControlPointView.m */; };
+		359726F91127CACC00B0427E /* IPControlPointController.m in Sources */ = {isa = PBXBuildFile; fileRef = 359726F81127CACC00B0427E /* IPControlPointController.m */; };
+		359726FC1127CADC00B0427E /* IPControlPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 359726FB1127CADC00B0427E /* IPControlPoint.m */; };
 		8D11072B0486CEB800E47090 /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 089C165CFE840E0CC02AAC07 /* InfoPlist.strings */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -25,6 +28,12 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		359726F41127CAC000B0427E /* IPControlPointView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPControlPointView.h; sourceTree = "<group>"; };
+		359726F51127CAC000B0427E /* IPControlPointView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPControlPointView.m; sourceTree = "<group>"; };
+		359726F71127CACC00B0427E /* IPControlPointController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPControlPointController.h; sourceTree = "<group>"; };
+		359726F81127CACC00B0427E /* IPControlPointController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPControlPointController.m; sourceTree = "<group>"; };
+		359726FA1127CADC00B0427E /* IPControlPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPControlPoint.h; sourceTree = "<group>"; };
+		359726FB1127CADC00B0427E /* IPControlPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPControlPoint.m; sourceTree = "<group>"; };
 		8D1107310486CEB800E47090 /* Interpolator-Info.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = "Interpolator-Info.plist"; sourceTree = "<group>"; };
 		8D1107320486CEB800E47090 /* Interpolator.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Interpolator.app; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -46,6 +55,12 @@
 			children = (
 				256AC3D80F4B6AC300CF3369 /* InterpolatorAppDelegate.h */,
 				256AC3D90F4B6AC300CF3369 /* InterpolatorAppDelegate.m */,
+				359726F41127CAC000B0427E /* IPControlPointView.h */,
+				359726F51127CAC000B0427E /* IPControlPointView.m */,
+				359726F71127CACC00B0427E /* IPControlPointController.h */,
+				359726F81127CACC00B0427E /* IPControlPointController.m */,
+				359726FA1127CADC00B0427E /* IPControlPoint.h */,
+				359726FB1127CADC00B0427E /* IPControlPoint.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -173,6 +188,9 @@
 			files = (
 				8D11072D0486CEB800E47090 /* main.m in Sources */,
 				256AC3DA0F4B6AC300CF3369 /* InterpolatorAppDelegate.m in Sources */,
+				359726F61127CAC000B0427E /* IPControlPointView.m in Sources */,
+				359726F91127CACC00B0427E /* IPControlPointController.m in Sources */,
+				359726FC1127CADC00B0427E /* IPControlPoint.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
