@@ -259,6 +259,8 @@
     if([selection count] == 0 || NSComparePoint(dragPoint, NSFarAwayPoint))
         return;
     
+    BOOL snapAngle = ([event modifierFlags] & NSShiftKeyMask) != 0;
+    
     NSPoint mouse = [self convertPointFromBase:
         [[NSApp keyWindow] mouseLocationOutsideOfEventStream]];
     
@@ -272,17 +274,38 @@
         int subpoint = sel.subpoint;
         
         if(subpoint == 2)
-        {
             point = [controlPoint point];
-            point = NSAddPoints(point, delta);
-            [controlPoint setPoint:point];
-        }
         else
+            point = [controlPoint controlPoint:subpoint];
+            
+        point = NSAddPoints(point, delta);
+        
+        // Snap angle to 45s
+        if(snapAngle && subpoint != 2)
         {
-            point = [controlPoint absoluteControlPoint:subpoint];
-            point = NSAddPoints(point, delta);
-            [controlPoint setAbsoluteControlPoint:subpoint toPoint:point];
+            NSPoint polar = NSCartesianToPolar(point);
+            
+            double diff = 100.0;
+            double ideal = 0.0;
+            
+            for(double angle = -M_PI; angle <= M_PI; angle += M_PI / 4.0)
+            {
+                if(fabs(polar.y - angle) < diff)
+                {
+                    diff = fabs(polar.y - angle);
+                    ideal = angle;
+                }
+            }
+            
+            polar.y = ideal;
+
+            point = NSPolarToCartesian(polar);
         }
+        
+        if(subpoint == 2)
+            [controlPoint setPoint:point];
+        else
+            [controlPoint setControlPoint:subpoint toPoint:point];
     }
     
     [self setNeedsDisplay:YES];
