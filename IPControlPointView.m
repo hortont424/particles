@@ -97,11 +97,6 @@
 
     trackingArea = [event trackingArea];
     hitPoint = [self convertPoint:[event locationInWindow] fromView:nil];
-
-    if(!NSComparePoint(dragPoint, NSFarAwayPoint))
-        [NSCursor hide];
-    else
-        [NSCursor unhide];
     
     if ([self mouse:hitPoint inRect:[trackingArea rect]] ||
         highlightedControlPoint)
@@ -128,6 +123,8 @@
         {
             [self removeTrackingArea:ta];
         }
+        
+        [NSCursor hide];
     }
     
     [self setNeedsDisplay:YES];
@@ -137,16 +134,18 @@
 {
     dragPoint = NSFarAwayPoint;
     
-    [NSCursor unhide];
-    
     if(selectedControlPoint == nil)
         return;
     
+    [NSCursor unhide];
     [self createTrackingAreasForControlPoint:selectedControlPoint];
 }
 
 - (void)mouseEntered:(NSEvent *)event
 {
+    if(!NSComparePoint(dragPoint, NSFarAwayPoint))
+        return;
+    
     NSDictionary * userInfo = [event userData];
     highlightedControlPoint = [userInfo objectForKey:@"point"];
     highlightedSubpoint = [[userInfo objectForKey:@"subpoint"] intValue];
@@ -182,7 +181,11 @@
 
 - (void)mouseExited:(NSEvent *)event
 {
+    if(!NSComparePoint(dragPoint, NSFarAwayPoint))
+        return;
+    
     highlightedControlPoint = nil;
+
     [self setNeedsDisplay:YES];
 }
 
