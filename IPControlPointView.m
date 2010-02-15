@@ -27,8 +27,8 @@
         pt = [[IPControlPoint alloc] init];
         [pt setPoint:NSMakePoint(50, 50)];
         [pt setType:IP_CONTROL_POINT_CORNER];
-        [pt setControlPoint:0 toPoint:NSMakePoint(15, 15)];
-        [pt setControlPoint:1 toPoint:NSMakePoint(-2, -12)];
+        [pt setControlPoint:0 toPoint:NSMakePoint(-2, -12)];
+        [pt setControlPoint:1 toPoint:NSMakePoint(15, 15)];
         
         [controlPoints addObject:pt];
         [self createTrackingAreasForControlPoint:pt];
@@ -45,8 +45,8 @@
         pt = [[IPControlPoint alloc] init];
         [pt setPoint:NSMakePoint(300, 200)];
         [pt setType:IP_CONTROL_POINT_SMOOTH_SYMMETRIC];
-        [pt setControlPoint:0 toPoint:NSMakePoint(30, 30)];
-        [pt setControlPoint:1 toPoint:NSMakePoint(-30, -30)];
+        [pt setControlPoint:0 toPoint:NSMakePoint(-30, -30)];
+        [pt setControlPoint:1 toPoint:NSMakePoint(30, 30)];
         
         [controlPoints addObject:pt];
         [self createTrackingAreasForControlPoint:pt];
@@ -398,10 +398,60 @@
     }
 }
 
+- (double)evaluateBezierParameterAtT:(double)t X1:(double)x1 X2:(double)x2
+    X3:(double)x3 X4:(double)x4
+{
+    return ((pow(1.0 - t, 3.0) * x1) + (3.0 * pow(1.0 - t, 2.0) * t * x2) +
+        (3.0 * (1.0 - t) * pow(t, 2.0) * x3) + (pow(t, 3.0) * x4));
+}
+
+- (NSPoint)evaluateBezierAtT:(double)t
+    pointA:(IPControlPoint *)a
+    pointB:(IPControlPoint *)b
+{
+    NSPoint p0, p1, p2, p3;
+    p0 = [a point];
+    p1 = [a absoluteControlPoint:1];
+    p2 = [b absoluteControlPoint:0];
+    p3 = [b point];
+    
+    return NSMakePoint(
+        [self evaluateBezierParameterAtT:t X1:p0.x X2:p1.x X3:p2.x X4:p3.x],
+        [self evaluateBezierParameterAtT:t X1:p0.y X2:p1.y X3:p2.y X4:p3.y]);
+}
+
+- (void)drawCurve
+{
+    IPControlPoint * a, * b;
+    
+    CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
+    CGContextSetInterpolationQuality(ctx, kCGInterpolationHigh);
+    CGContextSetRGBStrokeColor(ctx, 0.937, 0.161, 0.161, 1.0);
+    CGContextSetLineWidth(ctx, 1.0);
+    
+    for(int i = 0; i < [controlPoints count] - 1; i++)
+    {
+        a = [controlPoints objectAtIndex:i];
+        b = [controlPoints objectAtIndex:i+1];
+    
+        CGContextMoveToPoint(ctx, [a point].x, [a point].y);
+    
+        for(double t = 0.0; t < 1.0; t += 0.001)
+        {
+            NSPoint bzpt = [self evaluateBezierAtT:t pointA:a pointB:b];
+            CGContextAddLineToPoint(ctx, bzpt.x, bzpt.y);
+        }
+    
+        CGContextStrokePath(ctx);
+    }
+}
+
 - (void)drawRect:(NSRect)dirtyRect
 {
     [[NSColor whiteColor] setFill];
     NSRectFill(dirtyRect);
+    
+    [self drawCurve];
     
     for(IPControlPoint * controlPoint in controlPoints)
     {
