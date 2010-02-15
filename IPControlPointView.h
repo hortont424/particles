@@ -3,13 +3,23 @@
 
 #import "IPControlPoint.h"
 
+@interface IPControlPointSelection : NSObject
+{
+    IPControlPoint * controlPoint;
+    int subpoint;
+}
+
+@property (retain) IPControlPoint * controlPoint;
+@property (assign) int subpoint;
+
+@end
+
 @interface IPControlPointView : NSView
 {
     NSMutableArray * controlPoints;
     NSMapTable * controlPointSubareas;
     
-    IPControlPoint * selectedControlPoint;
-    int selectedSubpoint;
+    NSMutableArray * selection;
     
     IPControlPoint * highlightedControlPoint;
     int highlightedSubpoint;

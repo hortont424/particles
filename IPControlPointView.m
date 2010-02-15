@@ -1,5 +1,9 @@
 #import "IPControlPointView.h"
 
+@implementation IPControlPointSelection
+@synthesize controlPoint, subpoint;
+@end
+
 @implementation IPControlPointView
 
 - (id)initWithFrame:(NSRect)frame
@@ -18,6 +22,7 @@
         dragPoint = NSFarAwayPoint;
         controlPoints = [[NSMutableArray alloc] init];
         highlightedControlPoint = nil;
+        selection = [[NSMutableArray alloc] init];
         
         pt = [[IPControlPoint alloc] init];
         [pt setPoint:NSMakePoint(50, 50)];
@@ -70,7 +75,7 @@
         [userInfo setObject:controlPoint forKey:@"point"];
         [userInfo setObject:[NSNumber numberWithInt:index] forKey:@"subpoint"];
         
-        if(index < 2)
+        if(index != 2)
         {
             pt = [controlPoint absoluteControlPoint:index];
             rect = NSRectAroundPoint(pt, 4, 4);
@@ -111,17 +116,51 @@
 
 - (void)mouseDown:(NSEvent *) event
 {
-    selectedControlPoint = highlightedControlPoint;
-    selectedSubpoint = highlightedSubpoint;
-    dragPoint = [NSEvent mouseLocation];
-    
-    if(selectedControlPoint != nil)
+    if(highlightedControlPoint == nil)
     {
-        NSArray * areas;
-        areas = [controlPointSubareas objectForKey:selectedControlPoint];
-        for(NSTrackingArea * ta in areas)
+        [selection removeAllObjects];
+    }
+    else
+    {
+        dragPoint = [NSEvent mouseLocation];
+        
+        IPControlPointSelection * sel = [[IPControlPointSelection alloc] init];
+        
+        // Make sure point hasn't already been added to selection
+        long selectionIndex = [selection indexOfObjectPassingTest:
+            ^ BOOL (id obj, NSUInteger idx, BOOL * stop)
+            {
+                IPControlPointSelection * sel = (IPControlPointSelection *)obj;
+                return (sel.controlPoint == highlightedControlPoint &&
+                        sel.subpoint == highlightedSubpoint);
+            }];
+        
+        if(selectionIndex >= 0 && selectionIndex != NSNotFound)
+            return;
+    
+        sel.controlPoint = highlightedControlPoint;
+        sel.subpoint = highlightedSubpoint;
+        
+        BOOL selectingHandles =
+            ((IPControlPointSelection *)[selection lastObject]).subpoint != 2;
+        
+        BOOL appendSelection = ([event modifierFlags] & NSShiftKeyMask) != 0;
+        
+        if(highlightedSubpoint != 2 || selectingHandles || !appendSelection)
         {
-            [self removeTrackingArea:ta];
+            [selection removeAllObjects];
+        }
+        
+        [selection addObject:sel];
+        
+        for(IPControlPointSelection * sel in selection)
+        {
+            NSArray * areas;
+            areas = [controlPointSubareas objectForKey:sel.controlPoint];
+            for(NSTrackingArea * ta in areas)
+            {
+                [self removeTrackingArea:ta];
+            }
         }
         
         [NSCursor hide];
@@ -134,11 +173,15 @@
 {
     dragPoint = NSFarAwayPoint;
     
-    if(selectedControlPoint == nil)
-        return;
-    
-    [NSCursor unhide];
-    [self createTrackingAreasForControlPoint:selectedControlPoint];
+    if([selection count])
+    {
+        [NSCursor unhide];
+        
+        for(IPControlPointSelection * sel in selection)
+        {
+            [self createTrackingAreasForControlPoint:sel.controlPoint];
+        }
+    }
 }
 
 - (void)mouseEntered:(NSEvent *)event
@@ -154,26 +197,31 @@
 
 - (void)mouseDragged:(NSEvent *)event
 {
-    if(selectedControlPoint == nil)
+    if([selection count] == 0)
         return;
     
     NSPoint delta = NSSubtractPoints([NSEvent mouseLocation], dragPoint);
     NSPoint point;
     
-    if(selectedSubpoint == 2)
+    for(IPControlPointSelection * sel in selection)
     {
-        point = [selectedControlPoint point];
-        point = NSAddPoints(point, delta);
-        [selectedControlPoint setPoint:point];
+        IPControlPoint * controlPoint = sel.controlPoint;
+        int subpoint = sel.subpoint;
+        
+        if(subpoint == 2)
+        {
+            point = [controlPoint point];
+            point = NSAddPoints(point, delta);
+            [controlPoint setPoint:point];
+        }
+        else
+        {
+            point = [controlPoint absoluteControlPoint:subpoint];
+            point = NSAddPoints(point, delta);
+            [controlPoint setAbsoluteControlPoint:subpoint toPoint:point];
+        }
     }
-    else
-    {
-        point = [selectedControlPoint absoluteControlPoint:selectedSubpoint];
-        point = NSAddPoints(point, delta);
-        [selectedControlPoint setAbsoluteControlPoint:selectedSubpoint
-            toPoint:point];
-    }
-    
+
     [self setNeedsDisplay:YES];
     
     dragPoint = [NSEvent mouseLocation];
@@ -193,6 +241,18 @@
 {
     CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
     
+    long selectionIndex = [selection indexOfObjectPassingTest:
+        ^ BOOL (id obj, NSUInteger idx, BOOL * stop)
+        {
+            IPControlPointSelection * sel = (IPControlPointSelection *)obj;
+            return (sel.controlPoint == controlPoint);
+        }];
+    
+    IPControlPointSelection * sel = nil;
+    
+    if(selectionIndex >= 0 && selectionIndex != NSNotFound)
+        sel = [selection objectAtIndex:selectionIndex];
+    
     NSPoint point = [controlPoint point];
     CGRect ell;
     
@@ -201,8 +261,7 @@
     {
         NSPoint subpoint;
         
-        if(controlPoint == selectedControlPoint &&
-           selectedSubpoint == index)
+        if(sel && sel.subpoint == index)
         {
             CGContextSetRGBStrokeColor(ctx, 0.788, 0.714, 0.110, 1.0);
             CGContextSetRGBFillColor(ctx, 0.988, 0.914, 0.310, 1.0);
@@ -222,7 +281,7 @@
             CGContextSetLineWidth(ctx, 1.0);
         }
         
-        if(index < 2)
+        if(index != 2)
         {
             subpoint = [controlPoint absoluteControlPoint:index];
             ell = CGRectAroundPoint(subpoint, 2, 2);
@@ -234,7 +293,7 @@
         }
     
         // Draw handles
-        if(index < 2)
+        if(index != 2)
         {
             CGContextMoveToPoint(ctx, point.x, point.y);
             CGContextAddLineToPoint(ctx, subpoint.x, subpoint.y);
