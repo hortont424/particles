@@ -19,7 +19,7 @@
             valueOptions:NSMapTableStrongMemory
             capacity:32];
         
-        dragPoint = NSFarAwayPoint;
+        dragPoint = boxPoint = NSFarAwayPoint;
         controlPoints = [[NSMutableArray alloc] init];
         highlightedControlPoint = nil;
         selection = [[NSMutableArray alloc] init];
@@ -116,13 +116,18 @@
 
 - (void)mouseDown:(NSEvent *) event
 {
+    NSPoint mouse = [self convertPointFromBase:
+        [[NSApp keyWindow] mouseLocationOutsideOfEventStream]];
+    
+    BOOL appendSelection = ([event modifierFlags] & NSShiftKeyMask) != 0;
+    
     if(highlightedControlPoint == nil)
     {
-        [selection removeAllObjects];
+        boxPoint = mouse;
     }
     else
     {
-        dragPoint = [NSEvent mouseLocation];
+        dragPoint = mouse;
         
         // Make sure point hasn't already been added to selection
         for(IPControlPointSelection * sel in selection)
@@ -134,8 +139,6 @@
         
         BOOL selectingHandles =
             ((IPControlPointSelection *)[selection lastObject]).subpoint != 2;
-        
-        BOOL appendSelection = ([event modifierFlags] & NSShiftKeyMask) != 0;
         
         // Multiple selection only works on big control points, not handles
         // So, if we're selecting a handle, or have handles selected,
@@ -172,18 +175,63 @@
 
 - (void)mouseUp:(NSEvent *) event
 {
+    BOOL appendSelection = ([event modifierFlags] & NSShiftKeyMask) != 0;
+    
+    if(!NSComparePoint(boxPoint, NSFarAwayPoint))
+    {
+        NSPoint mouse = [self convertPointFromBase:
+            [[NSApp keyWindow] mouseLocationOutsideOfEventStream]];
+        
+        if(!appendSelection)
+            [selection removeAllObjects];
+        
+        for(IPControlPoint * controlPoint in controlPoints)
+        {
+            if(NSPointInRect([controlPoint point],
+                NSRectWithPoints(boxPoint, mouse)))
+            {
+                BOOL pointAlreadySelected = NO;
+                
+                for(IPControlPointSelection * sel in selection)
+                {
+                    if(sel.controlPoint == controlPoint &&
+                       sel.subpoint == 2)
+                    {
+                        pointAlreadySelected = YES;
+                        break;
+                    }
+                }
+                
+                if(pointAlreadySelected)
+                    continue;
+                
+                IPControlPointSelection * sel = 
+                    [[IPControlPointSelection alloc] init];
+                sel.controlPoint = controlPoint;
+                sel.subpoint = 2;
+                [selection addObject:sel];
+            }
+        }
+        
+        boxPoint = NSFarAwayPoint;
+        [self setNeedsDisplay:YES];
+        return;
+    }
+    
     dragPoint = NSFarAwayPoint;
     
     if([selection count])
     {
         [NSCursor unhide];
         
-        // Recalculate and add new tracking areas for all control points
+        // Recalculate and add new tracking areas for control points
         for(IPControlPointSelection * sel in selection)
         {
             [self createTrackingAreasForControlPoint:sel.controlPoint];
         }
     }
+    
+    [self setNeedsDisplay:YES];
 }
 
 - (void)mouseEntered:(NSEvent *)event
@@ -199,10 +247,19 @@
 
 - (void)mouseDragged:(NSEvent *)event
 {
-    if([selection count] == 0)
+    if(!NSComparePoint(boxPoint, NSFarAwayPoint))
+    {
+        [self setNeedsDisplay:YES];
+        return;
+    }
+    
+    if([selection count] == 0 || NSComparePoint(dragPoint, NSFarAwayPoint))
         return;
     
-    NSPoint delta = NSSubtractPoints([NSEvent mouseLocation], dragPoint);
+    NSPoint mouse = [self convertPointFromBase:
+        [[NSApp keyWindow] mouseLocationOutsideOfEventStream]];
+    
+    NSPoint delta = NSSubtractPoints(mouse, dragPoint);
     NSPoint point;
     
     // Shift all selected control points by delta
@@ -224,10 +281,10 @@
             [controlPoint setAbsoluteControlPoint:subpoint toPoint:point];
         }
     }
-
+    
     [self setNeedsDisplay:YES];
     
-    dragPoint = [NSEvent mouseLocation];
+    dragPoint = mouse;
 }
 
 - (void)mouseExited:(NSEvent *)event
@@ -318,6 +375,20 @@
     for(IPControlPoint * controlPoint in controlPoints)
     {
         [self drawPoint:controlPoint];
+    }
+    
+    if(!NSComparePoint(boxPoint, NSFarAwayPoint))
+    {
+        NSColor * blue = [NSColor colorWithCalibratedRed:0.447 green:0.624
+            blue: 0.812 alpha:0.5];
+            
+        [[blue colorWithAlphaComponent:0.2] setFill];
+        [blue setStroke];
+        
+        NSPoint mouse = [self convertPointFromBase:
+            [[NSApp keyWindow] mouseLocationOutsideOfEventStream]];
+        [NSBezierPath fillRect:NSRectWithPoints(boxPoint, mouse)];
+        [NSBezierPath strokeRect:NSRectWithPoints(boxPoint, mouse)];
     }
 }
 

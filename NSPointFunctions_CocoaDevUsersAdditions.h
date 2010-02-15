@@ -70,3 +70,32 @@ static inline BOOL NSComparePoint(NSPoint a, NSPoint b)
 {
     return a.x == b.x && a.y == b.y;
 }
+
+static inline NSRect NSRectWithPoints(NSPoint a, NSPoint b)
+{
+    NSRect r;
+    
+    if(a.x < b.x)
+    {
+        r.origin.x = a.x;
+        r.size.width = b.x - a.x;
+    }
+    else
+    {
+        r.origin.x = b.x;
+        r.size.width = a.x - b.x;
+    }
+    
+    if(a.y < b.y)
+    {
+        r.origin.y = a.y;
+        r.size.height = b.y - a.y;
+    }
+    else
+    {
+        r.origin.y = b.y;
+        r.size.height = a.y - b.y;
+    }
+    
+    return r;
+}

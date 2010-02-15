@@ -24,7 +24,7 @@
     IPControlPoint * highlightedControlPoint;
     int highlightedSubpoint;
     
-    NSPoint dragPoint;
+    NSPoint dragPoint, boxPoint;
 }
 
 - (void)createTrackingAreasForControlPoint:(IPControlPoint *)controlPoint;
