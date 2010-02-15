@@ -182,7 +182,8 @@
         NSPoint mouse = [self convertPointFromBase:
             [[NSApp keyWindow] mouseLocationOutsideOfEventStream]];
         
-        if(!appendSelection)
+        if(!appendSelection ||
+           ((IPControlPointSelection *)[selection lastObject]).subpoint != 2)
             [selection removeAllObjects];
         
         // Add control points within box select to selection
