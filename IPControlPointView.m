@@ -250,6 +250,13 @@
 
 - (void)mouseDragged:(NSEvent *)event
 {
+    // Don't let the mouse out of the view's rect
+    NSPoint mouse = [self convertPointFromBase:
+        [[NSApp keyWindow] mouseLocationOutsideOfEventStream]];
+    
+    if(!NSPointInRect(mouse, [self bounds]))
+        return;
+    
     // If we're doing box select, don't update any control points
     if(!NSComparePoint(boxPoint, NSFarAwayPoint))
     {
@@ -261,9 +268,6 @@
         return;
     
     BOOL snapAngle = ([event modifierFlags] & NSShiftKeyMask) != 0;
-    
-    NSPoint mouse = [self convertPointFromBase:
-        [[NSApp keyWindow] mouseLocationOutsideOfEventStream]];
     
     NSPoint delta = NSSubtractPoints(mouse, dragPoint);
     NSPoint point;
