@@ -124,35 +124,36 @@
     {
         dragPoint = [NSEvent mouseLocation];
         
-        IPControlPointSelection * sel = [[IPControlPointSelection alloc] init];
-        
         // Make sure point hasn't already been added to selection
-        long selectionIndex = [selection indexOfObjectPassingTest:
-            ^ BOOL (id obj, NSUInteger idx, BOOL * stop)
-            {
-                IPControlPointSelection * sel = (IPControlPointSelection *)obj;
-                return (sel.controlPoint == highlightedControlPoint &&
-                        sel.subpoint == highlightedSubpoint);
-            }];
-        
-        if(selectionIndex >= 0 && selectionIndex != NSNotFound)
-            return;
-    
-        sel.controlPoint = highlightedControlPoint;
-        sel.subpoint = highlightedSubpoint;
+        for(IPControlPointSelection * sel in selection)
+        {
+            if(sel.controlPoint == highlightedControlPoint &&
+               sel.subpoint == highlightedSubpoint)
+               return;
+        }
         
         BOOL selectingHandles =
             ((IPControlPointSelection *)[selection lastObject]).subpoint != 2;
         
         BOOL appendSelection = ([event modifierFlags] & NSShiftKeyMask) != 0;
         
+        // Multiple selection only works on big control points, not handles
+        // So, if we're selecting a handle, or have handles selected,
+        // we have to reset the selection. Also, if the shift key isn't
+        // held down, we have to reset the selection.
         if(highlightedSubpoint != 2 || selectingHandles || !appendSelection)
         {
             [selection removeAllObjects];
         }
         
+        // Add new control point
+        IPControlPointSelection * sel = [[IPControlPointSelection alloc] init];
+        sel.controlPoint = highlightedControlPoint;
+        sel.subpoint = highlightedSubpoint;
         [selection addObject:sel];
         
+        // Remove tracking areas for all control points
+        // They'll be readded when the user releases the mouse
         for(IPControlPointSelection * sel in selection)
         {
             NSArray * areas;
@@ -177,6 +178,7 @@
     {
         [NSCursor unhide];
         
+        // Recalculate and add new tracking areas for all control points
         for(IPControlPointSelection * sel in selection)
         {
             [self createTrackingAreasForControlPoint:sel.controlPoint];
@@ -203,6 +205,7 @@
     NSPoint delta = NSSubtractPoints([NSEvent mouseLocation], dragPoint);
     NSPoint point;
     
+    // Shift all selected control points by delta
     for(IPControlPointSelection * sel in selection)
     {
         IPControlPoint * controlPoint = sel.controlPoint;
@@ -241,6 +244,7 @@
 {
     CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
     
+    // Find our control point, if it's selected
     long selectionIndex = [selection indexOfObjectPassingTest:
         ^ BOOL (id obj, NSUInteger idx, BOOL * stop)
         {
@@ -249,7 +253,6 @@
         }];
     
     IPControlPointSelection * sel = nil;
-    
     if(selectionIndex >= 0 && selectionIndex != NSNotFound)
         sel = [selection objectAtIndex:selectionIndex];
     
