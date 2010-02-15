@@ -185,6 +185,7 @@
         if(!appendSelection)
             [selection removeAllObjects];
         
+        // Add control points within box select to selection
         for(IPControlPoint * controlPoint in controlPoints)
         {
             if(NSPointInRect([controlPoint point],
@@ -192,6 +193,7 @@
             {
                 BOOL pointAlreadySelected = NO;
                 
+                // Make sure control point isn't already selected
                 for(IPControlPointSelection * sel in selection)
                 {
                     if(sel.controlPoint == controlPoint &&
@@ -247,6 +249,7 @@
 
 - (void)mouseDragged:(NSEvent *)event
 {
+    // If we're doing box select, don't update any control points
     if(!NSComparePoint(boxPoint, NSFarAwayPoint))
     {
         [self setNeedsDisplay:YES];
@@ -377,6 +380,7 @@
         [self drawPoint:controlPoint];
     }
     
+    // Draw box selector
     if(!NSComparePoint(boxPoint, NSFarAwayPoint))
     {
         NSColor * blue = [NSColor colorWithCalibratedRed:0.447 green:0.624
