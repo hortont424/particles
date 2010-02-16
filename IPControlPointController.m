@@ -2,20 +2,15 @@
 
 @implementation IPControlPointController
 
-- (IBAction)setControlPointType:(id)sender
+- (IBAction)changeControlPointType:(id)sender
 {
     //[controlPointType setEnabled:YES];
-	NSLog(@"%p", controlPointType);
-    NSLog(@"d: %@", [controlPointType labelForSegment:0]);
 }
 
-- (IBAction)setDrawControlPoints:(id)sender
+- (IBAction)changeDrawControlPoints:(id)sender
 {
-    /*[controlPointView setDrawControlPoints:
+    [controlPointView setDrawControlPoints:
         [drawControlPoints isSelectedForSegment:0]];
-    [drawControlPoints setLabel:@"Import" forSegment:0];
-    NSLog(@"%@", [drawControlPoints labelForSegment:0]);
-    NSLog(@"%@", [controlPointType labelForSegment:0]);*/
 }
 
 @end

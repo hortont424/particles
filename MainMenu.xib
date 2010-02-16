@@ -12,8 +12,8 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="368"/>
 			<integer value="29"/>
+			<integer value="368"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1290,10 +1290,13 @@
 				</object>
 				<string key="NSName">_NSMainMenu</string>
 			</object>
+			<object class="NSCustomObject" id="1061912924">
+				<string key="NSClassName">IPControlPointController</string>
+			</object>
 			<object class="NSWindowTemplate" id="513744381">
 				<int key="NSWindowStyleMask">15</int>
 				<int key="NSWindowBacking">2</int>
-				<string key="NSWindowRect">{{196, 240}, {480, 270}}</string>
+				<string key="NSWindowRect">{{196, 72}, {632, 438}}</string>
 				<int key="NSWTFlags">611844096</int>
 				<string key="NSWindowTitle">Window</string>
 				<string key="NSWindowClass">NSWindow</string>
@@ -1304,51 +1307,134 @@
 					<int key="NSvFlags">256</int>
 					<object class="NSMutableArray" key="NSSubviews">
 						<bool key="EncodedWithXMLCoder">YES</bool>
-						<object class="NSSegmentedControl" id="54471884">
+						<object class="NSSegmentedControl" id="173688666">
 							<reference key="NSNextResponder" ref="414427165"/>
-							<int key="NSvFlags">268</int>
-							<string key="NSFrame">{{200, 153}, {131, 24}}</string>
+							<int key="NSvFlags">292</int>
+							<string key="NSFrame">{{19, 18}, {214, 20}}</string>
 							<reference key="NSSuperview" ref="414427165"/>
 							<bool key="NSEnabled">YES</bool>
-							<object class="NSSegmentedCell" key="NSCell" id="587723598">
-								<int key="NSCellFlags">67239424</int>
+							<object class="NSSegmentedCell" key="NSCell" id="593821807">
+								<int key="NSCellFlags">604110336</int>
 								<int key="NSCellFlags2">0</int>
-								<object class="NSFont" key="NSSupport">
+								<object class="NSFont" key="NSSupport" id="28">
 									<string key="NSName">LucidaGrande</string>
-									<double key="NSSize">13</double>
-									<int key="NSfFlags">16</int>
+									<double key="NSSize">12</double>
+									<int key="NSfFlags">4883</int>
 								</object>
-								<reference key="NSControlView" ref="54471884"/>
+								<reference key="NSControlView" ref="173688666"/>
 								<object class="NSMutableArray" key="NSSegmentImages">
 									<bool key="EncodedWithXMLCoder">YES</bool>
 									<object class="NSSegmentItem">
-										<string key="NSSegmentItemLabel">abc</string>
+										<string key="NSSegmentItemLabel">Corner</string>
 										<int key="NSSegmentItemImageScaling">0</int>
 									</object>
 									<object class="NSSegmentItem">
-										<string key="NSSegmentItemLabel">def</string>
+										<string key="NSSegmentItemLabel">Smooth</string>
 										<int key="NSSegmentItemTag">1</int>
 										<bool key="NSSegmentItemSelected">YES</bool>
 										<int key="NSSegmentItemImageScaling">0</int>
 									</object>
 									<object class="NSSegmentItem">
-										<string key="NSSegmentItemLabel">ghi</string>
+										<string key="NSSegmentItemLabel">Symmetric</string>
 										<int key="NSSegmentItemImageScaling">0</int>
 									</object>
 								</object>
 								<int key="NSSelectedSegment">1</int>
-								<int key="NSSegmentStyle">1</int>
+								<int key="NSSegmentStyle">3</int>
 							</object>
 						</object>
+						<object class="NSSegmentedControl" id="1029180769">
+							<reference key="NSNextResponder" ref="414427165"/>
+							<int key="NSvFlags">289</int>
+							<string key="NSFrame">{{470, 18}, {143, 20}}</string>
+							<reference key="NSSuperview" ref="414427165"/>
+							<bool key="NSEnabled">YES</bool>
+							<object class="NSSegmentedCell" key="NSCell" id="361774927">
+								<int key="NSCellFlags">67239424</int>
+								<int key="NSCellFlags2">0</int>
+								<reference key="NSSupport" ref="28"/>
+								<reference key="NSControlView" ref="1029180769"/>
+								<object class="NSMutableArray" key="NSSegmentImages">
+									<bool key="EncodedWithXMLCoder">YES</bool>
+									<object class="NSSegmentItem">
+										<string key="NSSegmentItemLabel">Show Control Points</string>
+										<bool key="NSSegmentItemSelected">YES</bool>
+										<int key="NSSegmentItemImageScaling">0</int>
+									</object>
+								</object>
+								<int key="NSTrackingMode">1</int>
+								<int key="NSSegmentStyle">3</int>
+							</object>
+						</object>
+						<object class="NSScrollView" id="781218282">
+							<reference key="NSNextResponder" ref="414427165"/>
+							<int key="NSvFlags">274</int>
+							<object class="NSMutableArray" key="NSSubviews">
+								<bool key="EncodedWithXMLCoder">YES</bool>
+								<object class="NSClipView" id="736363047">
+									<reference key="NSNextResponder" ref="781218282"/>
+									<int key="NSvFlags">2304</int>
+									<object class="NSMutableArray" key="NSSubviews">
+										<bool key="EncodedWithXMLCoder">YES</bool>
+										<object class="NSCustomView" id="1000720244">
+											<reference key="NSNextResponder" ref="736363047"/>
+											<int key="NSvFlags">274</int>
+											<string key="NSFrameSize">{2048, 356}</string>
+											<reference key="NSSuperview" ref="736363047"/>
+											<string key="NSClassName">IPControlPointView</string>
+										</object>
+									</object>
+									<string key="NSFrame">{{1, 1}, {590, 356}}</string>
+									<reference key="NSSuperview" ref="781218282"/>
+									<reference key="NSNextKeyView" ref="1000720244"/>
+									<reference key="NSDocView" ref="1000720244"/>
+									<object class="NSColor" key="NSBGColor">
+										<int key="NSColorSpace">6</int>
+										<string key="NSCatalogName">System</string>
+										<string key="NSColorName">controlColor</string>
+										<object class="NSColor" key="NSColor">
+											<int key="NSColorSpace">3</int>
+											<bytes key="NSWhite">MC42NjY2NjY2NjY3AA</bytes>
+										</object>
+									</object>
+									<int key="NScvFlags">4</int>
+								</object>
+								<object class="NSScroller" id="748027035">
+									<reference key="NSNextResponder" ref="781218282"/>
+									<int key="NSvFlags">-2147483392</int>
+									<string key="NSFrame">{{-100, -100}, {15, 351}}</string>
+									<reference key="NSSuperview" ref="781218282"/>
+									<reference key="NSTarget" ref="781218282"/>
+									<string key="NSAction">_doScroller:</string>
+									<double key="NSCurValue">1</double>
+									<double key="NSPercent">0.96363627910614014</double>
+								</object>
+								<object class="NSScroller" id="630383165">
+									<reference key="NSNextResponder" ref="781218282"/>
+									<int key="NSvFlags">256</int>
+									<string key="NSFrame">{{1, 357}, {590, 15}}</string>
+									<reference key="NSSuperview" ref="781218282"/>
+									<bool key="NSEnabled">YES</bool>
+									<int key="NSsFlags">1</int>
+									<reference key="NSTarget" ref="781218282"/>
+									<string key="NSAction">_doScroller:</string>
+									<double key="NSPercent">0.2880859375</double>
+								</object>
+							</object>
+							<string key="NSFrame">{{20, 45}, {592, 373}}</string>
+							<reference key="NSSuperview" ref="414427165"/>
+							<reference key="NSNextKeyView" ref="736363047"/>
+							<int key="NSsFlags">162</int>
+							<reference key="NSVScroller" ref="748027035"/>
+							<reference key="NSHScroller" ref="630383165"/>
+							<reference key="NSContentView" ref="736363047"/>
+						</object>
 					</object>
-					<string key="NSFrameSize">{480, 270}</string>
+					<string key="NSFrameSize">{632, 438}</string>
 					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1680, 1028}}</string>
 				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
-			</object>
-			<object class="NSCustomObject" id="545645396">
-				<string key="NSClassName">IPControlPointController</string>
 			</object>
 		</object>
 		<object class="IBObjectContainer" key="IBDocument.Objects">
@@ -2011,28 +2097,44 @@
 					<int key="connectionID">810</int>
 				</object>
 				<object class="IBConnectionRecord">
-					<object class="IBActionConnection" key="connection">
-						<string key="label">setControlPointType:</string>
-						<reference key="source" ref="545645396"/>
-						<reference key="destination" ref="54471884"/>
-					</object>
-					<int key="connectionID">814</int>
-				</object>
-				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
 						<string key="label">controlPointType</string>
-						<reference key="source" ref="545645396"/>
-						<reference key="destination" ref="54471884"/>
+						<reference key="source" ref="1061912924"/>
+						<reference key="destination" ref="173688666"/>
 					</object>
-					<int key="connectionID">816</int>
+					<int key="connectionID">828</int>
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">delegate</string>
-						<reference key="source" ref="1021"/>
-						<reference key="destination" ref="545645396"/>
+						<string key="label">drawControlPoints</string>
+						<reference key="source" ref="1061912924"/>
+						<reference key="destination" ref="1029180769"/>
 					</object>
-					<int key="connectionID">817</int>
+					<int key="connectionID">829</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">changeDrawControlPoints:</string>
+						<reference key="source" ref="1061912924"/>
+						<reference key="destination" ref="1029180769"/>
+					</object>
+					<int key="connectionID">830</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">changeControlPointType:</string>
+						<reference key="source" ref="1061912924"/>
+						<reference key="destination" ref="173688666"/>
+					</object>
+					<int key="connectionID">831</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">controlPointView</string>
+						<reference key="source" ref="1061912924"/>
+						<reference key="destination" ref="1000720244"/>
+					</object>
+					<int key="connectionID">836</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -2372,7 +2474,9 @@
 						<reference key="object" ref="414427165"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="54471884"/>
+							<reference ref="173688666"/>
+							<reference ref="1029180769"/>
+							<reference ref="781218282"/>
 						</object>
 						<reference key="parent" ref="513744381"/>
 					</object>
@@ -3081,23 +3185,63 @@
 						<reference key="parent" ref="108708964"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">811</int>
-						<reference key="object" ref="54471884"/>
+						<int key="objectID">819</int>
+						<reference key="object" ref="173688666"/>
 						<object class="NSMutableArray" key="children">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<reference ref="587723598"/>
+							<reference ref="593821807"/>
 						</object>
 						<reference key="parent" ref="414427165"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">812</int>
-						<reference key="object" ref="587723598"/>
-						<reference key="parent" ref="54471884"/>
+						<int key="objectID">820</int>
+						<reference key="object" ref="593821807"/>
+						<reference key="parent" ref="173688666"/>
 					</object>
 					<object class="IBObjectRecord">
-						<int key="objectID">813</int>
-						<reference key="object" ref="545645396"/>
+						<int key="objectID">821</int>
+						<reference key="object" ref="1029180769"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="361774927"/>
+						</object>
+						<reference key="parent" ref="414427165"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">822</int>
+						<reference key="object" ref="361774927"/>
+						<reference key="parent" ref="1029180769"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">827</int>
+						<reference key="object" ref="1061912924"/>
 						<reference key="parent" ref="0"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">832</int>
+						<reference key="object" ref="781218282"/>
+						<object class="NSMutableArray" key="children">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<reference ref="748027035"/>
+							<reference ref="630383165"/>
+							<reference ref="1000720244"/>
+						</object>
+						<reference key="parent" ref="414427165"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">833</int>
+						<reference key="object" ref="748027035"/>
+						<reference key="parent" ref="781218282"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">834</int>
+						<reference key="object" ref="630383165"/>
+						<reference key="parent" ref="781218282"/>
+					</object>
+					<object class="IBObjectRecord">
+						<int key="objectID">835</int>
+						<reference key="object" ref="1000720244"/>
+						<reference key="parent" ref="781218282"/>
 					</object>
 				</object>
 			</object>
@@ -3314,12 +3458,23 @@
 					<string>81.IBPluginDependency</string>
 					<string>81.ImportedFromIB2</string>
 					<string>81.editorWindowContentRectSynchronizationRect</string>
-					<string>811.IBPluginDependency</string>
-					<string>812.IBPluginDependency</string>
+					<string>819.IBPluginDependency</string>
+					<string>819.IBSegmentedControlTracker.RoundRobinState</string>
+					<string>819.IBSegmentedControlTracker.WasGrowing</string>
 					<string>82.IBPluginDependency</string>
 					<string>82.ImportedFromIB2</string>
+					<string>820.IBPluginDependency</string>
+					<string>821.IBPluginDependency</string>
+					<string>821.IBSegmentedControlTracker.RoundRobinState</string>
+					<string>821.IBSegmentedControlTracker.WasGrowing</string>
+					<string>822.IBPluginDependency</string>
+					<string>822.IBSegmentedControlInspectorSelectedSegmentMetadataKey</string>
 					<string>83.IBPluginDependency</string>
 					<string>83.ImportedFromIB2</string>
+					<string>832.IBPluginDependency</string>
+					<string>833.IBPluginDependency</string>
+					<string>834.IBPluginDependency</string>
+					<string>835.IBPluginDependency</string>
 					<string>92.IBPluginDependency</string>
 					<string>92.ImportedFromIB2</string>
 				</object>
@@ -3389,9 +3544,9 @@
 					<string>{{475, 832}, {234, 43}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{545, 458}, {480, 270}}</string>
+					<string>{{409, 337}, {632, 438}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>{{545, 458}, {480, 270}}</string>
+					<string>{{409, 337}, {632, 438}}</string>
 					<integer value="1"/>
 					<string>{{11, 666}, {480, 270}}</string>
 					<string>{3.40282e+38, 3.40282e+38}</string>
@@ -3535,11 +3690,22 @@
 					<integer value="1"/>
 					<string>{{323, 672}, {199, 203}}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<integer value="2"/>
 					<integer value="1"/>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<integer value="2"/>
+					<integer value="1"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<integer value="0"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<integer value="1"/>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<integer value="1"/>
 				</object>
@@ -3560,7 +3726,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">817</int>
+			<int key="maxID">836</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -3572,8 +3738,8 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>setControlPointType:</string>
-							<string>setDrawControlPoints:</string>
+							<string>changeControlPointType:</string>
+							<string>changeDrawControlPoints:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
@@ -3586,17 +3752,27 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>controlPointType</string>
+							<string>controlPointView</string>
 							<string>drawControlPoints</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>NSSegmentedControl</string>
+							<string>IPControlPointView</string>
 							<string>NSSegmentedControl</string>
 						</object>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBProjectSource</string>
 						<string key="minorKey">IPControlPointController.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">IPControlPointView</string>
+					<string key="superclassName">NSView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBProjectSource</string>
+						<string key="minorKey">IPControlPointView.h</string>
 					</object>
 				</object>
 			</object>
@@ -4043,6 +4219,22 @@
 					</object>
 				</object>
 				<object class="IBPartialClassDescription">
+					<string key="className">NSScrollView</string>
+					<string key="superclassName">NSView</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">AppKit.framework/Headers/NSScrollView.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
+					<string key="className">NSScroller</string>
+					<string key="superclassName">NSControl</string>
+					<object class="IBClassDescriptionSource" key="sourceIdentifier">
+						<string key="majorKey">IBFrameworkSource</string>
+						<string key="minorKey">AppKit.framework/Headers/NSScroller.h</string>
+					</object>
+				</object>
+				<object class="IBPartialClassDescription">
 					<string key="className">NSSegmentedCell</string>
 					<string key="superclassName">NSActionCell</string>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
@@ -4137,7 +4329,7 @@
 			<integer value="3000" key="NS.object.0"/>
 		</object>
 		<bool key="IBDocument.PluginDeclaredDependenciesTrackSystemTargetVersion">YES</bool>
-		<nil key="IBDocument.LastKnownRelativeProjectPath"/>
+		<string key="IBDocument.LastKnownRelativeProjectPath">Interpolator.xcodeproj</string>
 		<int key="IBDocument.defaultPropertyAccessControl">3</int>
 	</data>
 </archive>
