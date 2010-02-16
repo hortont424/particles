@@ -25,9 +25,14 @@
     int highlightedSubpoint;
     
     NSPoint dragPoint, boxPoint;
+    
+    BOOL drawControlPoints;
 }
 
 - (void)createTrackingAreasForControlPoint:(IPControlPoint *)controlPoint;
 - (void)drawPoint:(IPControlPoint *)controlPoint;
+
+- (void)setDrawControlPoints:(BOOL)newDrawControlPoints;
+- (BOOL)drawControlPoints;
 
 @end

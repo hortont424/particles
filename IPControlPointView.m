@@ -14,6 +14,8 @@
     {
         IPControlPoint * pt;
         
+        drawControlPoints = TRUE;
+        
         controlPointSubareas = [[NSMapTable alloc]
             initWithKeyOptions:NSMapTableStrongMemory
             valueOptions:NSMapTableStrongMemory
@@ -398,6 +400,8 @@
     }
 }
 
+// TODO: move this stuff into an IPCurve class (along with
+// set of control points, etc.)
 - (double)evaluateBezierParameterAtT:(double)t X1:(double)x1 X2:(double)x2
     X3:(double)x3 X4:(double)x4
 {
@@ -453,9 +457,12 @@
     
     [self drawCurve];
     
-    for(IPControlPoint * controlPoint in controlPoints)
+    if(drawControlPoints) // TODO: disable manipulation too
     {
-        [self drawPoint:controlPoint];
+        for(IPControlPoint * controlPoint in controlPoints)
+        {
+            [self drawPoint:controlPoint];
+        }
     }
     
     // Draw box selector
@@ -472,6 +479,17 @@
         [NSBezierPath fillRect:NSRectWithPoints(boxPoint, mouse)];
         [NSBezierPath strokeRect:NSRectWithPoints(boxPoint, mouse)];
     }
+}
+
+- (void)setDrawControlPoints:(BOOL)newDrawControlPoints
+{
+    drawControlPoints = newDrawControlPoints;
+    [self setNeedsDisplay:YES];
+}
+
+- (BOOL)drawControlPoints
+{
+    return drawControlPoints;
 }
 
 @end
