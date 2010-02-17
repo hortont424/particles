@@ -11,7 +11,7 @@ typedef enum
     IP_CONTROL_POINT_SENTRY
 } IPControlPointType;
 
-@interface IPControlPoint : NSObject
+@interface IPControlPoint : NSObject <NSCoding>
 {
     NSPoint point;
     IPControlPointType type;
@@ -32,5 +32,9 @@ typedef enum
 - (void)setControlPoint:(uint)index toPoint:(NSPoint)newPoint;
 - (void)setAbsoluteControlPoint:(uint)index toPoint:(NSPoint)newPoint;
 - (void)setControlWeight:(uint)index toValue:(double)newWeight;
+
+// (De)Coding
+- (id)initWithCoder:(NSCoder*)coder;
+- (void)encodeWithCoder:(NSCoder*)coder;
 
 @end

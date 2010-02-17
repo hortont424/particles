@@ -83,16 +83,32 @@
     NSPoint thisPolarPoint = NSCartesianToPolar(controlPoints[index]);
     NSPoint otherPolarPoint = NSCartesianToPolar(controlPoints[!index]);
     
+    // Constrain left control point to left quadrants
+    if(index == 0 &&
+       thisPolarPoint.y < (M_PI / 2.0) && thisPolarPoint.y > 0)
+        thisPolarPoint.y = (M_PI / 2.0);
+    
+    if(index == 0 &&
+       thisPolarPoint.y < 0 && thisPolarPoint.y > -(M_PI / 2.0))
+        thisPolarPoint.y = -(M_PI / 2.0);
+    
+    // Constrain right handle to right quadrants
+    if(index == 1 &&
+       thisPolarPoint.y > (M_PI / 2.0) && thisPolarPoint.y < M_PI)
+        thisPolarPoint.y = (M_PI / 2.0);
+    
+    if(index == 1 &&
+       thisPolarPoint.y < -(M_PI / 2.0) && thisPolarPoint.y > -M_PI)
+        thisPolarPoint.y = -(M_PI / 2.0);
+    
     switch(type)
     {
         case IP_CONTROL_POINT_SMOOTH:
             otherPolarPoint.y = thisPolarPoint.y + M_PI;
-            controlPoints[!index] = NSPolarToCartesian(otherPolarPoint);
             break;
         case IP_CONTROL_POINT_SMOOTH_SYMMETRIC:
             otherPolarPoint.x = thisPolarPoint.x;
             otherPolarPoint.y = thisPolarPoint.y + M_PI;
-            controlPoints[!index] = NSPolarToCartesian(otherPolarPoint);
             break;
         case IP_CONTROL_POINT_CORNER:
             break;
@@ -100,6 +116,9 @@
             NSLog(@"Invalid control point type: %d.", type);
             return;
     }
+    
+    controlPoints[index] = NSPolarToCartesian(thisPolarPoint);
+    controlPoints[!index] = NSPolarToCartesian(otherPolarPoint);
 }
 
 - (void)setAbsoluteControlPoint:(uint)index toPoint:(NSPoint)newPoint
@@ -142,6 +161,24 @@
             NSLog(@"Invalid control point type: %d.", type);
             return;
     }
+}
+
+// (De)Coding
+
+- (id)initWithCoder:(NSCoder*)coder
+{
+    point = [coder decodePointForKey:@"point"];
+    type = [coder decodeIntForKey:@"type"];
+    controlPoints[0] = [coder decodePointForKey:@"leftControlPoint"];
+    controlPoints[1] = [coder decodePointForKey:@"rightControlPoint"];
+}
+
+- (void)encodeWithCoder:(NSCoder*)coder
+{
+    [coder encodePoint:point forKey:@"point"];
+    [coder encodeInt:type forKey:@"type"];
+    [coder encodePoint:controlPoints[0] forKey:@"leftControlPoint"];
+    [coder encodePoint:controlPoints[1] forKey:@"rightControlPoint"];
 }
 
 @end
