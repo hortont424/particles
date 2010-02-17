@@ -403,10 +403,20 @@
         [self evaluateBezierParameterAtT:t X1:p0.y X2:p1.y X3:p2.y X4:p3.y]);
 }
 
+NSInteger controlPointSort(id point1, id point2, void * ctx)
+{
+    IPControlPoint * a = (IPControlPoint *)point1;
+    IPControlPoint * b = (IPControlPoint *)point2;
+    
+    return [a point].x > [b point].x ? 1 : -1;
+}
+
 - (void)drawCurve:(IPCurve *)curve
 {
     IPControlPoint * a, * b;
     NSArray * controlPoints = [curve controlPoints];
+    controlPoints = [controlPoints sortedArrayUsingFunction:controlPointSort
+        context:nil];
     
     CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
     CGContextSetInterpolationQuality(ctx, kCGInterpolationHigh);
