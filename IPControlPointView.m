@@ -12,8 +12,6 @@
     
     if (self)
     {
-        IPControlPoint * pt;
-        
         drawControlPoints = TRUE;
         
         controlPointSubareas = [[NSMapTable alloc]
@@ -22,36 +20,15 @@
             capacity:32];
         
         dragPoint = boxPoint = NSFarAwayPoint;
-        controlPoints = [[NSMutableArray alloc] init];
+        curves = [[NSMutableArray alloc] init];
         highlightedControlPoint = nil;
         selection = [[NSMutableArray alloc] init];
         
-        pt = [[IPControlPoint alloc] init];
-        [pt setPoint:NSMakePoint(50, 50)];
-        [pt setType:IP_CONTROL_POINT_CORNER];
-        [pt setControlPoint:0 toPoint:NSMakePoint(-2, -12)];
-        [pt setControlPoint:1 toPoint:NSMakePoint(15, 15)];
+        [curves addObject:[[IPCurve alloc] init]];
         
-        [controlPoints addObject:pt];
-        [self createTrackingAreasForControlPoint:pt];
-        
-        pt = [[IPControlPoint alloc] init];
-        [pt setPoint:NSMakePoint(150, 150)];
-        [pt setType:IP_CONTROL_POINT_SMOOTH];
-        [pt setControlPoint:0 toPoint:NSMakePoint(30, 15)];
-        [pt setControlPoint:1 toPoint:NSMakePoint(0, -12)];
-        
-        [controlPoints addObject:pt];
-        [self createTrackingAreasForControlPoint:pt];
-        
-        pt = [[IPControlPoint alloc] init];
-        [pt setPoint:NSMakePoint(300, 200)];
-        [pt setType:IP_CONTROL_POINT_SMOOTH_SYMMETRIC];
-        [pt setControlPoint:0 toPoint:NSMakePoint(-30, -30)];
-        [pt setControlPoint:1 toPoint:NSMakePoint(30, 30)];
-        
-        [controlPoints addObject:pt];
-        [self createTrackingAreasForControlPoint:pt];
+        for(IPCurve * curve in curves)
+            for(IPControlPoint * pt in [curve controlPoints])
+                [self createTrackingAreasForControlPoint:pt];
     }
     return self;
 }
@@ -189,35 +166,37 @@
             [selection removeAllObjects];
         
         // Add control points within box select to selection
-        for(IPControlPoint * controlPoint in controlPoints)
+        for(IPCurve * curve in curves)
         {
-            if(NSPointInRect([controlPoint point],
-                NSRectWithPoints(boxPoint, mouse)))
+            for(IPControlPoint * controlPoint in [curve controlPoints])
             {
-                BOOL pointAlreadySelected = NO;
-                
-                // Make sure control point isn't already selected
-                for(IPControlPointSelection * sel in selection)
+                if(NSPointInRect([controlPoint point],
+                    NSRectWithPoints(boxPoint, mouse)))
                 {
-                    if(sel.controlPoint == controlPoint &&
-                       sel.subpoint == 2)
+                    BOOL pointAlreadySelected = NO;
+                
+                    // Make sure control point isn't already selected
+                    for(IPControlPointSelection * sel in selection)
                     {
-                        pointAlreadySelected = YES;
-                        break;
+                        if(sel.controlPoint == controlPoint &&
+                           sel.subpoint == 2)
+                        {
+                            pointAlreadySelected = YES;
+                            break;
+                        }
                     }
+                
+                    if(pointAlreadySelected)
+                        continue;
+                
+                    IPControlPointSelection * sel = 
+                        [[IPControlPointSelection alloc] init];
+                    sel.controlPoint = controlPoint;
+                    sel.subpoint = 2;
+                    [selection addObject:sel];
                 }
-                
-                if(pointAlreadySelected)
-                    continue;
-                
-                IPControlPointSelection * sel = 
-                    [[IPControlPointSelection alloc] init];
-                sel.controlPoint = controlPoint;
-                sel.subpoint = 2;
-                [selection addObject:sel];
             }
         }
-        
         boxPoint = NSFarAwayPoint;
         [self setNeedsDisplay:YES];
         return;
@@ -424,9 +403,10 @@
         [self evaluateBezierParameterAtT:t X1:p0.y X2:p1.y X3:p2.y X4:p3.y]);
 }
 
-- (void)drawCurve
+- (void)drawCurve:(IPCurve *)curve
 {
     IPControlPoint * a, * b;
+    NSArray * controlPoints = [curve controlPoints];
     
     CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
     CGContextSetInterpolationQuality(ctx, kCGInterpolationHigh);
@@ -455,15 +435,13 @@
     [[NSColor whiteColor] setFill];
     NSRectFill(dirtyRect);
     
-    [self drawCurve];
+    for(IPCurve * curve in curves)
+        [self drawCurve:curve];
     
     if(drawControlPoints) // TODO: disable manipulation too
-    {
-        for(IPControlPoint * controlPoint in controlPoints)
-        {
-            [self drawPoint:controlPoint];
-        }
-    }
+        for(IPCurve * curve in curves)
+            for(IPControlPoint * controlPoint in [curve controlPoints])
+                [self drawPoint:controlPoint];
     
     // Draw box selector
     if(!NSComparePoint(boxPoint, NSFarAwayPoint))

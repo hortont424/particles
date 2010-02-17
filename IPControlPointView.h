@@ -2,6 +2,7 @@
 #import <ApplicationServices/ApplicationServices.h>
 
 #import "IPControlPoint.h"
+#import "IPCurve.h"
 
 @interface IPControlPointSelection : NSObject
 {
@@ -16,7 +17,7 @@
 
 @interface IPControlPointView : NSView
 {
-    NSMutableArray * controlPoints;
+    NSMutableArray * curves;
     NSMapTable * controlPointSubareas;
     
     NSMutableArray * selection;
@@ -30,9 +31,15 @@
 }
 
 - (void)createTrackingAreasForControlPoint:(IPControlPoint *)controlPoint;
-- (void)drawPoint:(IPControlPoint *)controlPoint;
 
-- (void)setDrawControlPoints:(BOOL)newDrawControlPoints;
+// Drawing
+- (void)drawPoint:(IPControlPoint *)controlPoint;
+- (void)drawCurve:(IPCurve *)curve;
+
+// Accessors
 - (BOOL)drawControlPoints;
+
+// Mutators
+- (void)setDrawControlPoints:(BOOL)newDrawControlPoints;
 
 @end

@@ -4,7 +4,7 @@ all:
 	xcodebuild
 
 run:
-	open ./build/Release/Interpolator.app
+	./build/Release/Interpolator.app/Contents/MacOS/Interpolator
 
 edit:
 	mate *.m *.h
