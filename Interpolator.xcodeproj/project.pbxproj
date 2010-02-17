@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		351CC6BC112C6D47007B522B /* IPCurveStorage.m in Sources */ = {isa = PBXBuildFile; fileRef = 351CC6BB112C6D47007B522B /* IPCurveStorage.m */; };
 		35378FEB112884420040C771 /* NSPointFunctions_CocoaDevUsersAdditions.m in Sources */ = {isa = PBXBuildFile; fileRef = 35378FEA112884420040C771 /* NSPointFunctions_CocoaDevUsersAdditions.m */; };
 		356A4D71112A78AA00C67A80 /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = 356A4D70112A78AA00C67A80 /* MainMenu.xib */; };
 		359726F61127CAC000B0427E /* IPCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 359726F51127CAC000B0427E /* IPCurveView.m */; };
@@ -24,6 +25,8 @@
 		29B97316FDCFA39411CA2CEA /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		29B97324FDCFA39411CA2CEA /* AppKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AppKit.framework; path = /System/Library/Frameworks/AppKit.framework; sourceTree = "<absolute>"; };
 		29B97325FDCFA39411CA2CEA /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = /System/Library/Frameworks/Foundation.framework; sourceTree = "<absolute>"; };
+		351CC6BA112C6D47007B522B /* IPCurveStorage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPCurveStorage.h; sourceTree = "<group>"; };
+		351CC6BB112C6D47007B522B /* IPCurveStorage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPCurveStorage.m; sourceTree = "<group>"; };
 		35378FEA112884420040C771 /* NSPointFunctions_CocoaDevUsersAdditions.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = NSPointFunctions_CocoaDevUsersAdditions.m; sourceTree = "<group>"; };
 		356A4D70112A78AA00C67A80 /* MainMenu.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = MainMenu.xib; sourceTree = "<group>"; };
 		359726F41127CAC000B0427E /* IPCurveView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPCurveView.h; sourceTree = "<group>"; };
@@ -64,6 +67,8 @@
 				35378FEA112884420040C771 /* NSPointFunctions_CocoaDevUsersAdditions.m */,
 				35C08301112BC3B900DC3500 /* IPCurve.h */,
 				35C08302112BC3B900DC3500 /* IPCurve.m */,
+				351CC6BA112C6D47007B522B /* IPCurveStorage.h */,
+				351CC6BB112C6D47007B522B /* IPCurveStorage.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -193,6 +198,7 @@
 				359726FC1127CADC00B0427E /* IPControlPoint.m in Sources */,
 				35378FEB112884420040C771 /* NSPointFunctions_CocoaDevUsersAdditions.m in Sources */,
 				35C08303112BC3B900DC3500 /* IPCurve.m in Sources */,
+				351CC6BC112C6D47007B522B /* IPCurveStorage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

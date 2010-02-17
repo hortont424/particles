@@ -2,6 +2,16 @@
 
 @implementation IPController
 
+- (void)awakeFromNib
+{
+    [curveStorage load];
+}
+
+- (void)applicationWillTerminate:(NSNotification *)notification
+{
+    [curveStorage save];
+}
+
 - (IBAction)changeControlPointType:(id)sender
 {
     //[controlPointType setEnabled:YES];

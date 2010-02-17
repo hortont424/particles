@@ -20,17 +20,24 @@
             capacity:32];
         
         dragPoint = boxPoint = NSFarAwayPoint;
-        curves = [[NSMutableArray alloc] init];
         highlightedControlPoint = nil;
         selection = [[NSMutableArray alloc] init];
-        
-        [curves addObject:[[IPCurve alloc] init]];
-        
-        for(IPCurve * curve in curves)
-            for(IPControlPoint * pt in [curve controlPoints])
-                [self createTrackingAreasForControlPoint:pt];
     }
     return self;
+}
+
+- (void)updateCurves
+{
+    curves = [curveStorage curves];
+    
+    for(NSTrackingArea * ta in [self trackingAreas])
+        [self removeTrackingArea:ta];
+    
+    for(IPCurve * curve in curves)
+        for(IPControlPoint * pt in [curve controlPoints])
+            [self createTrackingAreasForControlPoint:pt];
+    
+    [self setNeedsDisplay:YES];
 }
 
 - (void)createTrackingAreasForControlPoint:(IPControlPoint *)controlPoint
