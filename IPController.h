@@ -5,15 +5,18 @@
 
 @interface IPController : NSObject
 {
-    IBOutlet NSSegmentedControl * controlPointType;
-    IBOutlet NSSegmentedControl * drawControlPoints;
+    IBOutlet NSSegmentedControl * controlPointTypeButtons;
+    IBOutlet NSSegmentedControl * drawControlPointsButton;
+    IBOutlet NSPopUpButton * curveSetChooser;
     
     IBOutlet IPCurveView * controlPointView;
-	
 	IBOutlet IPCurveStorage * curveStorage;
 }
 
-- (IBAction)changeControlPointType:(id)sender;
-- (IBAction)changeDrawControlPoints:(id)sender;
+- (IBAction)setControlPointType:(id)sender;
+- (IBAction)setDrawControlPoints:(id)sender;
+
+- (IBAction)addCurveSet:(id)sender;
+- (IBAction)removeCurveSet:(id)sender;
 
 @end

@@ -12,15 +12,25 @@
     [curveStorage save];
 }
 
-- (IBAction)changeControlPointType:(id)sender
+- (IBAction)setControlPointType:(id)sender
 {
     //[controlPointType setEnabled:YES];
 }
 
-- (IBAction)changeDrawControlPoints:(id)sender
+- (IBAction)setDrawControlPoints:(id)sender
 {
     [controlPointView setDrawControlPoints:
-        [drawControlPoints isSelectedForSegment:0]];
+        [drawControlPointsButton isSelectedForSegment:0]];
+}
+
+- (IBAction)addCurveSet:(id)sender
+{
+    NSLog(@"add curve set");
+}
+
+- (IBAction)removeCurveSet:(id)sender
+{
+    NSLog(@"remove curve set");
 }
 
 @end
