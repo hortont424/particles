@@ -114,6 +114,7 @@
     else
     {
         dragPoint = mouse;
+        [NSCursor hide];
         
         // Make sure point hasn't already been added to selection
         for(IPControlPointSelection * sel in selection)
@@ -152,8 +153,6 @@
                 [self removeTrackingArea:ta];
             }
         }
-        
-        [NSCursor hide];
     }
     
     [self setNeedsDisplay:YES];
@@ -211,10 +210,11 @@
     
     dragPoint = NSFarAwayPoint;
     
+    if(highlightedControlPoint)
+        [NSCursor unhide];
+    
     if([selection count])
     {
-        [NSCursor unhide];
-        
         // Recalculate and add new tracking areas for control points
         for(IPControlPointSelection * sel in selection)
         {
@@ -252,7 +252,8 @@
         return;
     }
     
-    if([selection count] == 0 || NSComparePoint(dragPoint, NSFarAwayPoint))
+    if(!highlightedControlPoint || [selection count] == 0 ||
+       NSComparePoint(dragPoint, NSFarAwayPoint))
         return;
     
     BOOL snapAngle = ([event modifierFlags] & NSShiftKeyMask) != 0;
