@@ -46,4 +46,21 @@
     return controlPoints;
 }
 
+// (De)Coding
+
+- (id)initWithCoder:(NSCoder*)coder
+{
+    if (self = [super init])
+    {
+        controlPoints = [coder decodeObjectForKey:@"controlPoints"];
+    }
+    
+    return self;
+}
+
+- (void)encodeWithCoder:(NSCoder*)coder
+{
+    [coder encodeObject:controlPoints forKey:@"controlPoints"];
+}
+
 @end

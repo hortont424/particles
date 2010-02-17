@@ -10,4 +10,8 @@
 // Accessors
 - (NSArray *)controlPoints;
 
+// (De)Coding
+- (id)initWithCoder:(NSCoder*)coder;
+- (void)encodeWithCoder:(NSCoder*)coder;
+
 @end

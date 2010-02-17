@@ -167,10 +167,15 @@
 
 - (id)initWithCoder:(NSCoder*)coder
 {
-    point = [coder decodePointForKey:@"point"];
-    type = [coder decodeIntForKey:@"type"];
-    controlPoints[0] = [coder decodePointForKey:@"leftControlPoint"];
-    controlPoints[1] = [coder decodePointForKey:@"rightControlPoint"];
+    if (self = [super init])
+    {
+        point = [coder decodePointForKey:@"point"];
+        type = [coder decodeIntForKey:@"type"];
+        controlPoints[0] = [coder decodePointForKey:@"leftControlPoint"];
+        controlPoints[1] = [coder decodePointForKey:@"rightControlPoint"];
+    }
+    
+    return self;
 }
 
 - (void)encodeWithCoder:(NSCoder*)coder
