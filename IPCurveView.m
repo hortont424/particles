@@ -1,10 +1,10 @@
-#import "IPControlPointView.h"
+#import "IPCurveView.h"
 
 @implementation IPControlPointSelection
 @synthesize controlPoint, subpoint;
 @end
 
-@implementation IPControlPointView
+@implementation IPCurveView
 
 - (id)initWithFrame:(NSRect)frame
 {

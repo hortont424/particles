@@ -1,13 +1,13 @@
 #import <Cocoa/Cocoa.h>
 
-#import "IPControlPointView.h"
+#import "IPCurveView.h"
 
-@interface IPControlPointController : NSObject
+@interface IPController : NSObject
 {
     IBOutlet NSSegmentedControl * controlPointType;
     IBOutlet NSSegmentedControl * drawControlPoints;
     
-    IBOutlet IPControlPointView * controlPointView;
+    IBOutlet IPCurveView * controlPointView;
 }
 
 - (IBAction)changeControlPointType:(id)sender;

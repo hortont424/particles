@@ -1,6 +1,6 @@
-#import "IPControlPointController.h"
+#import "IPController.h"
 
-@implementation IPControlPointController
+@implementation IPController
 
 - (IBAction)changeControlPointType:(id)sender
 {

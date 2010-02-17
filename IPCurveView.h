@@ -15,7 +15,7 @@
 
 @end
 
-@interface IPControlPointView : NSView
+@interface IPCurveView : NSView
 {
     NSMutableArray * curves;
     NSMapTable * controlPointSubareas;
