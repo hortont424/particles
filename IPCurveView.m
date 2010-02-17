@@ -144,7 +144,7 @@
         
         // Remove tracking areas for all control points
         // They'll be readded when the user releases the mouse
-        for(IPControlPointSelection * sel in selection)
+        /*for(IPControlPointSelection * sel in selection)
         {
             NSArray * areas;
             areas = [controlPointSubareas objectForKey:sel.controlPoint];
@@ -152,7 +152,7 @@
             {
                 [self removeTrackingArea:ta];
             }
-        }
+        }*/
     }
     
     [self setNeedsDisplay:YES];
@@ -211,14 +211,14 @@
     dragPoint = NSFarAwayPoint;
     
     if(highlightedControlPoint)
-        [NSCursor unhide];
-    
-    if([selection count])
     {
-        // Recalculate and add new tracking areas for control points
-        for(IPControlPointSelection * sel in selection)
+        [NSCursor unhide];
+        
+        if(nextHighlightedControlPointSet)
         {
-            [self createTrackingAreasForControlPoint:sel.controlPoint];
+            nextHighlightedControlPointSet = NO;
+            highlightedControlPoint = nextHighlightedControlPoint;
+            highlightedSubpoint = nextHighlightedSubpoint;
         }
     }
     
@@ -228,7 +228,15 @@
 - (void)mouseEntered:(NSEvent *)event
 {
     if(!NSComparePoint(dragPoint, NSFarAwayPoint))
+    {
+        NSDictionary * userInfo = [event userData];
+        nextHighlightedControlPoint = [userInfo objectForKey:@"point"];
+        nextHighlightedSubpoint = [[userInfo objectForKey:@"subpoint"] 
+            intValue];
+        nextHighlightedControlPointSet = YES;
+        
         return;
+    }
     
     NSDictionary * userInfo = [event userData];
     highlightedControlPoint = [userInfo objectForKey:@"point"];
@@ -302,6 +310,24 @@
             [controlPoint setControlPoint:subpoint toPoint:point];
     }
     
+    if([selection count])
+    {
+        // Recalculate and add new tracking areas for control points
+        for(IPControlPointSelection * sel in selection)
+        {
+            NSArray * areas;
+            areas = [controlPointSubareas objectForKey:sel.controlPoint];
+            
+            for(NSTrackingArea * ta in areas)
+                [self removeTrackingArea:ta];
+        }
+        
+        for(IPControlPointSelection * sel in selection)
+        {
+            [self createTrackingAreasForControlPoint:sel.controlPoint];
+        }
+    }
+    
     [self setNeedsDisplay:YES];
     
     dragPoint = mouse;
@@ -310,7 +336,11 @@
 - (void)mouseExited:(NSEvent *)event
 {
     if(!NSComparePoint(dragPoint, NSFarAwayPoint))
+    {
+        nextHighlightedControlPoint = nil;
+        nextHighlightedControlPointSet = YES;
         return;
+    }
     
     highlightedControlPoint = nil;
 
