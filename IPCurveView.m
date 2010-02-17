@@ -141,18 +141,6 @@
         sel.controlPoint = highlightedControlPoint;
         sel.subpoint = highlightedSubpoint;
         [selection addObject:sel];
-        
-        // Remove tracking areas for all control points
-        // They'll be readded when the user releases the mouse
-        /*for(IPControlPointSelection * sel in selection)
-        {
-            NSArray * areas;
-            areas = [controlPointSubareas objectForKey:sel.controlPoint];
-            for(NSTrackingArea * ta in areas)
-            {
-                [self removeTrackingArea:ta];
-            }
-        }*/
     }
     
     [self setNeedsDisplay:YES];
@@ -312,7 +300,7 @@
     
     if([selection count])
     {
-        // Recalculate and add new tracking areas for control points
+        // Recalculate tracking areas for selected control points
         for(IPControlPointSelection * sel in selection)
         {
             NSArray * areas;
@@ -320,10 +308,7 @@
             
             for(NSTrackingArea * ta in areas)
                 [self removeTrackingArea:ta];
-        }
-        
-        for(IPControlPointSelection * sel in selection)
-        {
+            
             [self createTrackingAreasForControlPoint:sel.controlPoint];
         }
     }
