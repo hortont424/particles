@@ -11,7 +11,7 @@
     
     if(self)
     {
-        curves = [[NSMutableArray alloc] init];
+        curveSets = [[NSMutableArray alloc] init];
     }
     
     return self;
@@ -36,9 +36,9 @@
 
 // Accessors
 
-- (NSMutableArray *)curves
+- (NSMutableArray *)curveSets
 {
-    return curves;
+    return curveSets;
 }
 
 // (De)Coding
@@ -46,7 +46,7 @@
 - (void)save
 {
     NSDictionary * root;
-    root = [NSDictionary dictionaryWithObject:curves forKey:@"curves"];
+    root = [NSDictionary dictionaryWithObject:curveSets forKey:@"curveSets"];
     [NSKeyedArchiver archiveRootObject:root toFile:[self pathForDataFile]];
 }
 
@@ -58,11 +58,12 @@
     
     if(root)
     {
-        curves = [root objectForKey:@"curves"];
+        curveSets = [root objectForKey:@"curveSets"];
     }
     else
     {
         // Add one default curve
+        IPCurveSet * curveSet = [[IPCurveSet alloc] init];
         IPCurve * curve = [[IPCurve alloc] init];
         IPControlPoint * pt;
 
@@ -87,7 +88,9 @@
         [pt setControlPoint:1 toPoint:NSMakePoint(30, 30)];
         [curve addControlPoint:pt];
         
-        [curves addObject:curve];
+        [curveSet addCurve:curve];
+        
+        [curveSets addObject:curveSet];
     }
     
     [curveView updateCurves];

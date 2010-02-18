@@ -28,7 +28,7 @@
 
 - (void)updateCurves
 {
-    curves = [curveStorage curves];
+    curves = [[[curveStorage curveSets] objectAtIndex:0] curves];
     
     for(NSTrackingArea * ta in [self trackingAreas])
         [self removeTrackingArea:ta];

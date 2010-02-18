@@ -165,7 +165,7 @@
 
 // (De)Coding
 
-- (id)initWithCoder:(NSCoder*)coder
+- (id)initWithCoder:(NSCoder *)coder
 {
     if (self = [super init])
     {
@@ -178,7 +178,7 @@
     return self;
 }
 
-- (void)encodeWithCoder:(NSCoder*)coder
+- (void)encodeWithCoder:(NSCoder *)coder
 {
     [coder encodePoint:point forKey:@"point"];
     [coder encodeInt:type forKey:@"type"];

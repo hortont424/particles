@@ -15,7 +15,7 @@
 - (void)removeControlPoint:(IPControlPoint *)controlPoint;
 
 // (De)Coding
-- (id)initWithCoder:(NSCoder*)coder;
-- (void)encodeWithCoder:(NSCoder*)coder;
+- (id)initWithCoder:(NSCoder *)coder;
+- (void)encodeWithCoder:(NSCoder *)coder;
 
 @end

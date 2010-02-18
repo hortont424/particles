@@ -34,7 +34,7 @@ typedef enum
 - (void)setControlWeight:(uint)index toValue:(double)newWeight;
 
 // (De)Coding
-- (id)initWithCoder:(NSCoder*)coder;
-- (void)encodeWithCoder:(NSCoder*)coder;
+- (id)initWithCoder:(NSCoder *)coder;
+- (void)encodeWithCoder:(NSCoder *)coder;
 
 @end

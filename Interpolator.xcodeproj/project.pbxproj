@@ -13,6 +13,7 @@
 		359726F61127CAC000B0427E /* IPCurveView.m in Sources */ = {isa = PBXBuildFile; fileRef = 359726F51127CAC000B0427E /* IPCurveView.m */; };
 		359726F91127CACC00B0427E /* IPController.m in Sources */ = {isa = PBXBuildFile; fileRef = 359726F81127CACC00B0427E /* IPController.m */; };
 		359726FC1127CADC00B0427E /* IPControlPoint.m in Sources */ = {isa = PBXBuildFile; fileRef = 359726FB1127CADC00B0427E /* IPControlPoint.m */; };
+		3597DF49112CC93E0042EE90 /* IPCurveSet.m in Sources */ = {isa = PBXBuildFile; fileRef = 3597DF48112CC93E0042EE90 /* IPCurveSet.m */; };
 		35C08303112BC3B900DC3500 /* IPCurve.m in Sources */ = {isa = PBXBuildFile; fileRef = 35C08302112BC3B900DC3500 /* IPCurve.m */; };
 		8D11072D0486CEB800E47090 /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 29B97316FDCFA39411CA2CEA /* main.m */; settings = {ATTRIBUTES = (); }; };
 		8D11072F0486CEB800E47090 /* Cocoa.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 1058C7A1FEA54F0111CA2CBB /* Cocoa.framework */; };
@@ -35,6 +36,8 @@
 		359726F81127CACC00B0427E /* IPController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPController.m; sourceTree = "<group>"; };
 		359726FA1127CADC00B0427E /* IPControlPoint.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPControlPoint.h; sourceTree = "<group>"; };
 		359726FB1127CADC00B0427E /* IPControlPoint.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPControlPoint.m; sourceTree = "<group>"; };
+		3597DF47112CC93E0042EE90 /* IPCurveSet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPCurveSet.h; sourceTree = "<group>"; };
+		3597DF48112CC93E0042EE90 /* IPCurveSet.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPCurveSet.m; sourceTree = "<group>"; };
 		35AE00391127D3FA0014DCC6 /* NSPointFunctions_CocoaDevUsersAdditions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = NSPointFunctions_CocoaDevUsersAdditions.h; sourceTree = "<group>"; };
 		35C08301112BC3B900DC3500 /* IPCurve.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = IPCurve.h; sourceTree = "<group>"; };
 		35C08302112BC3B900DC3500 /* IPCurve.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = IPCurve.m; sourceTree = "<group>"; };
@@ -69,6 +72,8 @@
 				35C08302112BC3B900DC3500 /* IPCurve.m */,
 				351CC6BA112C6D47007B522B /* IPCurveStorage.h */,
 				351CC6BB112C6D47007B522B /* IPCurveStorage.m */,
+				3597DF47112CC93E0042EE90 /* IPCurveSet.h */,
+				3597DF48112CC93E0042EE90 /* IPCurveSet.m */,
 			);
 			name = Classes;
 			sourceTree = "<group>";
@@ -199,6 +204,7 @@
 				35378FEB112884420040C771 /* NSPointFunctions_CocoaDevUsersAdditions.m in Sources */,
 				35C08303112BC3B900DC3500 /* IPCurve.m in Sources */,
 				351CC6BC112C6D47007B522B /* IPCurveStorage.m in Sources */,
+				3597DF49112CC93E0042EE90 /* IPCurveSet.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
