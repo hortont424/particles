@@ -1,4 +1,27 @@
-Interpolator
-============
+Cinematic Particle Effects with OpenCL
+======================================
 
-Stuff!
+This project aims to construct a set of tools for designing, simulating,
+previewing, and rendering offline particle systems. While it will not render
+particle systems in real time, it will utilize OpenCL - and thus, the parallel
+processing power of modern GPUs - to enable systems with enormous particle
+counts.
+
+All software will be built and tested on Mac OS 10.6 - some components
+(Interpolator) will require Cocoa, which is only available on OS X; other
+components (Simulator, Renderer) will theoretically be portable to alternative
+platforms with OpenCL and OpenGL.
+
+All code is being released under the two-clause BSD license, which can be found
+in the LICENSE file in each project's subtree.
+
+Components
+----------
+
+* Interpolator - curve editor for animating various properties of systems
+
+* Simulator - uses OpenCL to simulate and record the motion of particles
+
+* Previewer - low-quality OpenGL-based instant-feedback system preview
+
+* Renderer - render Simulator's output to high-quality image sequences
