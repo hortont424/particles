@@ -7,4 +7,4 @@ run:
 	./build/Release/Simulator
 
 edit:
-	mate *.m *.h
+	mate *.c *.h
