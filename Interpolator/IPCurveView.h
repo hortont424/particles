@@ -19,6 +19,7 @@
 @interface IPCurveView : NSView
 {
     NSMutableArray * curves;
+    unsigned int curvesIndex;
     NSMapTable * controlPointSubareas;
     
     NSMutableArray * selection;
@@ -46,8 +47,10 @@
 
 // Accessors
 - (BOOL)drawControlPoints;
+- (unsigned int)curvesIndex;
 
 // Mutators
 - (void)setDrawControlPoints:(BOOL)newDrawControlPoints;
+- (void)setCurvesIndex:(unsigned int)newCurvesIndex;
 
 @end

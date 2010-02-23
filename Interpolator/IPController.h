@@ -18,5 +18,8 @@
 
 - (IBAction)addCurveSet:(id)sender;
 - (IBAction)removeCurveSet:(id)sender;
+- (IBAction)changeCurveSet:(id)sender;
+
+- (void)updateCurveSets;
 
 @end

@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="832"/>
+			<integer value="368"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2258,14 +2258,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">curveView</string>
-						<reference key="source" ref="231665071"/>
-						<reference key="destination" ref="1000720244"/>
-					</object>
-					<int key="connectionID">851</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">curveSetChooser</string>
 						<reference key="source" ref="1061912924"/>
 						<reference key="destination" ref="176334927"/>
@@ -2327,6 +2319,22 @@
 						<reference key="destination" ref="1029180769"/>
 					</object>
 					<int key="connectionID">877</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">changeCurveSet:</string>
+						<reference key="source" ref="1061912924"/>
+						<reference key="destination" ref="176334927"/>
+					</object>
+					<int key="connectionID">878</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">delegate</string>
+						<reference key="source" ref="231665071"/>
+						<reference key="destination" ref="1061912924"/>
+					</object>
+					<int key="connectionID">879</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -4018,7 +4026,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">877</int>
+			<int key="maxID">879</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4031,9 +4039,9 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>addCurveSet:</string>
+							<string>changeCurveSet:</string>
 							<string>removeCurveSet:</string>
 							<string>setControlPointType:</string>
-							<string>setCurveSet:</string>
 							<string>setDrawControlPoints:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
@@ -4081,7 +4089,7 @@
 					<string key="className">IPCurveStorage</string>
 					<string key="superclassName">NSObject</string>
 					<object class="NSMutableDictionary" key="outlets">
-						<string key="NS.key.0">curveView</string>
+						<string key="NS.key.0">delegate</string>
 						<string key="NS.object.0">id</string>
 					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">

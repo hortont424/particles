@@ -28,7 +28,7 @@
 
 - (void)updateCurves
 {
-    curves = [[[curveStorage curveSets] objectAtIndex:0] curves];
+    curves = [[[curveStorage curveSets] objectAtIndex:curvesIndex] curves];
     
     for(NSTrackingArea * ta in [self trackingAreas])
         [self removeTrackingArea:ta];
@@ -492,15 +492,26 @@ NSInteger controlPointSort(id point1, id point2, void * ctx)
     }
 }
 
+- (BOOL)drawControlPoints
+{
+    return drawControlPoints;
+}
+
+- (unsigned int)curvesIndex
+{
+    return curvesIndex;
+}
+
 - (void)setDrawControlPoints:(BOOL)newDrawControlPoints
 {
     drawControlPoints = newDrawControlPoints;
     [self setNeedsDisplay:YES];
 }
 
-- (BOOL)drawControlPoints
+- (void)setCurvesIndex:(unsigned int)newCurvesIndex
 {
-    return drawControlPoints;
+    curvesIndex = newCurvesIndex;
+    [self updateCurves];
 }
 
 @end

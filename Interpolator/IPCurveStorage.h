@@ -7,11 +7,14 @@
 @interface IPCurveStorage : NSObject
 {
     NSMutableArray * curveSets;
-	
-    IBOutlet id curveView;
+
+    IBOutlet id delegate;
 }
 
 - (NSString *)pathForDataFile;
+
+// Mutators
+- (IPCurveSet *)addCurveSet;
 
 // Accessors
 - (NSMutableArray *)curveSets;
@@ -20,6 +23,6 @@
 - (void)save;
 - (void)load;
 
-@property (nonatomic,retain) IBOutlet id curveView;
+@property (nonatomic,retain) IBOutlet id delegate;
 
 @end
