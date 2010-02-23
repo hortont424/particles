@@ -13,8 +13,9 @@ const char *KernelSource = "\n" \
 "   const unsigned int count)                                           \n" \
 "{                                                                      \n" \
 "   int i = get_global_id(0);                                           \n" \
-"   if(i < count)                                                       \n" \
-"       output[i] = input[i] * input[i];                                \n" \
+"   if(i < count){                                                      \n" \
+"       for(int j = 0; j < 1024 * 1024 * 5; j++)                        \n" \
+"           output[i] = sqrt(input[i]);}                                \n" \
 "}                                                                      \n" \
 "\n";
 
@@ -110,13 +111,13 @@ int main(int argc, const char * argv[])
     SimulatorProgram * prog = compileProgram(sim, "square", KernelSource);
     showBuildLog(sim, prog);
     
-    prog->globalCount = 16;
+    prog->globalCount = 2048;
     
     float * data = (float *)calloc(prog->globalCount, sizeof(float));
     float * results = (float *)calloc(prog->globalCount, sizeof(float));
     
     for(int i = 0; i < prog->globalCount; i++)
-        data[i] = i;
+        data[i] = pow(i, 2);
     
     cl_mem input, output;
     input = clCreateBuffer(sim->ctx, CL_MEM_READ_ONLY,
