@@ -7,7 +7,7 @@ typedef enum
     IP_CONTROL_POINT_SMOOTH,
     IP_CONTROL_POINT_SMOOTH_SYMMETRIC,
     IP_CONTROL_POINT_CORNER,
-
+    
     IP_CONTROL_POINT_SENTRY
 } IPControlPointType;
 
@@ -15,7 +15,7 @@ typedef enum
 {
     NSPoint point;
     IPControlPointType type;
-
+    
     NSPoint controlPoints[2];
 }
 

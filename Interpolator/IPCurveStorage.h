@@ -4,7 +4,7 @@
 #import "IPControlPoint.h"
 #import "IPCurveSet.h"
 
-@interface IPCurveStorage : NSObjec
+@interface IPCurveStorage : NSObject
 {
     NSMutableArray * curveSets;
 

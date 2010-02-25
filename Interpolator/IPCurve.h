@@ -2,7 +2,7 @@
 
 #import "IPControlPoint.h"
 
-@interface IPCurve : NSObjec
+@interface IPCurve : NSObject
 {
     NSMutableArray * controlPoints;
 }
