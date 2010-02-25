@@ -45,11 +45,11 @@
 - (void)drawPoint:(IPControlPoint *)controlPoint;
 - (void)drawCurve:(IPCurve *)curve;
 
-// Accessors
+// Accessor
 - (BOOL)drawControlPoints;
 - (unsigned int)curvesIndex;
 
-// Mutators
+// Mutator
 - (void)setDrawControlPoints:(BOOL)newDrawControlPoints;
 - (void)setCurvesIndex:(unsigned int)newCurvesIndex;
 

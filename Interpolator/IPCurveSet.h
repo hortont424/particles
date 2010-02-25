@@ -8,7 +8,7 @@
     NSMutableArray * curves;
 }
 
-// Mutators
+// Mutator
 - (void)addCurve:(IPCurve *)curve;
 
 // (De)Coding

@@ -13,10 +13,10 @@
 
 - (NSString *)pathForDataFile;
 
-// Mutators
+// Mutator
 - (IPCurveSet *)addCurveSet;
 
-// Accessors
+// Accessor
 - (NSMutableArray *)curveSets;
 
 // (De)Coding

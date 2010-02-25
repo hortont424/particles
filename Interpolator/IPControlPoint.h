@@ -19,14 +19,14 @@ typedef enum
     NSPoint controlPoints[2];
 }
 
-// Accessors
+// Accessor
 - (NSPoint)point;
 - (IPControlPointType)type;
 - (NSPoint)controlPoint:(uint)index;
 - (NSPoint)absoluteControlPoint:(uint)index;
 - (double)controlWeights:(uint)index;
 
-// Mutators
+// Mutator
 - (void)setPoint:(NSPoint)newPoint;
 - (void)setType:(IPControlPointType)newType;
 - (void)setControlPoint:(uint)index toPoint:(NSPoint)newPoint;
