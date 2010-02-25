@@ -7,10 +7,10 @@
     NSMutableArray * controlPoints;
 }
 
-// Accessor
+// Accessors
 - (NSArray *)controlPoints;
 
-// Mutator
+// Mutators
 - (void)addControlPoint:(IPControlPoint *)controlPoint;
 - (void)removeControlPoint:(IPControlPoint *)controlPoint;
 

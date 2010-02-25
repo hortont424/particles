@@ -1,7 +1,7 @@
 // Not covered by toplevel license.
 
 // Borrowed from:
-// http://www.cocoadev.com/index.pl?NSPointFunction
+// http://www.cocoadev.com/index.pl?NSPointFunctions
 
 #import <Cocoa/Cocoa.h>
 #import <math.h>
