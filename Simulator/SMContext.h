@@ -12,7 +12,7 @@ typedef struct _SMContext
     cl_command_queue cmds;
 } SMContext;
 
-SMContext * initializeSimulator(int argc, char * argv[]);
+SMContext * initializeSimulator(int argc, char * const * argv);
 
 void waitForCompletion(SMContext * sim);
 

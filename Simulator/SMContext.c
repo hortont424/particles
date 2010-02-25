@@ -4,7 +4,7 @@
 #include "SMContext.h"
 #include "SMError.h"
 
-SMContext * initializeSimulator(int argc, char * argv[])
+SMContext * initializeSimulator(int argc, char * const * argv)
 {
     SMContext * sim;
     int deviceType;

@@ -4,7 +4,7 @@
 
 #include "SMSimulator.h"
 
-int main(int argc, const char * argv[])
+int main(int argc, char * const * argv)
 {
     SMContext * sim = initializeSimulator(argc, argv);
     SMProgram * prog = loadKernel(sim, "./kernels/square.cl");
@@ -15,7 +15,7 @@ int main(int argc, const char * argv[])
     float * data = (float *)calloc(prog->globalCount, sizeof(float));
     float * results = (float *)calloc(prog->globalCount, sizeof(float));
 
-    for(int i = 0; i < prog->globalCount; i++)
+    for(unsigned int i = 0; i < prog->globalCount; i++)
         data[i] = i;
 
     cl_mem input, output;
@@ -41,6 +41,6 @@ int main(int argc, const char * argv[])
                         NULL, NULL);
 
     printf("\nOutput: ");
-    for(int i = 0; i < prog->globalCount; i++)
+    for(unsigned int i = 0; i < prog->globalCount; i++)
         printf("%d ", (unsigned int)results[i]);
 }

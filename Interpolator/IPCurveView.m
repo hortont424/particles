@@ -446,7 +446,7 @@ NSInteger controlPointSort(id point1, id point2, void * ctx)
     CGContextSetRGBStrokeColor(ctx, 0.937, 0.161, 0.161, 1.0);
     CGContextSetLineWidth(ctx, 1.0);
     
-    for(int i = 0; i < [controlPoints count] - 1; i++)
+    for(unsigned int i = 0; i < [controlPoints count] - 1; i++)
     {
         a = [controlPoints objectAtIndex:i];
         b = [controlPoints objectAtIndex:i+1];

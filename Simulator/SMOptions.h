@@ -3,6 +3,6 @@
 
 extern int simulatorUsesCPU;
 
-void parseSimulatorOptions(int argc, char * argv[]);
+void parseSimulatorOptions(int argc, char * const * argv);
 
 #endif
