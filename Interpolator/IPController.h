@@ -3,12 +3,12 @@
 #import "IPCurveView.h"
 #import "IPCurveStorage.h"
 
-@interface IPController : NSObject
+@interface IPController : NSObjec
 {
     IBOutlet NSSegmentedControl * controlPointTypeButtons;
     IBOutlet NSSegmentedControl * drawControlPointsButton;
     IBOutlet NSPopUpButton * curveSetChooser;
-    
+
     IBOutlet IPCurveView * controlPointView;
 	IBOutlet IPCurveStorage * curveStorage;
 }

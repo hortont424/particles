@@ -5,7 +5,7 @@
 
 #include "SMOptions.h"
 
-typedef struct _SMContext
+typedef struct _SMContex
 {
     cl_device_id devs;
     cl_context ctx;

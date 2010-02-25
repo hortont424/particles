@@ -8,9 +8,9 @@
 typedef struct _SMProgram
 {
     size_t globalCount, localCount;
-    
+
     const char * name;
-    
+
     cl_program program;
     cl_kernel kernel;
 } SMProgram;
