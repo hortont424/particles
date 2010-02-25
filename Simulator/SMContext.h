@@ -3,7 +3,7 @@
 
 #include <OpenCL/opencl.h>
 
-#define DEVICE_TYPE CL_DEVICE_TYPE_GPU
+#include "SMOptions.h"
 
 typedef struct _SMContext
 {
@@ -12,7 +12,7 @@ typedef struct _SMContext
     cl_command_queue cmds;
 } SMContext;
 
-SMContext * initializeSimulator();
+SMContext * initializeSimulator(int argc, char * argv[]);
 
 void waitForCompletion(SMContext * sim);
 

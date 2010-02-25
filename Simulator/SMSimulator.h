@@ -4,6 +4,7 @@
 #include <OpenCL/opencl.h>
 
 #include "SMError.h"
+#include "SMOptions.h"
 
 #include "SMContext.h"
 #include "SMProgram.h"

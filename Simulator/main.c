@@ -6,7 +6,7 @@
 
 int main(int argc, const char * argv[])
 {
-    SMContext * sim = initializeSimulator();
+    SMContext * sim = initializeSimulator(argc, argv);
     SMProgram * prog = loadKernel(sim, "./kernels/square.cl");
     showBuildLog(sim, prog);
     

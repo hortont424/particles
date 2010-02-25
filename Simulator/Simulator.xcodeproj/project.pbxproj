@@ -12,6 +12,7 @@
 		355B73DB113677B80021A409 /* SMError.c in Sources */ = {isa = PBXBuildFile; fileRef = 355B73D7113677B80021A409 /* SMError.c */; };
 		355B73DC113677B80021A409 /* SMContext.c in Sources */ = {isa = PBXBuildFile; fileRef = 355B73D9113677B80021A409 /* SMContext.c */; };
 		35A3BA071132F2D5008EA6D0 /* OpenCL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35A3BA061132F2D5008EA6D0 /* OpenCL.framework */; };
+		35F06D1E11368C8300F41A9E /* SMOptions.c in Sources */ = {isa = PBXBuildFile; fileRef = 35F06D1C11368C8300F41A9E /* SMOptions.c */; };
 		8DD76FAC0486AB0100D96B5E /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.c */; settings = {ATTRIBUTES = (); }; };
 		8DD76FB00486AB0100D96B5E /* Simulator.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6A0FF2C0290799A04C91782 /* Simulator.1 */; };
 /* End PBXBuildFile section */
@@ -41,6 +42,8 @@
 		355B73D9113677B80021A409 /* SMContext.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SMContext.c; sourceTree = "<group>"; };
 		355B73DA113677B80021A409 /* SMContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMContext.h; sourceTree = "<group>"; };
 		35A3BA061132F2D5008EA6D0 /* OpenCL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenCL.framework; path = System/Library/Frameworks/OpenCL.framework; sourceTree = SDKROOT; };
+		35F06D1C11368C8300F41A9E /* SMOptions.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SMOptions.c; sourceTree = "<group>"; };
+		35F06D1D11368C8300F41A9E /* SMOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMOptions.h; sourceTree = "<group>"; };
 		8DD76FB20486AB0100D96B5E /* Simulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Simulator; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6A0FF2C0290799A04C91782 /* Simulator.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Simulator.1; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -81,6 +84,8 @@
 				351EA8B1113687C900CFA21A /* SMSimulator.h */,
 				351EA8B2113687C900CFA21A /* SMProgram.c */,
 				351EA8B3113687C900CFA21A /* SMProgram.h */,
+				35F06D1C11368C8300F41A9E /* SMOptions.c */,
+				35F06D1D11368C8300F41A9E /* SMOptions.h */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -157,6 +162,7 @@
 				355B73DC113677B80021A409 /* SMContext.c in Sources */,
 				351EA8A711367A6000CFA21A /* SMKernelLoader.c in Sources */,
 				351EA8B4113687C900CFA21A /* SMProgram.c in Sources */,
+				35F06D1E11368C8300F41A9E /* SMOptions.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
