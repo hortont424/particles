@@ -20,4 +20,10 @@ typedef struct _SimulatorProgram
     cl_kernel kernel;
 } SimulatorProgram;
 
+SimulatorContext * initializeSimulator();
+SimulatorProgram * compileProgram(SimulatorContext * sim, const char * name,
+                                  const char * source);
+void executeProgram(SimulatorContext * sim, SimulatorProgram * prog);
+void waitForPrograms(SimulatorContext * sim);
+
 #endif

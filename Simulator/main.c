@@ -3,33 +3,22 @@
 #include <math.h>
 
 #include "simulator.h"
-
-const char *KernelSource = "\n" \
-"__kernel void square(                                                  \n" \
-"   __global float* input,                                              \n" \
-"   __global float* output,                                             \n" \
-"   const unsigned int count)                                           \n" \
-"{                                                                      \n" \
-"   int i = get_global_id(0);                                           \n" \
-"   if(i < count){                                                      \n" \
-"       for(int j = 0; j < 1024 * 1024 * 5; j++)                        \n" \
-"           output[i] = sqrt(input[i]);}                                \n" \
-"}                                                                      \n" \
-"\n";
+#include "kernelLoader.h"
+#include "error.h"
 
 int main(int argc, const char * argv[])
 {
     SimulatorContext * sim = initializeSimulator();
-    SimulatorProgram * prog = compileProgram(sim, "square", KernelSource);
+    SimulatorProgram * prog = loadKernel(sim, "./kernels/square.cl");
     showBuildLog(sim, prog);
     
-    prog->globalCount = 2048;
+    prog->globalCount = 32;
     
     float * data = (float *)calloc(prog->globalCount, sizeof(float));
     float * results = (float *)calloc(prog->globalCount, sizeof(float));
     
     for(int i = 0; i < prog->globalCount; i++)
-        data[i] = pow(i, 2);
+        data[i] = i;
     
     cl_mem input, output;
     input = clCreateBuffer(sim->ctx, CL_MEM_READ_ONLY,
