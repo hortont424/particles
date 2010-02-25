@@ -1,7 +1,10 @@
-.PHONY: all
+.PHONY: all clean run run-cpu edit
 
 all:
 	xcodebuild
+
+clean:
+	rm -rf ./build
 
 run:
 	./build/Release/Simulator
