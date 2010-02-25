@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "error.h"
+#include "SMError.h"
 
 void throwError(const char * errorMessage)
 {
@@ -13,7 +13,7 @@ void raiseOpenCLError(const char * errinfo, const void * private_info,
     throwError(errinfo);
 }
 
-void showBuildLog(SimulatorContext * sim, SimulatorProgram * prog)
+void showBuildLog(SMContext * sim, SMProgram * prog)
 {
     size_t len;
     char buf[2048];

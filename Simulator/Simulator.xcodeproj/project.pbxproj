@@ -7,9 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		351EA8A711367A6000CFA21A /* kernelLoader.c in Sources */ = {isa = PBXBuildFile; fileRef = 351EA8A511367A6000CFA21A /* kernelLoader.c */; };
-		355B73DB113677B80021A409 /* error.c in Sources */ = {isa = PBXBuildFile; fileRef = 355B73D7113677B80021A409 /* error.c */; };
-		355B73DC113677B80021A409 /* simulator.c in Sources */ = {isa = PBXBuildFile; fileRef = 355B73D9113677B80021A409 /* simulator.c */; };
+		351EA8A711367A6000CFA21A /* SMKernelLoader.c in Sources */ = {isa = PBXBuildFile; fileRef = 351EA8A511367A6000CFA21A /* SMKernelLoader.c */; };
+		351EA8B4113687C900CFA21A /* SMProgram.c in Sources */ = {isa = PBXBuildFile; fileRef = 351EA8B2113687C900CFA21A /* SMProgram.c */; };
+		355B73DB113677B80021A409 /* SMError.c in Sources */ = {isa = PBXBuildFile; fileRef = 355B73D7113677B80021A409 /* SMError.c */; };
+		355B73DC113677B80021A409 /* SMContext.c in Sources */ = {isa = PBXBuildFile; fileRef = 355B73D9113677B80021A409 /* SMContext.c */; };
 		35A3BA071132F2D5008EA6D0 /* OpenCL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35A3BA061132F2D5008EA6D0 /* OpenCL.framework */; };
 		8DD76FAC0486AB0100D96B5E /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.c */; settings = {ATTRIBUTES = (); }; };
 		8DD76FB00486AB0100D96B5E /* Simulator.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6A0FF2C0290799A04C91782 /* Simulator.1 */; };
@@ -30,12 +31,15 @@
 
 /* Begin PBXFileReference section */
 		08FB7796FE84155DC02AAC07 /* main.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = main.c; sourceTree = "<group>"; };
-		351EA8A511367A6000CFA21A /* kernelLoader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = kernelLoader.c; sourceTree = "<group>"; };
-		351EA8A611367A6000CFA21A /* kernelLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = kernelLoader.h; sourceTree = "<group>"; };
-		355B73D7113677B80021A409 /* error.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = error.c; sourceTree = "<group>"; };
-		355B73D8113677B80021A409 /* error.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = error.h; sourceTree = "<group>"; };
-		355B73D9113677B80021A409 /* simulator.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = simulator.c; sourceTree = "<group>"; };
-		355B73DA113677B80021A409 /* simulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = simulator.h; sourceTree = "<group>"; };
+		351EA8A511367A6000CFA21A /* SMKernelLoader.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SMKernelLoader.c; sourceTree = "<group>"; };
+		351EA8A611367A6000CFA21A /* SMKernelLoader.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMKernelLoader.h; sourceTree = "<group>"; };
+		351EA8B1113687C900CFA21A /* SMSimulator.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMSimulator.h; sourceTree = "<group>"; };
+		351EA8B2113687C900CFA21A /* SMProgram.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SMProgram.c; sourceTree = "<group>"; };
+		351EA8B3113687C900CFA21A /* SMProgram.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMProgram.h; sourceTree = "<group>"; };
+		355B73D7113677B80021A409 /* SMError.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SMError.c; sourceTree = "<group>"; };
+		355B73D8113677B80021A409 /* SMError.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMError.h; sourceTree = "<group>"; };
+		355B73D9113677B80021A409 /* SMContext.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SMContext.c; sourceTree = "<group>"; };
+		355B73DA113677B80021A409 /* SMContext.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMContext.h; sourceTree = "<group>"; };
 		35A3BA061132F2D5008EA6D0 /* OpenCL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = OpenCL.framework; path = System/Library/Frameworks/OpenCL.framework; sourceTree = SDKROOT; };
 		8DD76FB20486AB0100D96B5E /* Simulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Simulator; sourceTree = BUILT_PRODUCTS_DIR; };
 		C6A0FF2C0290799A04C91782 /* Simulator.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Simulator.1; sourceTree = "<group>"; };
@@ -68,12 +72,15 @@
 			isa = PBXGroup;
 			children = (
 				08FB7796FE84155DC02AAC07 /* main.c */,
-				355B73D7113677B80021A409 /* error.c */,
-				355B73D8113677B80021A409 /* error.h */,
-				355B73D9113677B80021A409 /* simulator.c */,
-				355B73DA113677B80021A409 /* simulator.h */,
-				351EA8A511367A6000CFA21A /* kernelLoader.c */,
-				351EA8A611367A6000CFA21A /* kernelLoader.h */,
+				355B73D7113677B80021A409 /* SMError.c */,
+				355B73D8113677B80021A409 /* SMError.h */,
+				355B73D9113677B80021A409 /* SMContext.c */,
+				355B73DA113677B80021A409 /* SMContext.h */,
+				351EA8A511367A6000CFA21A /* SMKernelLoader.c */,
+				351EA8A611367A6000CFA21A /* SMKernelLoader.h */,
+				351EA8B1113687C900CFA21A /* SMSimulator.h */,
+				351EA8B2113687C900CFA21A /* SMProgram.c */,
+				351EA8B3113687C900CFA21A /* SMProgram.h */,
 			);
 			name = Source;
 			sourceTree = "<group>";
@@ -146,9 +153,10 @@
 			buildActionMask = 2147483647;
 			files = (
 				8DD76FAC0486AB0100D96B5E /* main.c in Sources */,
-				355B73DB113677B80021A409 /* error.c in Sources */,
-				355B73DC113677B80021A409 /* simulator.c in Sources */,
-				351EA8A711367A6000CFA21A /* kernelLoader.c in Sources */,
+				355B73DB113677B80021A409 /* SMError.c in Sources */,
+				355B73DC113677B80021A409 /* SMContext.c in Sources */,
+				351EA8A711367A6000CFA21A /* SMKernelLoader.c in Sources */,
+				351EA8B4113687C900CFA21A /* SMProgram.c in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -2,14 +2,12 @@
 #include <stdlib.h>
 #include <math.h>
 
-#include "simulator.h"
-#include "kernelLoader.h"
-#include "error.h"
+#include "SMSimulator.h"
 
 int main(int argc, const char * argv[])
 {
-    SimulatorContext * sim = initializeSimulator();
-    SimulatorProgram * prog = loadKernel(sim, "./kernels/square.cl");
+    SMContext * sim = initializeSimulator();
+    SMProgram * prog = loadKernel(sim, "./kernels/square.cl");
     showBuildLog(sim, prog);
     
     prog->globalCount = 32;

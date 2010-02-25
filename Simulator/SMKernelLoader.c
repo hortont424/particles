@@ -7,8 +7,8 @@
 #include <sys/stat.h>
 #include <string.h>
 
-#include "kernelLoader.h"
-#include "error.h"
+#include "SMKernelLoader.h"
+#include "SMError.h"
 
 char * kernelNameFromFilename(const char * filename)
 {
@@ -24,13 +24,13 @@ char * kernelNameFromFilename(const char * filename)
     return strncpy(kernelName, lastSlash + 1, kernelNameLength);
 }
 
-SimulatorProgram * loadKernel(SimulatorContext * sim, const char * filename)
+SMProgram * loadKernel(SMContext * sim, const char * filename)
 {
     struct stat fileInfo;
     int fileHandle;
     char * fileContent;
     char * kernelName;
-    SimulatorProgram * prog;
+    SMProgram * prog;
     
     if(!strstr(filename, ".cl"))
     {
