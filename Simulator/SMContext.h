@@ -14,6 +14,6 @@ typedef struct _SMContext
 
 SMContext * initializeSimulator();
 
-void waitForPrograms(SMContext * sim);
+void waitForCompletion(SMContext * sim);
 
 #endif

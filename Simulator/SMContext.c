@@ -14,7 +14,7 @@ SMContext * initializeSimulator()
     return sim;
 }
 
-void waitForPrograms(SMContext * sim)
+void waitForCompletion(SMContext * sim)
 {
     clFinish(sim->cmds);
 }

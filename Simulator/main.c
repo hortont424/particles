@@ -34,12 +34,13 @@ int main(int argc, const char * argv[])
     clSetKernelArg(prog->kernel, 2, sizeof(unsigned int), &ct);
     
     executeProgram(sim, prog);
-    waitForPrograms(sim);
+    waitForCompletion(sim);
     
     clEnqueueReadBuffer(sim->cmds, output, CL_TRUE, 0,
                         sizeof(float) * prog->globalCount, results, 0,
                         NULL, NULL);
     
+    printf("\nOutput: ");
     for(int i = 0; i < prog->globalCount; i++)
-        printf("%f ", results[i]);
+        printf("%d ", (unsigned int)results[i]);
 }
