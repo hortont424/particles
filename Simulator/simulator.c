@@ -21,6 +21,7 @@ SimulatorProgram * compileProgram(SimulatorContext * sim, const char * name,
     SimulatorProgram * prog = calloc(1, sizeof(SimulatorProgram));
     
     prog->program = clCreateProgramWithSource(sim->ctx, 1, &source, NULL, NULL);
+    prog->name = name;
     
     if(clBuildProgram(prog->program, 0, NULL, NULL, NULL, NULL) != CL_SUCCESS)
     {
@@ -41,8 +42,8 @@ void executeProgram(SimulatorContext * sim, SimulatorProgram * prog)
     if(prog->globalCount < prog->localCount)
         prog->localCount = prog->globalCount;
     
-    printf("Running kernel on %zd elements, %zd at a time.\n",
-           prog->globalCount, prog->localCount);
+    printf("Running '%s' on %zd elements, %zd at a time\n",
+           prog->name, prog->globalCount, prog->localCount);
     
     clEnqueueNDRangeKernel(sim->cmds, prog->kernel, 1, NULL, &prog->globalCount,
                            &prog->localCount, 0, NULL, NULL);

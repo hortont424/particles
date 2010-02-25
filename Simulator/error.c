@@ -21,5 +21,6 @@ void showBuildLog(SimulatorContext * sim, SimulatorProgram * prog)
     clGetProgramBuildInfo(prog->program, sim->devs, CL_PROGRAM_BUILD_LOG,
                           sizeof(buf), buf, &len);
     
-    printf("%s\n", buf);
+    if(buf[0] != 0)
+        printf("%s\n", buf);
 }

@@ -16,6 +16,8 @@ typedef struct _SimulatorProgram
 {
     size_t globalCount, localCount;
     
+    char * name;
+    
     cl_program program;
     cl_kernel kernel;
 } SimulatorProgram;
