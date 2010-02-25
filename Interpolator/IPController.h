@@ -8,7 +8,7 @@
     IBOutlet NSSegmentedControl * controlPointTypeButtons;
     IBOutlet NSSegmentedControl * drawControlPointsButton;
     IBOutlet NSPopUpButton * curveSetChooser;
-    
+
     IBOutlet IPCurveView * controlPointView;
 	IBOutlet IPCurveStorage * curveStorage;
 }

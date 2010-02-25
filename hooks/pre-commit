@@ -33,5 +33,5 @@ then
 fi
 
 for f in `find . | grep ".*\.[ch]$"` ; do
-    sed -i '' 's/[ \t]*$//' $f
+    sed -i '' 's/[ 	]*$//' $f
 done

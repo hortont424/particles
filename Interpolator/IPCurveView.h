@@ -21,20 +21,20 @@
     NSMutableArray * curves;
     unsigned int curvesIndex;
     NSMapTable * controlPointSubareas;
-    
+
     NSMutableArray * selection;
-    
+
     // TODO: use IPControlPointSelection for highlight too!
     IPControlPoint * nextHighlightedControlPoint;
     int nextHighlightedSubpoint;
     BOOL nextHighlightedControlPointSet;
     IPControlPoint * highlightedControlPoint;
     int highlightedSubpoint;
-    
+
     NSPoint dragPoint, boxPoint;
-    
+
     BOOL drawControlPoints;
-    
+
     IBOutlet IPCurveStorage * curveStorage;
 }
 
