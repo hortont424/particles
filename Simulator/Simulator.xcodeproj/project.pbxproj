@@ -14,7 +14,6 @@
 		35A3BA071132F2D5008EA6D0 /* OpenCL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 35A3BA061132F2D5008EA6D0 /* OpenCL.framework */; };
 		35F06D1E11368C8300F41A9E /* SMOptions.c in Sources */ = {isa = PBXBuildFile; fileRef = 35F06D1C11368C8300F41A9E /* SMOptions.c */; };
 		8DD76FAC0486AB0100D96B5E /* main.c in Sources */ = {isa = PBXBuildFile; fileRef = 08FB7796FE84155DC02AAC07 /* main.c */; settings = {ATTRIBUTES = (); }; };
-		8DD76FB00486AB0100D96B5E /* Simulator.1 in CopyFiles */ = {isa = PBXBuildFile; fileRef = C6A0FF2C0290799A04C91782 /* Simulator.1 */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXCopyFilesBuildPhase section */
@@ -24,7 +23,6 @@
 			dstPath = /usr/share/man/man1/;
 			dstSubfolderSpec = 0;
 			files = (
-				8DD76FB00486AB0100D96B5E /* Simulator.1 in CopyFiles */,
 			);
 			runOnlyForDeploymentPostprocessing = 1;
 		};
@@ -45,7 +43,6 @@
 		35F06D1C11368C8300F41A9E /* SMOptions.c */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.c; path = SMOptions.c; sourceTree = "<group>"; };
 		35F06D1D11368C8300F41A9E /* SMOptions.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SMOptions.h; sourceTree = "<group>"; };
 		8DD76FB20486AB0100D96B5E /* Simulator */ = {isa = PBXFileReference; explicitFileType = "compiled.mach-o.executable"; includeInIndex = 0; path = Simulator; sourceTree = BUILT_PRODUCTS_DIR; };
-		C6A0FF2C0290799A04C91782 /* Simulator.1 */ = {isa = PBXFileReference; lastKnownFileType = text.man; path = Simulator.1; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -65,7 +62,6 @@
 			children = (
 				35A3BA051132F2CC008EA6D0 /* Frameworks */,
 				08FB7795FE84155DC02AAC07 /* Source */,
-				C6A0FF2B0290797F04C91782 /* Documentation */,
 				1AB674ADFE9D54B511CA2CBB /* Products */,
 			);
 			name = Simulator;
@@ -104,14 +100,6 @@
 				35A3BA061132F2D5008EA6D0 /* OpenCL.framework */,
 			);
 			name = Frameworks;
-			sourceTree = "<group>";
-		};
-		C6A0FF2B0290797F04C91782 /* Documentation */ = {
-			isa = PBXGroup;
-			children = (
-				C6A0FF2C0290799A04C91782 /* Simulator.1 */,
-			);
-			name = Documentation;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
