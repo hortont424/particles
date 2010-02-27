@@ -15,21 +15,23 @@ __kernel void gravity(__global float * input, __global float * output,
     
     id *= 7;
     
-    loc = (float4)(input[id + 0], input[id + 0], input[id + 0], 0.0f);
+    loc = (float4)(input[id + 0], input[id + 1], input[id + 2], 0.0f);
     vel = (float4)(input[id + 4], input[id + 5], input[id + 6], 0.0f);
     accel = (float4)(0.0f);
-    
+    int n = 0;
     for(int i = 0; i < count * 7; i += 7)
     {
         if(i == id)
             continue;
         
-        iloc = (float4)(input[i + 0], input[i + 0], input[i + 0], 0.0f);
-        accel += (grav * input[i + 3]) / distance(loc, iloc);
+        iloc = (float4)(input[i + 0], input[i + 1], input[i + 2], 0.0f);
+        accel += normalize(iloc - loc) * ((grav * input[i + 3]) / pow(distance(loc, iloc), 2));
+        
+        n = i;
     }
     
-    vel += (accel * 0.1);
-    loc += vel * 0.1;
+    vel += (accel * 0.01);
+    loc += vel * 0.01;
     
     output[id + 0] = loc.x;
     output[id + 1] = loc.y;
