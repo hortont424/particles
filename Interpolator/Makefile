@@ -7,7 +7,7 @@ clean:
 	rm -rf ./build
 
 run:
-	./build/Release/Interpolator.app/Contents/MacOS/Interpolator
+	./build/Debug/Interpolator.app/Contents/MacOS/Interpolator
 
 edit:
 	mate *.c *.h

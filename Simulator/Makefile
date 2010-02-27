@@ -7,10 +7,10 @@ clean:
 	rm -rf ./build
 
 run:
-	./build/Release/Simulator
+	./build/Debug/Simulator
 
 run-cpu:
-	./build/Release/Simulator -c
+	./build/Debug/Simulator -c
 
 edit:
 	mate *.c *.h libsimulator/*.c libsimulator/*.h
