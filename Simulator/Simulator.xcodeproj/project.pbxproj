@@ -29,7 +29,7 @@
 			isa = PBXContainerItemProxy;
 			containerPortal = 08FB7793FE84155DC02AAC07 /* Project object */;
 			proxyType = 1;
-			remoteGlobalIDString = 357B774C1139195E00D012C8 /* libsimulator */;
+			remoteGlobalIDString = 357B774C1139195E00D012C8;
 			remoteInfo = libsimulator;
 		};
 /* End PBXContainerItemProxy section */
@@ -370,7 +370,7 @@
 				1DEB928708733DD80010E9CD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		1DEB928908733DD80010E9CD /* Build configuration list for PBXProject "Simulator" */ = {
 			isa = XCConfigurationList;
@@ -379,7 +379,7 @@
 				1DEB928B08733DD80010E9CD /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 		357B77521139198500D012C8 /* Build configuration list for PBXNativeTarget "libsimulator" */ = {
 			isa = XCConfigurationList;
@@ -388,7 +388,7 @@
 				357B774F1139195F00D012C8 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
-			defaultConfigurationName = Release;
+			defaultConfigurationName = Debug;
 		};
 /* End XCConfigurationList section */
 	};
