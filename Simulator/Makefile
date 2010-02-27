@@ -13,4 +13,4 @@ run-cpu:
 	./build/Release/Simulator -c
 
 edit:
-	mate *.c *.h
+	mate *.c *.h libsimulator/*.c libsimulator/*.h
