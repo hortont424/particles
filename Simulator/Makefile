@@ -1,16 +1,16 @@
 .PHONY: all clean run run-cpu edit
 
 all:
-	xcodebuild
+	scons -Q
 
 clean:
 	rm -rf ./build
 
 run:
-	./build/Debug/Simulator
+	./build/simulator
 
 run-cpu:
-	./build/Debug/Simulator -c
+	./build/simulator -c
 
 edit:
 	mate *.c *.h libsimulator/*.c libsimulator/*.h

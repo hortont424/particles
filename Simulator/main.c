@@ -48,7 +48,7 @@ int main(int argc, char * const * argv)
     {
         inputbuf = (step % 2 == 0 ? &input : &output);
         outputbuf = (step % 2 == 0 ? &output : &input);
-        
+
         clSetKernelArg(prog->kernel, 0, sizeof(cl_mem), inputbuf);
         clSetKernelArg(prog->kernel, 1, sizeof(cl_mem), outputbuf);
         clSetKernelArg(prog->kernel, 2, sizeof(unsigned int), &ct);

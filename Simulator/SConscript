@@ -1,0 +1,4 @@
+Import('env libsimulator')
+
+simulator = env.Program("simulator", Glob("*.c"), LIBS=['simulator'], CPPPATH="libsimulator", LIBPATH="libsimulator")
+Depends(simulator, libsimulator)
