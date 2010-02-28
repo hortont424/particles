@@ -3,10 +3,11 @@
     x y z m vxvyvz
 */
 
-__kernel void gravity(__global float * input, __global float * output,
+__kernel void gravity(__global float * input,
+                      __global float * output,
                       const unsigned int count)
 {
-    float4 loc, accel, vel, iloc;
+    float4 loc, accel, vel, iloc, dir;
     float grav = 0.0000000000667300f;
     int id = get_global_id(0);
     
@@ -25,12 +26,15 @@ __kernel void gravity(__global float * input, __global float * output,
             continue;
         
         iloc = (float4)(input[i + 0], input[i + 1], input[i + 2], 0.0f);
-        accel += normalize(iloc - loc) * ((grav * input[i + 3]) / pow(distance(loc, iloc), 2));
+        dir = normalize(iloc - loc);
+        accel += dir * ((grav * input[i + 3]) / pow(distance(loc, iloc), 2));
         
         n = i;
     }
     
     vel += (accel * 0.01);
+    //vel *= 0.95;
+    
     loc += vel * 0.01;
     
     output[id + 0] = loc.x;

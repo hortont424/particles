@@ -2,6 +2,12 @@
 #include <stdlib.h>
 #include <math.h>
 #include <time.h>
+#include <sys/mman.h>
+#include <sys/uio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <errno.h>
 
 #include "SMSimulator.h"
 
@@ -13,10 +19,9 @@ int main(int argc, char * const * argv)
     SMProgram * prog = loadKernel(sim, "./kernels/gravity.cl");
     showBuildLog(sim, prog);
 
-    prog->globalCount = 4096;
+    prog->globalCount = 1024;
 
     float * data = (float *)calloc(prog->globalCount * 7, sizeof(float));
-    float * results = (float *)calloc(prog->globalCount * 7, sizeof(float));
 
     for(unsigned int i = 0; i < prog->globalCount * 7; i += 7)
     {
@@ -42,10 +47,21 @@ int main(int argc, char * const * argv)
 
     unsigned int ct = prog->globalCount;
 
-    FILE * outputFile = fopen("test.out", "w");
-
-    for(int step = 0; step < 10000; step++)
+    for(int step = 0; step < 5000; step++)
     {
+        char filename[256];
+        snprintf(filename, 256, "test-%d.out", step);
+        int fd = open(filename, O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
+
+        // Stretch the file
+        lseek(fd, sizeof(float) * prog->globalCount * 7, SEEK_SET);
+        write(fd, "", 1);
+
+        float * results = (float *)mmap(NULL,
+                                        sizeof(float) * prog->globalCount * 7,
+                                        PROT_READ | PROT_WRITE, MAP_SHARED,
+                                        fd, 0);
+
         inputbuf = (step % 2 == 0 ? &input : &output);
         outputbuf = (step % 2 == 0 ? &output : &input);
 
@@ -56,15 +72,11 @@ int main(int argc, char * const * argv)
         executeProgram(sim, prog);
         waitForCompletion(sim);
 
-        clEnqueueReadBuffer(sim->cmds, *outputbuf,
-                            CL_TRUE, 0,
+        clEnqueueReadBuffer(sim->cmds, *outputbuf, CL_TRUE, 0,
                             sizeof(float) * prog->globalCount * 7, results, 0,
                             NULL, NULL);
 
-        for(unsigned int i = 0; i < prog->globalCount * 7; i += 7)
-            fprintf(outputFile, "%f,%f,%f\n", results[i + 0], results[i + 1],
-                    results[i + 2]);
-
-        fprintf(outputFile, "\n");
+        munmap(results, sizeof(float) * prog->globalCount * 7);
+        close(fd);
     }
 }
