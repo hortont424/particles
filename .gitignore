@@ -2,3 +2,4 @@
 *perspectivev3
 .DS_Store
 build/
+.sconsign.dblite
