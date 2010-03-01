@@ -9,6 +9,7 @@ __kernel void gravity(__global float * input,
 {
     float4 loc, accel, vel, iloc, dir;
     float grav = 0.0000000000667300f;
+    float dist;
     int id = get_global_id(0);
     
     if(id > count)
@@ -27,7 +28,10 @@ __kernel void gravity(__global float * input,
         
         iloc = (float4)(input[i + 0], input[i + 1], input[i + 2], 0.0f);
         dir = normalize(iloc - loc);
-        accel += dir * ((grav * input[i + 3]) / pow(distance(loc, iloc), 2));
+        dist = distance(loc, iloc);
+        if(dist < 2.0)
+            dist = 2.0;
+        accel += dir * ((grav * input[i + 3]) / pow(dist, 2));
         
         n = i;
     }

@@ -19,7 +19,7 @@ int main(int argc, char * const * argv)
     SMProgram * prog = loadKernel(sim, "./kernels/gravity.cl");
     showBuildLog(sim, prog);
 
-    prog->globalCount = 1024;
+    prog->globalCount = 16384;
 
     float * data = (float *)calloc(prog->globalCount * 7, sizeof(float));
 
@@ -28,10 +28,10 @@ int main(int argc, char * const * argv)
         data[i + 0] = (float)rand()/(float)RAND_MAX;
         data[i + 1] = (float)rand()/(float)RAND_MAX;
         data[i + 2] = (float)rand()/(float)RAND_MAX;
-        data[i + 3] = 1000000.0;
-        data[i + 4] = 0.0;
-        data[i + 5] = 0.0;
-        data[i + 6] = 0.0;
+        data[i + 3] = 10000000.0;
+        data[i + 4] = 0.0; //((float)rand()/(float)RAND_MAX) - 0.5;
+        data[i + 5] = 0.0; //((float)rand()/(float)RAND_MAX) - 0.5;
+        data[i + 6] = 0.0; //((float)rand()/(float)RAND_MAX) - 0.5;
     }
 
     cl_mem input, output;
@@ -74,7 +74,7 @@ int main(int argc, char * const * argv)
                             results + (prog->globalCount * 7 * step),
                             0, NULL, NULL);
     }
-    
+
     munmap(results, fileSize);
     close(fd);
 }

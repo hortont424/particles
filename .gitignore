@@ -4,3 +4,4 @@
 build/
 .sconsign.dblite
 *.out
+*.out.bz2
