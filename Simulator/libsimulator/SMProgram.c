@@ -7,8 +7,7 @@
 #include <sys/stat.h>
 #include <string.h>
 
-#include "SMProgram.h"
-#include "SMError.h"
+#include "SMSimulator.h"
 
 SMProgram * compileProgram(SMContext * sim, const char * name,
                                   const char * source)

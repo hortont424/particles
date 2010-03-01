@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "SMError.h"
+#include "SMSimulator.h"
 
 void throwError(const char * errorMessage)
 {

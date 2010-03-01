@@ -1,8 +1,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "SMContext.h"
-#include "SMError.h"
+#include "SMSimulator.h"
 
 SMContext * SMContextNew(int argc, char * const * argv)
 {
