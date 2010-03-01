@@ -15,8 +15,7 @@ typedef struct _SMProgram
     cl_kernel kernel;
 } SMProgram;
 
-SMProgram * compileProgram(SMContext * sim, const char * name,
-                           const char * source);
-void executeProgram(SMContext * sim, SMProgram * prog);
+SMProgram * SMProgramNew(SMContext * sim, const char * filename);
+void SMProgramExecute(SMContext * sim, SMProgram * prog);
 
 #endif

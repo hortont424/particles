@@ -15,8 +15,8 @@ int main(int argc, char * const * argv)
 {
     srand((int)time(NULL));
 
-    SMContext * sim = initializeSimulator(argc, argv);
-    SMProgram * prog = loadKernel(sim, "./kernels/gravity.cl");
+    SMContext * sim = SMContextNew(argc, argv);
+    SMProgram * prog = SMProgramNew(sim, "./kernels/gravity.cl");
     showBuildLog(sim, prog);
 
     prog->globalCount = 16384;
@@ -66,8 +66,8 @@ int main(int argc, char * const * argv)
         clSetKernelArg(prog->kernel, 1, sizeof(cl_mem), outputbuf);
         clSetKernelArg(prog->kernel, 2, sizeof(unsigned int), &ct);
 
-        executeProgram(sim, prog);
-        waitForCompletion(sim);
+        SMProgramExecute(sim, prog);
+        SMContextWait(sim);
 
         clEnqueueReadBuffer(sim->cmds, *outputbuf, CL_TRUE, 0,
                             sizeof(float) * prog->globalCount * 7,

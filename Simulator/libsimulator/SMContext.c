@@ -4,13 +4,13 @@
 #include "SMContext.h"
 #include "SMError.h"
 
-SMContext * initializeSimulator(int argc, char * const * argv)
+SMContext * SMContextNew(int argc, char * const * argv)
 {
     SMContext * sim;
     int deviceType;
     char deviceName[2048], vendorName[2048];
 
-    parseSimulatorOptions(argc, argv);
+    SMOptionsParse(argc, argv);
 
     sim = calloc(1, sizeof(SMContext));
     deviceType = simulatorUsesCPU ? CL_DEVICE_TYPE_CPU : CL_DEVICE_TYPE_GPU;
@@ -30,7 +30,7 @@ SMContext * initializeSimulator(int argc, char * const * argv)
     return sim;
 }
 
-void waitForCompletion(SMContext * sim)
+void SMContextWait(SMContext * sim)
 {
     clFinish(sim->cmds);
 }

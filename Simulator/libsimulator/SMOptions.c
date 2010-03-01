@@ -8,7 +8,7 @@
 
 int simulatorUsesCPU = false;
 
-void parseSimulatorOptions(int argc, char * const * argv)
+void SMOptionsParse(int argc, char * const * argv)
 {
     char currentOption;
 

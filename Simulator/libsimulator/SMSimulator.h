@@ -9,6 +9,4 @@
 #include "SMContext.h"
 #include "SMProgram.h"
 
-#include "SMKernelLoader.h"
-
 #endif
