@@ -6,7 +6,7 @@
 typedef struct _SMBuffer
 {
     void * buffer;
-    
+
     size_t elementSize;
     long elementCount;
 } SMBuffer;

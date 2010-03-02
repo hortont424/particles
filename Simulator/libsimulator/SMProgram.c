@@ -28,21 +28,6 @@ SMProgram * compileProgram(SMContext * sim, const char * name,
     return prog;
 }
 
-void SMProgramExecute(SMContext * sim, SMProgram * prog)
-{
-    clGetKernelWorkGroupInfo(prog->kernel, sim->devs, CL_KERNEL_WORK_GROUP_SIZE,
-                             sizeof(prog->localCount), &prog->localCount, NULL);
-
-    if(prog->globalCount < prog->localCount)
-        prog->localCount = prog->globalCount;
-
-    printf("Running '%s' on %zd elements, %zd at a time\n",
-           prog->name, prog->globalCount, prog->localCount);
-
-    clEnqueueNDRangeKernel(sim->cmds, prog->kernel, 1, NULL, &prog->globalCount,
-                           &prog->localCount, 0, NULL, NULL);
-}
-
 char * kernelNameFromFilename(const char * filename)
 {
     char * lastSlash, * lastDot, * kernelName;
@@ -96,5 +81,44 @@ SMProgram * SMProgramNew(SMContext * sim, const char * filename)
     if(prog)
         printf("Successfully loaded kernel '%s'\n", kernelName);
 
+    prog->arguments = (SMArgument **)calloc(SMProgramGetArgumentCount(prog),
+                                            sizeof(SMArgument *));
+
     return prog;
+}
+
+void SMContextExecuteProgram(SMContext * sim, SMProgram * prog)
+{
+    clGetKernelWorkGroupInfo(prog->kernel, sim->devs, CL_KERNEL_WORK_GROUP_SIZE,
+                             sizeof(prog->localCount), &prog->localCount, NULL);
+
+    if(prog->globalCount < prog->localCount)
+        prog->localCount = prog->globalCount;
+
+    printf("Running '%s' on %zd elements, %zd at a time\n",
+           prog->name, prog->globalCount, prog->localCount);
+
+    clEnqueueNDRangeKernel(sim->cmds, prog->kernel, 1, NULL, &prog->globalCount,
+                           &prog->localCount, 0, NULL, NULL);
+}
+
+void SMProgramSetArgument(SMProgram * prog, unsigned int i, SMArgument * arg)
+{
+    if(i > SMProgramGetArgumentCount(prog))
+    {
+        throwError("trying to set nonexistent argument");
+        return;
+    }
+
+    prog->arguments[i] = arg;
+}
+
+unsigned int SMProgramGetArgumentCount(SMProgram * prog)
+{
+    unsigned int argc;
+
+    clGetKernelInfo(prog->kernel, CL_KERNEL_NUM_ARGS, sizeof(unsigned int),
+                    &argc, NULL);
+
+    return argc;
 }

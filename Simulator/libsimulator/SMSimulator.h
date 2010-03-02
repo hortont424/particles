@@ -9,5 +9,6 @@
 #include "SMContext.h"
 #include "SMProgram.h"
 #include "SMBuffer.h"
+#include "SMArgument.h"
 
 #endif

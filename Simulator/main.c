@@ -19,7 +19,7 @@ int main(int argc, char * const * argv)
     SMProgram * prog = SMProgramNew(sim, "./kernels/gravity.cl");
     showBuildLog(sim, prog);
 
-    prog->globalCount = 16384;
+    prog->globalCount = 1024;
 
     float * data = (float *)calloc(prog->globalCount * 7, sizeof(float));
 
@@ -47,7 +47,7 @@ int main(int argc, char * const * argv)
 
     unsigned int ct = prog->globalCount;
 
-    int iters = 5000;
+    int iters = 10;
     long fileSize = sizeof(float) * prog->globalCount * 7 * iters;
     int fd = open("test.out", O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
     // Stretch the file
@@ -66,7 +66,7 @@ int main(int argc, char * const * argv)
         clSetKernelArg(prog->kernel, 1, sizeof(cl_mem), outputbuf);
         clSetKernelArg(prog->kernel, 2, sizeof(unsigned int), &ct);
 
-        SMProgramExecute(sim, prog);
+        SMContextExecuteProgram(sim, prog);
         SMContextWait(sim);
 
         clEnqueueReadBuffer(sim->cmds, *outputbuf, CL_TRUE, 0,
