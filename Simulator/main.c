@@ -34,16 +34,9 @@ int main(int argc, char * const * argv)
         data[i + 6] = 0.0; //((float)rand()/(float)RAND_MAX) - 0.5;
     }
 
-    cl_mem input, output;
-    cl_mem * inputbuf, * outputbuf;
-    input = clCreateBuffer(sim->ctx, CL_MEM_READ_WRITE,
-                           sizeof(float) * prog->globalCount * 7, NULL, NULL);
-    output = clCreateBuffer(sim->ctx, CL_MEM_READ_WRITE,
-                            sizeof(float) * prog->globalCount * 7, NULL, NULL);
-
-    clEnqueueWriteBuffer(sim->cmds, input, CL_TRUE, 0,
-                         sizeof(float) * prog->globalCount * 7, data, 0,
-                         NULL, NULL);
+    SMBuffer * abuf, * bbuf;
+    abuf = SMBufferNewWithSize(sim, prog->globalCount * 7, sizeof(float));
+    bbuf = SMBufferNewWithSize(sim, prog->globalCount * 7, sizeof(float));
 
     unsigned int ct = prog->globalCount;
 
@@ -57,22 +50,27 @@ int main(int argc, char * const * argv)
     float * results = (float *)mmap(NULL, fileSize, PROT_READ | PROT_WRITE,
                                     MAP_SHARED, fd, 0);
 
+    SMBufferSet(abuf, data);
+
+    SMArgument * abufarg, * bbufarg, * countarg;
+    abufarg = SMArgumentNewWithBuffer(abuf);
+    bbufarg = SMArgumentNewWithBuffer(bbuf);
+    countarg = SMArgumentNewWithInt(ct);
+
     for(int step = 0; step < iters; step++)
     {
-        inputbuf = (step % 2 == 0 ? &input : &output);
-        outputbuf = (step % 2 == 0 ? &output : &input);
+        SMArgument * inarg, * outarg;
+        inarg = (step % 2 == 0 ? abufarg : bbufarg);
+        outarg = (step % 2 == 0 ? bbufarg : abufarg);
 
-        clSetKernelArg(prog->kernel, 0, sizeof(cl_mem), inputbuf);
-        clSetKernelArg(prog->kernel, 1, sizeof(cl_mem), outputbuf);
-        clSetKernelArg(prog->kernel, 2, sizeof(unsigned int), &ct);
+        SMProgramSetArgument(prog, 0, inarg);
+        SMProgramSetArgument(prog, 1, outarg);
+        SMProgramSetArgument(prog, 2, countarg);
 
-        SMContextExecuteProgram(sim, prog);
+        SMProgramExecute(prog);
         SMContextWait(sim);
 
-        clEnqueueReadBuffer(sim->cmds, *outputbuf, CL_TRUE, 0,
-                            sizeof(float) * prog->globalCount * 7,
-                            results + (prog->globalCount * 7 * step),
-                            0, NULL, NULL);
+        SMBufferGet((step % 2 == 0 ? bbuf : abuf), (void**)&results);
     }
 
     munmap(results, fileSize);

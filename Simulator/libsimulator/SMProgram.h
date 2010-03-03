@@ -15,10 +15,15 @@ typedef struct _SMProgram
 
     cl_program program;
     cl_kernel kernel;
+
+    SMContext * context;
 } SMProgram;
 
 SMProgram * SMProgramNew(SMContext * sim, const char * filename);
-void SMContextExecuteProgram(SMContext * sim, SMProgram * prog);
+void SMProgramFree(SMProgram * prog);
+
+void SMProgramExecute(SMProgram * prog);
+
 void SMProgramSetArgument(SMProgram * prog, unsigned int i, SMArgument * arg);
 unsigned int SMProgramGetArgumentCount(SMProgram * prog);
 

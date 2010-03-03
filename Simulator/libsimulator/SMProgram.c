@@ -77,6 +77,7 @@ SMProgram * SMProgramNew(SMContext * sim, const char * filename)
     read(fileHandle, fileContent, fileInfo.st_size + 1);
 
     prog = compileProgram(sim, kernelName, fileContent);
+    prog->context = sim;
 
     if(prog)
         printf("Successfully loaded kernel '%s'\n", kernelName);
@@ -87,9 +88,31 @@ SMProgram * SMProgramNew(SMContext * sim, const char * filename)
     return prog;
 }
 
-void SMContextExecuteProgram(SMContext * sim, SMProgram * prog)
+void SMProgramFree(SMProgram * prog)
 {
-    clGetKernelWorkGroupInfo(prog->kernel, sim->devs, CL_KERNEL_WORK_GROUP_SIZE,
+    // TODO: cleanup OpenCL stuff
+    free(prog->arguments);
+    free(prog);
+}
+
+void SMProgramExecute(SMProgram * prog)
+{
+    for(int i = 0; i < SMProgramGetArgumentCount(prog); i++)
+    {
+        SMArgument * arg = prog->arguments[i];
+
+        if(!arg)
+        {
+            throwError("kernel argument not set");
+            return;
+        }
+
+        clSetKernelArg(prog->kernel, i, SMArgumentGetSize(arg),
+                       SMArgumentGetPointer(arg));
+    }
+
+    clGetKernelWorkGroupInfo(prog->kernel, prog->context->devs,
+                             CL_KERNEL_WORK_GROUP_SIZE,
                              sizeof(prog->localCount), &prog->localCount, NULL);
 
     if(prog->globalCount < prog->localCount)
@@ -98,8 +121,9 @@ void SMContextExecuteProgram(SMContext * sim, SMProgram * prog)
     printf("Running '%s' on %zd elements, %zd at a time\n",
            prog->name, prog->globalCount, prog->localCount);
 
-    clEnqueueNDRangeKernel(sim->cmds, prog->kernel, 1, NULL, &prog->globalCount,
-                           &prog->localCount, 0, NULL, NULL);
+    clEnqueueNDRangeKernel(prog->context->cmds, prog->kernel, 1, NULL,
+                           &prog->globalCount, &prog->localCount, 0, NULL,
+                           NULL);
 }
 
 void SMProgramSetArgument(SMProgram * prog, unsigned int i, SMArgument * arg)
