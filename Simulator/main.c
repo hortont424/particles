@@ -40,7 +40,7 @@ int main(int argc, char * const * argv)
 
     unsigned int ct = prog->globalCount;
 
-    int iters = 10;
+    int iters = 500;
     long fileSize = sizeof(float) * prog->globalCount * 7 * iters;
     int fd = open("test.out", O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
     // Stretch the file
@@ -70,7 +70,8 @@ int main(int argc, char * const * argv)
         SMProgramExecute(prog);
         SMContextWait(sim);
 
-        SMBufferGet((step % 2 == 0 ? bbuf : abuf), (void**)&results);
+        float * partialResults = results + (prog->globalCount * 7 * step);
+        SMBufferGet((step % 2 == 0 ? bbuf : abuf), (void**)&partialResults);
     }
 
     munmap(results, fileSize);
