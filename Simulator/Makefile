@@ -7,9 +7,11 @@ clean:
 	rm -rf ./build
 
 run:
+	rm test.out
 	./build/simulator
 
 run-cpu:
+	rm test.out
 	./build/simulator -c
 
 edit:
