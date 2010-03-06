@@ -6,9 +6,19 @@
 
 #include "SMContext.h"
 
+typedef enum _SMBufferType
+{
+    SM_FILE_BUFFER,
+    SM_OPENCL_BUFFER
+} SMBufferType;
+
 typedef struct _SMBuffer
 {
-    cl_mem buffer;
+    SMBufferType type;
+    
+    cl_mem gpuBuffer;
+    void * fileBuffer;
+    int file;
 
     size_t elementSize;
     long elementCount;
@@ -16,15 +26,15 @@ typedef struct _SMBuffer
     SMContext * context;
 } SMBuffer;
 
-SMBuffer * SMBufferNew(SMContext * sim, long elementCount);
-SMBuffer * SMBufferNewWithSize(SMContext * sim, long elementCount,
-                               size_t elementSize);
+SMBuffer * SMBufferNew(SMContext * sim, long elementCount, size_t elementSize);
+SMBuffer * SMBufferNewWithFile(SMContext * sim, long elementCount,
+                               size_t elementSize, const char * filename);
 SMBuffer * SMBufferFree(SMBuffer * buf);
 
 size_t SMBufferGetSize(SMBuffer * buf);
 long SMBufferGetElementCount(SMBuffer * buf);
 size_t SMBufferGetElementSize(SMBuffer * buf);
-cl_mem SMBufferGetNative(SMBuffer * buf);
+cl_mem SMBufferGetCLBuffer(SMBuffer * buf);
 
 void SMBufferGet(SMBuffer * buf, void ** data);
 void SMBufferSet(SMBuffer * buf, void * data);

@@ -3,8 +3,14 @@
 
 #include "SMSimulator.h"
 
+/**
+ * Allocates the space required for an SMContext, creates an OpenCL context
+ * and command queue associated with it, parses command line options, prints
+ * the make and model of the OpenCL computation device, and returns the newly
+ * created SMContext.
+ */
 SMContext * SMContextNew(int argc, char * const * argv)
-{
+{ // TODO: does it make sense to do SMOptionsParse from here?!
     SMContext * sim;
     int deviceType;
     char deviceName[2048], vendorName[2048];
@@ -29,7 +35,20 @@ SMContext * SMContextNew(int argc, char * const * argv)
     return sim;
 }
 
+/**
+ * Wait for all commands in the given context's command queue to complete, then
+ * return.
+ *
+ * @param sim The simulation context to wait for.
+ */
 void SMContextWait(SMContext * sim)
 {
     clFinish(sim->cmds);
+}
+
+void SMContextFree(SMContext * sim)
+{
+    clReleaseCommandQueue(sim->cmds);
+    clReleaseContext(sim->ctx);
+    free(sim);
 }

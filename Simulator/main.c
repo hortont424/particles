@@ -35,12 +35,12 @@ int main(int argc, char * const * argv)
     }
 
     SMBuffer * abuf, * bbuf;
-    abuf = SMBufferNewWithSize(sim, prog->globalCount * 7, sizeof(float));
-    bbuf = SMBufferNewWithSize(sim, prog->globalCount * 7, sizeof(float));
+    abuf = SMBufferNew(sim, prog->globalCount * 7, sizeof(float));
+    bbuf = SMBufferNew(sim, prog->globalCount * 7, sizeof(float));
 
     unsigned int ct = prog->globalCount;
 
-    int iters = 500;
+    int iters = 10;
     long fileSize = sizeof(float) * prog->globalCount * 7 * iters;
     int fd = open("test.out", O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
     // Stretch the file

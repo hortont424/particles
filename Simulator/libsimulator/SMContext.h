@@ -14,5 +14,6 @@ typedef struct _SMContext
 
 SMContext * SMContextNew(int argc, char * const * argv);
 void SMContextWait(SMContext * sim);
+void SMContextFree(SMContext * sim);
 
 #endif

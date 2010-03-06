@@ -12,7 +12,7 @@ SMArgument * SMArgumentNewWithBuffer(SMBuffer * buf)
     SMArgument * arg = SMArgumentNew();
 
     cl_mem * nativeBuffer = (cl_mem *)calloc(1, sizeof(cl_mem));
-    (*nativeBuffer) = SMBufferGetNative(buf);
+    (*nativeBuffer) = SMBufferGetCLBuffer(buf);
 
     arg->size = sizeof(cl_mem);
     arg->pointer = (void *)nativeBuffer;
