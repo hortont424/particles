@@ -57,7 +57,7 @@ SMBuffer * SMBufferNewWithFile(SMContext * sim, long elementCount,
     return buf;
 }
 
-SMBuffer * SMBufferFree(SMBuffer * buf)
+void SMBufferFree(SMBuffer * buf)
 {
     switch(buf->type)
     {

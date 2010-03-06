@@ -1,7 +1,9 @@
+import os
+
 VariantDir('build', '.', duplicate=0)
 
-env = Environment(CCFLAGS="--std=c99 -g")
-env.AppendUnique(FRAMEWORKS=Split('OpenCL'))
+env = Environment(CC="clang", CCFLAGS="--std=c99 -O4 -Wall -Werror")
+env.AppendUnique(FRAMEWORKS=['OpenCL'])
 
 libsimulator = SConscript('build/libsimulator/SConscript', 'env')
 simulator = SConscript('build/SConscript', 'env libsimulator')

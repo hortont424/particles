@@ -29,7 +29,7 @@ typedef struct _SMBuffer
 SMBuffer * SMBufferNew(SMContext * sim, long elementCount, size_t elementSize);
 SMBuffer * SMBufferNewWithFile(SMContext * sim, long elementCount,
                                size_t elementSize, const char * filename);
-SMBuffer * SMBufferFree(SMBuffer * buf);
+void SMBufferFree(SMBuffer * buf);
 
 size_t SMBufferGetSize(SMBuffer * buf);
 long SMBufferGetElementCount(SMBuffer * buf);

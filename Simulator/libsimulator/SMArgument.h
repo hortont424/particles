@@ -18,7 +18,7 @@ SMArgument * SMArgumentNew();
 SMArgument * SMArgumentNewWithBuffer(SMBuffer * buf);
 SMArgument * SMArgumentNewWithFloat(float f);
 SMArgument * SMArgumentNewWithInt(int f);
-SMArgument * SMArgumentFree(SMArgument * arg);
+void SMArgumentFree(SMArgument * arg);
 
 size_t SMArgumentGetSize(SMArgument * arg);
 void * SMArgumentGetPointer(SMArgument * arg);

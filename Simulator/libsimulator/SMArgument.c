@@ -46,7 +46,7 @@ SMArgument * SMArgumentNewWithInt(int f)
 }
 
 
-SMArgument * SMArgumentFree(SMArgument * arg)
+void SMArgumentFree(SMArgument * arg)
 {
     if(arg->owned)
         free(arg->pointer);
