@@ -36,17 +36,6 @@ SMContext * SMContextNew(int argc, char * const * argv)
 }
 
 /**
- * Wait for all commands in the given context's command queue to complete, then
- * return.
- *
- * @param sim The simulation context to wait for.
- */
-void SMContextWait(SMContext * sim)
-{
-    clFinish(sim->cmds);
-}
-
-/**
  * Free the memory used by an SMContext, destroying the OpenCL context and 
  * command queue in the process.
  *
@@ -57,4 +46,15 @@ void SMContextFree(SMContext * sim)
     clReleaseCommandQueue(sim->cmds);
     clReleaseContext(sim->ctx);
     free(sim);
+}
+
+/**
+ * Wait for all commands in the given context's command queue to complete, then
+ * return.
+ *
+ * @param sim The simulation context to wait for.
+ */
+void SMContextWait(SMContext * sim)
+{
+    clFinish(sim->cmds);
 }
