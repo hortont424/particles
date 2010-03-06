@@ -24,6 +24,7 @@ void SMProgramFree(SMProgram * prog);
 
 void SMProgramExecute(SMProgram * prog);
 
+void SMProgramSetGlobalCount(SMProgram * prog, size_t globalCount);
 void SMProgramSetArgument(SMProgram * prog, unsigned int i, SMArgument * arg);
 unsigned int SMProgramGetArgumentCount(SMProgram * prog);
 

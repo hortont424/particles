@@ -126,6 +126,11 @@ void SMProgramExecute(SMProgram * prog)
                            NULL);
 }
 
+void SMProgramSetGlobalCount(SMProgram * prog, size_t globalCount)
+{
+    prog->globalCount = globalCount;
+}
+
 void SMProgramSetArgument(SMProgram * prog, unsigned int i, SMArgument * arg)
 {
     if(i > SMProgramGetArgumentCount(prog))

@@ -12,21 +12,27 @@
 #include "SMSimulator.h"
 
 #define ELEMENT_SIZE    7
-#define ELEMENT_COUNT   1024
+#define ELEMENT_COUNT   2048
 #define FRAME_SIZE      (ELEMENT_SIZE * ELEMENT_COUNT)
-#define FRAME_COUNT     1000
+#define FRAME_COUNT     100
+#define TOTAL_SIZE      (FRAME_SIZE * FRAME_COUNT)
 
 int main(int argc, char * const * argv)
 {
+    SMContext * sim;
+    SMProgram * prog;
+    float * data, * partialResults;
+    SMBuffer * abuf, * bbuf, * fileBuf;
+    SMArgument * abufarg, * bbufarg, * countarg;
+    
     srand((int)time(NULL));
 
-    SMContext * sim = SMContextNew(argc, argv);
-    SMProgram * prog = SMProgramNew(sim, "./kernels/gravity.cl");
+    sim = SMContextNew(argc, argv);
+    prog = SMProgramNew(sim, "./kernels/gravity.cl");
+    SMProgramSetGlobalCount(prog, ELEMENT_COUNT);
     showBuildLog(sim, prog);
-
-    prog->globalCount = ELEMENT_COUNT;
-
-    float * data = (float *)calloc(FRAME_SIZE, sizeof(float));
+    
+    data = (float *)calloc(FRAME_SIZE, sizeof(float));
 
     for(unsigned int i = 0; i < FRAME_SIZE; i += ELEMENT_SIZE)
     {
@@ -39,37 +45,27 @@ int main(int argc, char * const * argv)
         data[i + 6] = 0.0;
     }
 
-    SMBuffer * abuf, * bbuf, * fileBuf;
     abuf = SMBufferNew(sim, FRAME_SIZE, sizeof(float));
     bbuf = SMBufferNew(sim, FRAME_SIZE, sizeof(float));
-
-    unsigned int ct = prog->globalCount;
-    
-    fileBuf = SMBufferNewWithFile(sim, FRAME_SIZE * FRAME_COUNT,
-                                  sizeof(float), "test.out");
-
     SMBufferSet(abuf, data);
+    
+    fileBuf = SMBufferNewWithFile(sim, TOTAL_SIZE, sizeof(float), "test.out");
 
-    SMArgument * abufarg, * bbufarg, * countarg;
     abufarg = SMArgumentNewWithBuffer(abuf);
     bbufarg = SMArgumentNewWithBuffer(bbuf);
-    countarg = SMArgumentNewWithInt(ct);
+    countarg = SMArgumentNewWithInt(ELEMENT_COUNT);
+    
+    partialResults = (float*)SMBufferGetNativeBuffer(fileBuf);
 
-    for(int step = 0; step < FRAME_COUNT; step++)
+    for(int step = 0; step < FRAME_COUNT; step++, partialResults += FRAME_SIZE)
     {
-        SMArgument * inarg, * outarg;
-        inarg = (step % 2 == 0 ? abufarg : bbufarg);
-        outarg = (step % 2 == 0 ? bbufarg : abufarg);
-
-        SMProgramSetArgument(prog, 0, inarg);
-        SMProgramSetArgument(prog, 1, outarg);
+        SMProgramSetArgument(prog, 0, (step % 2 ? bbufarg : abufarg));
+        SMProgramSetArgument(prog, 1, (step % 2 ? abufarg : bbufarg));
         SMProgramSetArgument(prog, 2, countarg);
 
         SMProgramExecute(prog);
         SMContextWait(sim);
 
-        float * partialResults = (float *)SMBufferGetNativeBuffer(fileBuf) +
-            (FRAME_SIZE * step);
         SMBufferGet((step % 2 == 0 ? bbuf : abuf), (void**)&partialResults);
     }
 
@@ -77,5 +73,5 @@ int main(int argc, char * const * argv)
     SMBufferFree(bbuf);
     SMBufferFree(fileBuf);
     
-    return 0;
+    return EXIT_SUCCESS;
 }
