@@ -9,7 +9,7 @@ quickdocs:
 	doxygen libsimulator/libsimulator.doxyfile
 
 docs: quickdocs
-	open build/doc/html/index.html
+	open build/doc/html/modules.html
 
 clean:
 	rm -rf ./build

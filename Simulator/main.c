@@ -29,9 +29,9 @@ int main(int argc, char * const * argv)
         data[i + 1] = (float)rand()/(float)RAND_MAX;
         data[i + 2] = (float)rand()/(float)RAND_MAX;
         data[i + 3] = 10000000.0;
-        data[i + 4] = 0.0; //((float)rand()/(float)RAND_MAX) - 0.5;
-        data[i + 5] = 0.0; //((float)rand()/(float)RAND_MAX) - 0.5;
-        data[i + 6] = 0.0; //((float)rand()/(float)RAND_MAX) - 0.5;
+        data[i + 4] = 0.0;
+        data[i + 5] = 0.0;
+        data[i + 6] = 0.0;
     }
 
     SMBuffer * abuf, * bbuf, * fileBuf;
@@ -40,7 +40,7 @@ int main(int argc, char * const * argv)
 
     unsigned int ct = prog->globalCount;
 
-    int iters = 10;
+    int iters = 500;
     
     fileBuf = SMBufferNewWithFile(sim, prog->globalCount * 7 * iters,
                                   sizeof(float), "test.out");

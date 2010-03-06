@@ -49,6 +49,8 @@ void SMContextWait(SMContext * sim)
 /**
  * Free the memory used by an SMContext, destroying the OpenCL context and 
  * command queue in the process.
+ *
+ * @param sim The simulation context to free.
  */
 void SMContextFree(SMContext * sim)
 {
