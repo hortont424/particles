@@ -11,6 +11,11 @@
 
 #include "SMSimulator.h"
 
+#define ELEMENT_SIZE    7
+#define ELEMENT_COUNT   1024
+#define FRAME_SIZE      (ELEMENT_SIZE * ELEMENT_COUNT)
+#define FRAME_COUNT     1000
+
 int main(int argc, char * const * argv)
 {
     srand((int)time(NULL));
@@ -19,11 +24,11 @@ int main(int argc, char * const * argv)
     SMProgram * prog = SMProgramNew(sim, "./kernels/gravity.cl");
     showBuildLog(sim, prog);
 
-    prog->globalCount = 1024;
+    prog->globalCount = ELEMENT_COUNT;
 
-    float * data = (float *)calloc(prog->globalCount * 7, sizeof(float));
+    float * data = (float *)calloc(FRAME_SIZE, sizeof(float));
 
-    for(unsigned int i = 0; i < prog->globalCount * 7; i += 7)
+    for(unsigned int i = 0; i < FRAME_SIZE; i += ELEMENT_SIZE)
     {
         data[i + 0] = (float)rand()/(float)RAND_MAX;
         data[i + 1] = (float)rand()/(float)RAND_MAX;
@@ -35,14 +40,12 @@ int main(int argc, char * const * argv)
     }
 
     SMBuffer * abuf, * bbuf, * fileBuf;
-    abuf = SMBufferNew(sim, prog->globalCount * 7, sizeof(float));
-    bbuf = SMBufferNew(sim, prog->globalCount * 7, sizeof(float));
+    abuf = SMBufferNew(sim, FRAME_SIZE, sizeof(float));
+    bbuf = SMBufferNew(sim, FRAME_SIZE, sizeof(float));
 
     unsigned int ct = prog->globalCount;
-
-    int iters = 500;
     
-    fileBuf = SMBufferNewWithFile(sim, prog->globalCount * 7 * iters,
+    fileBuf = SMBufferNewWithFile(sim, FRAME_SIZE * FRAME_COUNT,
                                   sizeof(float), "test.out");
 
     SMBufferSet(abuf, data);
@@ -52,7 +55,7 @@ int main(int argc, char * const * argv)
     bbufarg = SMArgumentNewWithBuffer(bbuf);
     countarg = SMArgumentNewWithInt(ct);
 
-    for(int step = 0; step < iters; step++)
+    for(int step = 0; step < FRAME_COUNT; step++)
     {
         SMArgument * inarg, * outarg;
         inarg = (step % 2 == 0 ? abufarg : bbufarg);
@@ -66,7 +69,7 @@ int main(int argc, char * const * argv)
         SMContextWait(sim);
 
         float * partialResults = (float *)SMBufferGetNativeBuffer(fileBuf) +
-            (prog->globalCount * 7 * step);
+            (FRAME_SIZE * step);
         SMBufferGet((step % 2 == 0 ? bbuf : abuf), (void**)&partialResults);
     }
 
