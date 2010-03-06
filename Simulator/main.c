@@ -34,21 +34,16 @@ int main(int argc, char * const * argv)
         data[i + 6] = 0.0; //((float)rand()/(float)RAND_MAX) - 0.5;
     }
 
-    SMBuffer * abuf, * bbuf;
+    SMBuffer * abuf, * bbuf, * fileBuf;
     abuf = SMBufferNew(sim, prog->globalCount * 7, sizeof(float));
     bbuf = SMBufferNew(sim, prog->globalCount * 7, sizeof(float));
 
     unsigned int ct = prog->globalCount;
 
     int iters = 10;
-    long fileSize = sizeof(float) * prog->globalCount * 7 * iters;
-    int fd = open("test.out", O_CREAT | O_RDWR, S_IRUSR | S_IWUSR);
-    // Stretch the file
-    lseek(fd, fileSize, SEEK_SET);
-    write(fd, "", 1);
-
-    float * results = (float *)mmap(NULL, fileSize, PROT_READ | PROT_WRITE,
-                                    MAP_SHARED, fd, 0);
+    
+    fileBuf = SMBufferNewWithFile(sim, prog->globalCount * 7 * iters,
+                                  sizeof(float), "test.out");
 
     SMBufferSet(abuf, data);
 
@@ -70,10 +65,12 @@ int main(int argc, char * const * argv)
         SMProgramExecute(prog);
         SMContextWait(sim);
 
-        float * partialResults = results + (prog->globalCount * 7 * step);
+        float * partialResults = (float *)SMBufferGetNativeBuffer(fileBuf) +
+            (prog->globalCount * 7 * step);
         SMBufferGet((step % 2 == 0 ? bbuf : abuf), (void**)&partialResults);
     }
 
-    munmap(results, fileSize);
-    close(fd);
+    SMBufferFree(abuf);
+    SMBufferFree(bbuf);
+    SMBufferFree(fileBuf);
 }

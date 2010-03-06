@@ -35,6 +35,7 @@ size_t SMBufferGetSize(SMBuffer * buf);
 long SMBufferGetElementCount(SMBuffer * buf);
 size_t SMBufferGetElementSize(SMBuffer * buf);
 cl_mem SMBufferGetCLBuffer(SMBuffer * buf);
+void * SMBufferGetNativeBuffer(SMBuffer * buf);
 
 void SMBufferGet(SMBuffer * buf, void ** data);
 void SMBufferSet(SMBuffer * buf, void * data);

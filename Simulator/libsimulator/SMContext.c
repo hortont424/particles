@@ -46,6 +46,10 @@ void SMContextWait(SMContext * sim)
     clFinish(sim->cmds);
 }
 
+/**
+ * Free the memory used by an SMContext, destroying the OpenCL context and 
+ * command queue in the process.
+ */
 void SMContextFree(SMContext * sim)
 {
     clReleaseCommandQueue(sim->cmds);

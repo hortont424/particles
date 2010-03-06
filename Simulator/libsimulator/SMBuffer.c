@@ -98,6 +98,14 @@ cl_mem SMBufferGetCLBuffer(SMBuffer * buf)
     return buf->gpuBuffer;
 }
 
+void * SMBufferGetNativeBuffer(SMBuffer * buf)
+{
+    if(buf->type != SM_FILE_BUFFER)
+        throwError("tried to get native buffer from non-file buffer");
+    
+    return buf->fileBuffer;
+}
+
 void SMBufferGet(SMBuffer * buf, void ** data)
 {
     if(*data == NULL)
