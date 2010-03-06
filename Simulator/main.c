@@ -73,4 +73,6 @@ int main(int argc, char * const * argv)
     SMBufferFree(abuf);
     SMBufferFree(bbuf);
     SMBufferFree(fileBuf);
+    
+    return 0;
 }

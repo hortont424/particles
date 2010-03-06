@@ -1,5 +1,5 @@
 Import('env')
 
-libsimulator = env.Library("simulator", Glob("*.c"))
+libsimulator = env.SharedLibrary("simulator", Glob("*.c"))
 
 Return('libsimulator')
