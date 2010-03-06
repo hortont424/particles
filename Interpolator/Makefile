@@ -10,4 +10,4 @@ run:
 	./build/Debug/Interpolator.app/Contents/MacOS/Interpolator
 
 edit:
-	mate *.c *.h
+	mate .
