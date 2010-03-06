@@ -1,13 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
-#include <math.h>
 #include <time.h>
-#include <sys/mman.h>
-#include <sys/uio.h>
-#include <fcntl.h>
-#include <unistd.h>
-#include <sys/stat.h>
-#include <errno.h>
 
 #include "SMSimulator.h"
 
@@ -47,9 +40,12 @@ int main(int argc, char * const * argv)
 
     abuf = SMBufferNew(sim, FRAME_SIZE, sizeof(float));
     bbuf = SMBufferNew(sim, FRAME_SIZE, sizeof(float));
+    
     SMBufferSet(abuf, data);
+    free(data);
     
     fileBuf = SMBufferNewWithFile(sim, TOTAL_SIZE, sizeof(float), "test.out");
+    printf("Created output file (%d KB)\n", TOTAL_SIZE * sizeof(float) / 1024);
 
     abufarg = SMArgumentNewWithBuffer(abuf);
     bbufarg = SMArgumentNewWithBuffer(bbuf);
@@ -59,6 +55,8 @@ int main(int argc, char * const * argv)
 
     for(int step = 0; step < FRAME_COUNT; step++, partialResults += FRAME_SIZE)
     {
+        printf("Computing frame %d/%d (%d%%)...\n", step + 1, FRAME_COUNT, 
+               (int)((float)(step + 1) / FRAME_COUNT * 100));
         SMProgramSetArgument(prog, 0, (step % 2 ? bbufarg : abufarg));
         SMProgramSetArgument(prog, 1, (step % 2 ? abufarg : bbufarg));
         SMProgramSetArgument(prog, 2, countarg);
@@ -72,6 +70,11 @@ int main(int argc, char * const * argv)
     SMBufferFree(abuf);
     SMBufferFree(bbuf);
     SMBufferFree(fileBuf);
+    SMArgumentFree(abufarg);
+    SMArgumentFree(bbufarg);
+    SMArgumentFree(countarg);
+    SMProgramFree(prog);
+    SMContextFree(sim);
     
     return EXIT_SUCCESS;
 }

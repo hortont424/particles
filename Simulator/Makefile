@@ -15,11 +15,11 @@ clean:
 	rm -rf ./build
 
 run:
-	rm test.out
+	rm -f test.out
 	./build/simulator
 
 run-cpu:
-	rm test.out
+	rm -f test.out
 	./build/simulator -c
 
 edit:
