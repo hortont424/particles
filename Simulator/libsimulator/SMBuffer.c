@@ -63,7 +63,7 @@ SMBuffer * SMBufferNewWithFile(SMContext * sim, long elementCount,
 
     if(buf->file == -1)
     {
-        throwError("couldn't create buffer file");
+        throwError("couldn't create buffer file '%s'", filename);
         return NULL;
     }
 
@@ -77,6 +77,12 @@ SMBuffer * SMBufferNewWithFile(SMContext * sim, long elementCount,
     return buf;
 }
 
+/**
+ * Free the memory used by the given SMBuffer. This will also unmap and close
+ * the associated file if it's a file-backed buffer.
+ *
+ * @param buf The buffer to free.
+ */
 void SMBufferFree(SMBuffer * buf)
 {
     switch(buf->type)
@@ -95,21 +101,37 @@ void SMBufferFree(SMBuffer * buf)
     free(buf);
 }
 
+/**
+ * @param buf The SMBuffer to inspect.
+ * @return The number of elements in the buffer.
+ */
 long SMBufferGetElementCount(SMBuffer * buf)
 {
     return buf->elementCount;
 }
 
+/**
+ * @param buf The SMBuffer to inspect.
+ * @return The size of each element in the buffer.
+ */
 size_t SMBufferGetElementSize(SMBuffer * buf)
 {
     return buf->elementSize;
 }
 
+/**
+ * @param buf The SMBuffer to inspect.
+ * @return The total size of the buffer.
+ */
 size_t SMBufferGetSize(SMBuffer * buf)
 {
     return SMBufferGetElementSize(buf) * SMBufferGetElementCount(buf);
 }
 
+/**
+ * @param buf The SMBuffer to inspect.
+ * @return The cl_mem object which backs OpenCL buffers.
+ */
 cl_mem SMBufferGetCLBuffer(SMBuffer * buf)
 {
     if(buf->type != SM_OPENCL_BUFFER)
@@ -118,6 +140,10 @@ cl_mem SMBufferGetCLBuffer(SMBuffer * buf)
     return buf->gpuBuffer;
 }
 
+/**
+ * @param buf The SMBuffer to inspect.
+ * @return A pointer to the native buffer in memory, for file-backed buffers.
+ */
 void * SMBufferGetNativeBuffer(SMBuffer * buf)
 {
     if(buf->type != SM_FILE_BUFFER)
@@ -126,8 +152,20 @@ void * SMBufferGetNativeBuffer(SMBuffer * buf)
     return buf->fileBuffer;
 }
 
+/**
+ * Copy the contents of the given SMBuffer into the given native buffer. If
+ * space hasn't been allocated for the native buffer, allocate just enough
+ * space to fit the SMBuffer.
+ *
+ * Keep in mind that if the SMBuffer is OpenCL-backed, this is an expensive
+ * operation, as it involves copying a chunk of data from video to main memory.
+ *
+ * @param buf The source SMBuffer.
+ * @param data A pointer to the destination native buffer.
+ */
 void SMBufferGet(SMBuffer * buf, void ** data)
 {
+    /// \todo I'm not totally sure this makes sense.
     if(*data == NULL)
     {
         (*data) = (void *)calloc(1, SMBufferGetSize(buf));
@@ -146,6 +184,15 @@ void SMBufferGet(SMBuffer * buf, void ** data)
     }
 }
 
+/**
+ * Copy the contents of the given native buffer into the given SMBuffer.
+ *
+ * Keep in mind that if the SMBuffer is OpenCL-backed, this is an expensive
+ * operation, as it involves copying a chunk of data from main to video memory.
+ *
+ * @param buf The destination SMBuffer.
+ * @param data The source native buffer.
+ */
 void SMBufferSet(SMBuffer * buf, void * data)
 {
     switch(buf->type)

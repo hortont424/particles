@@ -52,7 +52,7 @@ SMProgram * SMProgramNew(SMContext * sim, const char * filename)
 
     if(!strstr(filename, ".cl"))
     {
-        throwError("not an OpenCL kernel file");
+        throwError("'%s' is not an OpenCL kernel file", filename);
         return NULL;
     }
 
@@ -60,14 +60,14 @@ SMProgram * SMProgramNew(SMContext * sim, const char * filename)
 
     if(fileHandle == -1 || fstat(fileHandle, &fileInfo) == -1)
     {
-        throwError("kernel file not found");
+        throwError("kernel file '%s' not found", filename);
         return NULL;
     }
 
     // Since we use stat's size, we can't allow symlinks here
     if(!S_ISREG(fileInfo.st_mode))
     {
-        throwError("kernel file is non-regular; symbolic link?");
+        throwError("'%s' is non-regular; symbolic link?", filename);
         return NULL;
     }
 
@@ -103,7 +103,7 @@ void SMProgramExecute(SMProgram * prog)
 
         if(!arg)
         {
-            throwError("kernel argument not set");
+            throwError("kernel argument #%d not set", i + 1);
             return;
         }
 
@@ -135,7 +135,7 @@ void SMProgramSetArgument(SMProgram * prog, unsigned int i, SMArgument * arg)
 {
     if(i > SMProgramGetArgumentCount(prog))
     {
-        throwError("trying to set nonexistent argument");
+        throwError("trying to set nonexistent argument #%d", i);
         return;
     }
 

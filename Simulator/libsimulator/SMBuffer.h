@@ -13,8 +13,8 @@
 
 typedef enum _SMBufferType
 {
-    SM_FILE_BUFFER,
-    SM_OPENCL_BUFFER
+    SM_FILE_BUFFER,         /**< mmapped-file-backed buffer */
+    SM_OPENCL_BUFFER        /**< OpenCL-memory-object-backed buffer */
 } SMBufferType;
 
 typedef struct _SMBuffer

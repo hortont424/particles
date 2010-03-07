@@ -2,15 +2,10 @@
 
 #include "SMSimulator.h"
 
-void throwError(const char * errorMessage)
-{
-    printf("Error: %s\n", errorMessage);
-}
-
 void raiseOpenCLError(const char * errinfo, const void * private_info,
                       size_t cb, void * user_data)
 {
-    throwError(errinfo);
+    throwError("%s", errinfo);
 }
 
 void showBuildLog(SMContext * sim, SMProgram * prog)
