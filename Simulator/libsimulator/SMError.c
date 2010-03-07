@@ -2,6 +2,8 @@
 
 #include "SMSimulator.h"
 
+/// \todo This file is a joke. Should be cleaned up at some point.
+
 void raiseOpenCLError(const char * errinfo, const void * private_info,
                       size_t cb, void * user_data)
 {

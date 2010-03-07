@@ -6,7 +6,7 @@
  * @{
  */
 
-extern int simulatorUsesCPU;
+extern int simulatorUsesCPU; /**< Whether to restrict simulation to the CPU */
 
 void SMOptionsParse(int argc, char * const * argv);
 
