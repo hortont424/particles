@@ -42,6 +42,17 @@ char * kernelNameFromFilename(const char * filename)
     return strncpy(kernelName, lastSlash + 1, kernelNameLength);
 }
 
+/**
+ * Allocate the space required for an SMProgram, load an OpenCL kernel from the
+ * given file, compile it, and allocate space for its list of arguments.
+ *
+ * Since we use fstat to determine the size of the file to be loaded, it can't
+ * be a symlink (the size of the symlink would be reported instead!).
+ *
+ * @param sim The simulation context to compile the kernel within.
+ * @param filename The filename of the OpenCL kernel to load and compile.
+ * @return The newly allocated program.
+ */
 SMProgram * SMProgramNew(SMContext * sim, const char * filename)
 {
     struct stat fileInfo;
@@ -88,6 +99,11 @@ SMProgram * SMProgramNew(SMContext * sim, const char * filename)
     return prog;
 }
 
+/**
+ * Free the memory used by the given SMProgram and its contents.
+ *
+ * @param prog The program to be freed.
+ */
 void SMProgramFree(SMProgram * prog)
 {
     // TODO: cleanup OpenCL stuff
@@ -95,6 +111,12 @@ void SMProgramFree(SMProgram * prog)
     free(prog);
 }
 
+/**
+ * Execute the given SMProgram in its context, after setting all of the
+ * arguments on the kernel from the SMProgram's list of arguments.
+ *
+ * @param prog The program to execute.
+ */
 void SMProgramExecute(SMProgram * prog)
 {
     for(int i = 0; i < SMProgramGetArgumentCount(prog); i++)
@@ -111,6 +133,7 @@ void SMProgramExecute(SMProgram * prog)
                        SMArgumentGetPointer(arg));
     }
 
+    /// \todo Make not-evenly-divisible globalCounts still work, somehow
     clGetKernelWorkGroupInfo(prog->kernel, prog->context->devs,
                              CL_KERNEL_WORK_GROUP_SIZE,
                              sizeof(prog->localCount), &prog->localCount, NULL);
@@ -126,11 +149,21 @@ void SMProgramExecute(SMProgram * prog)
                            NULL);
 }
 
+/**
+ * @param buf The SMBuffer to modify.
+ * @param globalCount The total number of kernel instances to be spawned.
+ */
 void SMProgramSetGlobalCount(SMProgram * prog, size_t globalCount)
 {
     prog->globalCount = globalCount;
 }
 
+/**
+ * @param buf The SMBuffer to modify.
+ * @param i The index of the argument to set.
+ * @param arg A pointer to the SMArgument object representing the value of
+ * the kernel argument.
+ */
 void SMProgramSetArgument(SMProgram * prog, unsigned int i, SMArgument * arg)
 {
     if(i > SMProgramGetArgumentCount(prog))
@@ -142,6 +175,10 @@ void SMProgramSetArgument(SMProgram * prog, unsigned int i, SMArgument * arg)
     prog->arguments[i] = arg;
 }
 
+/**
+ * @param prog The SMProgram to inspect.
+ * @return The number of arguments that the compiled kernel expects to receive.
+ */
 unsigned int SMProgramGetArgumentCount(SMProgram * prog)
 {
     unsigned int argc;
