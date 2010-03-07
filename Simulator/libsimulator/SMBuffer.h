@@ -20,7 +20,7 @@ typedef enum _SMBufferType
 typedef struct _SMBuffer
 {
     SMBufferType type;      /**< Type of buffer */
-    
+
     cl_mem gpuBuffer;       /**< OpenCL buffer (for SM_OPENCL_BUFFER) */
     void * fileBuffer;      /**< Native buffer (for SM_FILE_BUFFER) */
     int file;               /**< File descriptor (for SM_FILE_BUFFER) */

@@ -17,16 +17,16 @@ int main(int argc, char * const * argv)
     float * data, * partialResults;
     SMBuffer * abuf, * bbuf, * fileBuf;
     SMArgument * abufarg, * bbufarg, * countarg;
-    
+
     srand((int)time(NULL));
-    
+
     SMOptionsParse(argc, argv);
 
     sim = SMContextNew(argc, argv);
     prog = SMProgramNew(sim, "./kernels/gravity.cl");
     SMProgramSetGlobalCount(prog, ELEMENT_COUNT);
     showBuildLog(sim, prog);
-    
+
     data = (float *)calloc(FRAME_SIZE, sizeof(float));
 
     for(unsigned int i = 0; i < FRAME_SIZE; i += ELEMENT_SIZE)
@@ -42,22 +42,22 @@ int main(int argc, char * const * argv)
 
     abuf = SMBufferNew(sim, FRAME_SIZE, sizeof(float));
     bbuf = SMBufferNew(sim, FRAME_SIZE, sizeof(float));
-    
+
     SMBufferSet(abuf, data);
     free(data);
-    
+
     fileBuf = SMBufferNewWithFile(sim, TOTAL_SIZE, sizeof(float), "test.out");
     printf("Created output file (%d KB)\n", TOTAL_SIZE * sizeof(float) / 1024);
 
     abufarg = SMArgumentNewWithBuffer(abuf);
     bbufarg = SMArgumentNewWithBuffer(bbuf);
     countarg = SMArgumentNewWithInt(ELEMENT_COUNT);
-    
+
     partialResults = (float*)SMBufferGetNativeBuffer(fileBuf);
 
     for(int step = 0; step < FRAME_COUNT; step++, partialResults += FRAME_SIZE)
     {
-        printf("Computing frame %d/%d (%d%%)...\n", step + 1, FRAME_COUNT, 
+        printf("Computing frame %d/%d (%d%%)...\n", step + 1, FRAME_COUNT,
                (int)((float)(step + 1) / FRAME_COUNT * 100));
         SMProgramSetArgument(prog, 0, (step % 2 ? bbufarg : abufarg));
         SMProgramSetArgument(prog, 1, (step % 2 ? abufarg : bbufarg));
@@ -77,6 +77,6 @@ int main(int argc, char * const * argv)
     SMArgumentFree(countarg);
     SMProgramFree(prog);
     SMContextFree(sim);
-    
+
     return EXIT_SUCCESS;
 }

@@ -13,15 +13,16 @@
 
 typedef struct _SMProgram
 {
-    size_t globalCount, localCount;
+    size_t globalCount;         /**< Total number of kernel instances */
+    size_t localCount;          /**< Number of parallel kernel instances */
 
-    const char * name;
-    SMArgument ** arguments;
+    const char * name;          /**< Name of represented OpenCL kernel */
+    SMArgument ** arguments;    /**< List of kernel arguments */
 
-    cl_program program;
-    cl_kernel kernel;
+    cl_program program;         /**< OpenCL program */
+    cl_kernel kernel;           /**< Compiled OpenCL kernel */
 
-    SMContext * context;
+    SMContext * context;        /**< The context that owns the program */
 } SMProgram;
 
 SMProgram * SMProgramNew(SMContext * sim, const char * filename);

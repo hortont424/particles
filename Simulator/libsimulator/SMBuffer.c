@@ -9,6 +9,17 @@
 
 #include "SMSimulator.h"
 
+/**
+ * Create an SMBuffer backed by an OpenCL memory object. Depending on whether
+ * the context it's created in is on the CPU or GPU, reads and writes to this
+ * buffer may involve transferring data between main and video memory, which is
+ * much slower than working solely within either.
+ *
+ * @param sim The context in which to create the new buffer.
+ * @param elementCount The number of elements in the buffer.
+ * @param elementSize The size of an element in the buffer.
+ * @return The newly allocated buffer.
+ */
 SMBuffer * SMBufferNew(SMContext * sim, long elementCount, size_t elementSize)
 {
     SMBuffer * buf = (SMBuffer *)calloc(1, sizeof(SMBuffer));
@@ -25,6 +36,15 @@ SMBuffer * SMBufferNew(SMContext * sim, long elementCount, size_t elementSize)
     return buf;
 }
 
+/**
+ * Create an SMBuffer backed by an mmapped file. If the file exists, it is
+ * overwritten; if it doesn't, it is created.
+ *
+ * @param sim The context in which to create the new buffer.
+ * @param elementCount The number of elements in the buffer.
+ * @param elementSize The size of an element in the buffer.
+ * @return The newly allocated buffer.
+ */
 SMBuffer * SMBufferNewWithFile(SMContext * sim, long elementCount,
                                size_t elementSize, const char * filename)
 {
@@ -37,10 +57,10 @@ SMBuffer * SMBufferNewWithFile(SMContext * sim, long elementCount,
     buf->elementSize = elementSize;
 
     buf->fileBuffer = clCreateBuffer(sim->ctx, CL_MEM_READ_WRITE,
-                                      SMBufferGetSize(buf), NULL, NULL);
-                                      
+                                     SMBufferGetSize(buf), NULL, NULL);
+
     buf->file = open(filename, O_CREAT | O_RDWR | O_TRUNC, S_IRUSR | S_IWUSR);
-    
+
     if(buf->file == -1)
     {
         throwError("couldn't create buffer file");
@@ -71,7 +91,7 @@ void SMBufferFree(SMBuffer * buf)
         default:
             throwError("tried to free unknown buffer type");
     }
-    
+
     free(buf);
 }
 
@@ -94,7 +114,7 @@ cl_mem SMBufferGetCLBuffer(SMBuffer * buf)
 {
     if(buf->type != SM_OPENCL_BUFFER)
         throwError("tried to get cl_mem from non-OpenCL buffer");
-    
+
     return buf->gpuBuffer;
 }
 
@@ -102,7 +122,7 @@ void * SMBufferGetNativeBuffer(SMBuffer * buf)
 {
     if(buf->type != SM_FILE_BUFFER)
         throwError("tried to get native buffer from non-file buffer");
-    
+
     return buf->fileBuffer;
 }
 
