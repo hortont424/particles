@@ -6,6 +6,11 @@
 
 #include "SMContext.h"
 
+/**
+ * @defgroup SMBuffer SMBuffer
+ * @{
+ */
+
 typedef enum _SMBufferType
 {
     SM_FILE_BUFFER,
@@ -14,16 +19,16 @@ typedef enum _SMBufferType
 
 typedef struct _SMBuffer
 {
-    SMBufferType type;
+    SMBufferType type;      /**< Type of buffer */
     
-    cl_mem gpuBuffer;
-    void * fileBuffer;
-    int file;
+    cl_mem gpuBuffer;       /**< OpenCL buffer (for SM_OPENCL_BUFFER) */
+    void * fileBuffer;      /**< Native buffer (for SM_FILE_BUFFER) */
+    int file;               /**< File descriptor (for SM_FILE_BUFFER) */
 
-    size_t elementSize;
-    long elementCount;
+    size_t elementSize;     /**< Size of each element in the buffer */
+    long elementCount;      /**< Number of elements in the buffer */
 
-    SMContext * context;
+    SMContext * context;    /**< The context that owns the buffer */
 } SMBuffer;
 
 SMBuffer * SMBufferNew(SMContext * sim, long elementCount, size_t elementSize);
@@ -39,5 +44,7 @@ void * SMBufferGetNativeBuffer(SMBuffer * buf);
 
 void SMBufferGet(SMBuffer * buf, void ** data);
 void SMBufferSet(SMBuffer * buf, void * data);
+
+/** @} */
 
 #endif

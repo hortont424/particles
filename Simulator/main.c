@@ -19,6 +19,8 @@ int main(int argc, char * const * argv)
     SMArgument * abufarg, * bbufarg, * countarg;
     
     srand((int)time(NULL));
+    
+    SMOptionsParse(argc, argv);
 
     sim = SMContextNew(argc, argv);
     prog = SMProgramNew(sim, "./kernels/gravity.cl");

@@ -4,9 +4,16 @@
 #include "SMContext.h"
 #include "SMProgram.h"
 
+/**
+ * @defgroup SMError SMError
+ * @{
+ */
+
 void throwError(const char * errorMessage);
 void raiseOpenCLError(const char * errinfo, const void * private_info,
                       size_t cb, void * user_data);
 void showBuildLog(SMContext * sim, SMProgram * prog);
+
+/** @} */
 
 #endif

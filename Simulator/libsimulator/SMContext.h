@@ -17,7 +17,7 @@ typedef struct _SMContext
     cl_command_queue cmds;  /**< OpenCL command queue */
 } SMContext;
 
-SMContext * SMContextNew(int argc, char * const * argv);
+SMContext * SMContextNew();
 void SMContextFree(SMContext * sim);
 
 void SMContextWait(SMContext * sim);

@@ -4,18 +4,18 @@
 #include "SMSimulator.h"
 
 /**
- * Allocates the space required for an SMContext, creates an OpenCL context
- * and command queue associated with it, parses command line options, prints
- * the make and model of the OpenCL computation device, and returns the newly
+ * Allocate the space required for an SMContext, create an OpenCL context
+ * and command queue associated with it, parse command line options, print
+ * the make and model of the OpenCL computation device, and return the newly
  * created SMContext.
+ *
+ * @return The newly allocated simulation context.
  */
-SMContext * SMContextNew(int argc, char * const * argv)
-{ // TODO: does it make sense to do SMOptionsParse from here?!
+SMContext * SMContextNew()
+{
     SMContext * sim;
     int deviceType;
     char deviceName[2048], vendorName[2048];
-
-    SMOptionsParse(argc, argv);
 
     sim = calloc(1, sizeof(SMContext));
     deviceType = simulatorUsesCPU ? CL_DEVICE_TYPE_CPU : CL_DEVICE_TYPE_GPU;
