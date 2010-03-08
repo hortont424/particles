@@ -1,8 +1,0 @@
-import os
-
-VariantDir('build', '.', duplicate=0)
-
-env = Environment(CCFLAGS="--std=c99 -O4 -Wall -Werror -fobjc-gc")
-env.AppendUnique(FRAMEWORKS=['OpenCL','Cocoa','AppKit','Foundation'])
-
-interpolator = SConscript('build/SConscript', 'env')
