@@ -1,13 +1,13 @@
-.PHONY: all clean run run-cpu edit
+.PHONY: all clean run edit
 
 all:
-	xcodebuild
+	scons -Q
 
 clean:
 	rm -rf ./build
 
 run:
-	./build/Debug/Interpolator.app/Contents/MacOS/Interpolator
+	./build/Interpolator.app/Contents/MacOS/Interpolator
 
 edit:
 	mate .

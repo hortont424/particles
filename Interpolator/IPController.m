@@ -46,12 +46,12 @@
 - (void)updateCurveSets
 {
     [curveSetChooser removeAllItems];
-    
+
     for(IPCurveSet * curveSet in [curveStorage curveSets])
     {
         [curveSetChooser addItemWithTitle:[curveSet name]];
     }
-    
+
     [controlPointView updateCurves];
 }
 

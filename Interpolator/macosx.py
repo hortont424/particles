@@ -1,4 +1,6 @@
 #!/usr/bin/env python
+# From Joey Mukherjee (joey@swri.edu), 2005
+
 """Provides tools for building Mac application bundles."""
 
 from os.path import *
@@ -11,19 +13,7 @@ from SCons.Builder import *
 from SCons.Defaults import SharedCheck, ProgScan
 from SCons.Script.SConscript import SConsEnvironment
 
-
 def TOOL_BUNDLE(env):
-    """defines env.Bundle() for linking bundles on Darwin/OSX, and
-       env.InstallBundle() for installing a bundle into its dir.
-       A bundle has this structure: (filenames are case SENSITIVE)
-       sapphire.bundle/
-         Contents/
-           Info.plist (an XML key->value database; defined by BUNDLE_INFO_PLIST)
-           PkgInfo (trivially short; defined by value of BUNDLE_PKGINFO)
-           MacOS/
-             executable (the executable or shared lib, linked with Bundle())
-    Resources/
-         """
     if 'BUNDLE' in env['TOOLS']: return
     if env['PLATFORM'] == 'darwin':
         env.Append(TOOLS = 'BUNDLE')
@@ -46,73 +36,6 @@ def TOOL_BUNDLE(env):
         # This requires some other tools:
         TOOL_WRITE_VAL(env)
 
-        def ensureWritable(nodes):
-            for node in nodes:
-                if exists(node.path) and not (stat(node.path)[0] & 0200):
-                   chmod(node.path, 0777)
-            return nodes
-
-# Copy given patterns from inDir to outDir
-
-        def DFS(root, skip_symlinks = 1):
-            """Depth first search traversal of directory structure.  Children
-            are visited in alphabetical order."""
-            stack = [root]
-            visited = {}
-            while stack:
-                d = stack.pop()
-                if d not in visited:  ## just to prevent any possible recursive
-                                      ## loops
-                    visited[d] = 1
-                    yield d
-                stack.extend(subdirs(d, skip_symlinks))
-
-
-        def subdirs(root, skip_symlinks = 1):
-            """Given a root directory, returns the first-level subdirectories."""
-            try:
-                dirs = [join(root, x) for x in listdir(root)]
-                dirs = filter(isdir, dirs)
-                if skip_symlinks:
-                    dirs = filter(lambda x: not islink(x), dirs)
-                dirs.sort()
-                return dirs
-            except OSError, IOError: return []
-
-        def copyFiles (env, outDir, inDir):
-            inDirNode = env.Dir(inDir)
-            outDirNode = env.Dir(outDir)
-            subdirs = DFS (inDirNode.name)
-            files = []
-            for subdir in subdirs:
-                files += glob.glob (join (subdir, '*'))
-            outputs = []
-            for f in files:
-                if isfile (f):
-                   outputs += ensureWritable (env.InstallAs (outDirNode.abspath + '/' + f, env.File (f)))
-            return outputs
-
-        def InstallBundle (env, target_dir, bundle):
-            """Move a Mac OS-X bundle to its final destination"""
-
-            # check parameters!
-
-            if exists(target_dir) and not isdir (target_dir):
-               raise SCons.Errors.UserError, "InstallBundle: %s needs to be a directory!"%(target_dir)
-
-            bundledirs = env.arg2nodes (bundle, env.fs.File)
-            outputs = []
-            for bundledir in bundledirs:
-                suffix = bundledir.name [bundledir.name.rfind ('.'):]
-                if (exists(bundledir.name) and not isdir (bundledir.name)) or suffix != '.app':
-                   raise SCons.Errors.UserError, "InstallBundle: %s needs to be a directory with a .app suffix!"%(bundledir.name)
-
-            # copy all of them to the target dir
-
-                outputs += env.copyFiles (target_dir, bundledir)
-            return outputs
-
-        # Common type codes are BNDL for generic bundle and APPL for application.
         def MakeBundle(env, bundledir, app,
                        key, info_plist,
                        typecode='BNDL', creator='SapP',
@@ -163,9 +86,6 @@ def TOOL_BUNDLE(env):
         # This is not a regular Builder; it's a wrapper function.
         # So just make it available as a method of Environment.
         SConsEnvironment.MakeBundle = MakeBundle
-        SConsEnvironment.InstallBundle = InstallBundle
-        SConsEnvironment.copyFiles = copyFiles
-
 
 def TOOL_WRITE_VAL(env):
     env.Append(TOOLS = 'WRITE_VAL')
@@ -176,9 +96,3 @@ def TOOL_WRITE_VAL(env):
         f.write(source[0].get_contents())
         f.close()
     env['BUILDERS']['WriteVal'] = Builder(action=write_val)
-
-
-def osx_copy( dest, source, env ):
-    from macostools import copy
-    copy( source, dest )
-    shutil.copymode(source, dest)

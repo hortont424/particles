@@ -9,16 +9,16 @@
 - (id)initWithFrame:(NSRect)frame
 {
     self = [super initWithFrame:frame];
-    
+
     if (self)
     {
         drawControlPoints = TRUE;
-        
+
         controlPointSubareas = [[NSMapTable alloc]
             initWithKeyOptions:NSMapTableStrongMemory
             valueOptions:NSMapTableStrongMemory
             capacity:32];
-        
+
         dragPoint = boxPoint = NSFarAwayPoint;
         highlightedControlPoint = nil;
         selection = [[NSMutableArray alloc] init];
@@ -29,26 +29,26 @@
 - (void)updateCurves
 {
     curves = [[[curveStorage curveSets] objectAtIndex:curvesIndex] curves];
-    
+
     for(NSTrackingArea * ta in [self trackingAreas])
         [self removeTrackingArea:ta];
-    
+
     for(IPCurve * curve in curves)
         for(IPControlPoint * pt in [curve controlPoints])
             [self createTrackingAreasForControlPoint:pt];
-    
+
     [self setNeedsDisplay:YES];
 }
 
 - (void)createTrackingAreasForControlPoint:(IPControlPoint *)controlPoint
 {
     NSTrackingAreaOptions trackingOptions;
-    trackingOptions = (NSTrackingMouseEnteredAndExited | 
+    trackingOptions = (NSTrackingMouseEnteredAndExited |
                        NSTrackingMouseMoved |
                        NSTrackingActiveInActiveApp |
                        NSTrackingEnabledDuringMouseDrag |
                        NSTrackingCursorUpdate);
-    
+
     NSPoint pt;
     NSRect rect;
     NSMutableDictionary * userInfo;
@@ -60,7 +60,7 @@
         userInfo = [[NSMutableDictionary alloc] init];
         [userInfo setObject:controlPoint forKey:@"point"];
         [userInfo setObject:[NSNumber numberWithInt:index] forKey:@"subpoint"];
-        
+
         if(index != 2)
         {
             pt = [controlPoint absoluteControlPoint:index];
@@ -72,10 +72,10 @@
             rect = NSRectAroundPoint(pt, 6, 6);
             [controlPointSubareas setObject:subareas forKey:controlPoint];
         }
-        
+
         ta = [[NSTrackingArea alloc] initWithRect:rect options:trackingOptions
             owner:self userInfo:userInfo];
-        
+
         [self addTrackingArea:ta];
         [subareas addObject:ta];
     }
@@ -88,7 +88,7 @@
 
     trackingArea = [event trackingArea];
     hitPoint = [self convertPoint:[event locationInWindow] fromView:nil];
-    
+
     if ([self mouse:hitPoint inRect:[trackingArea rect]] ||
         highlightedControlPoint)
     {
@@ -104,9 +104,9 @@
 {
     NSPoint mouse = [self convertPointFromBase:
         [[NSApp keyWindow] mouseLocationOutsideOfEventStream]];
-    
+
     BOOL appendSelection = ([event modifierFlags] & NSShiftKeyMask) != 0;
-    
+
     if(highlightedControlPoint == nil)
     {
         boxPoint = mouse;
@@ -115,7 +115,7 @@
     {
         dragPoint = mouse;
         [NSCursor hide];
-        
+
         // Make sure point hasn't already been added to selection
         for(IPControlPointSelection * sel in selection)
         {
@@ -123,10 +123,10 @@
                sel.subpoint == highlightedSubpoint)
                return;
         }
-        
+
         BOOL selectingHandles =
             ((IPControlPointSelection *)[selection lastObject]).subpoint != 2;
-        
+
         // Multiple selection only works on big control points, not handles
         // So, if we're selecting a handle, or have handles selected,
         // we have to reset the selection. Also, if the shift key isn't
@@ -135,30 +135,30 @@
         {
             [selection removeAllObjects];
         }
-        
+
         // Add new control point
         IPControlPointSelection * sel = [[IPControlPointSelection alloc] init];
         sel.controlPoint = highlightedControlPoint;
         sel.subpoint = highlightedSubpoint;
         [selection addObject:sel];
     }
-    
+
     [self setNeedsDisplay:YES];
 }
 
 - (void)mouseUp:(NSEvent *) event
 {
     BOOL appendSelection = ([event modifierFlags] & NSShiftKeyMask) != 0;
-    
+
     if(!NSComparePoint(boxPoint, NSFarAwayPoint))
     {
         NSPoint mouse = [self convertPointFromBase:
             [[NSApp keyWindow] mouseLocationOutsideOfEventStream]];
-        
+
         if(!appendSelection ||
            ((IPControlPointSelection *)[selection lastObject]).subpoint != 2)
             [selection removeAllObjects];
-        
+
         // Add control points within box select to selection
         for(IPCurve * curve in curves)
         {
@@ -168,7 +168,7 @@
                     NSRectWithPoints(boxPoint, mouse)))
                 {
                     BOOL pointAlreadySelected = NO;
-                
+
                     // Make sure control point isn't already selected
                     for(IPControlPointSelection * sel in selection)
                     {
@@ -179,11 +179,11 @@
                             break;
                         }
                     }
-                
+
                     if(pointAlreadySelected)
                         continue;
-                
-                    IPControlPointSelection * sel = 
+
+                    IPControlPointSelection * sel =
                         [[IPControlPointSelection alloc] init];
                     sel.controlPoint = controlPoint;
                     sel.subpoint = 2;
@@ -195,13 +195,13 @@
         [self setNeedsDisplay:YES];
         return;
     }
-    
+
     dragPoint = NSFarAwayPoint;
-    
+
     if(highlightedControlPoint)
     {
         [NSCursor unhide];
-        
+
         if(nextHighlightedControlPointSet)
         {
             nextHighlightedControlPointSet = NO;
@@ -209,7 +209,7 @@
             highlightedSubpoint = nextHighlightedSubpoint;
         }
     }
-    
+
     [self setNeedsDisplay:YES];
 }
 
@@ -219,13 +219,13 @@
     {
         NSDictionary * userInfo = [event userData];
         nextHighlightedControlPoint = [userInfo objectForKey:@"point"];
-        nextHighlightedSubpoint = [[userInfo objectForKey:@"subpoint"] 
+        nextHighlightedSubpoint = [[userInfo objectForKey:@"subpoint"]
             intValue];
         nextHighlightedControlPointSet = YES;
-        
+
         return;
     }
-    
+
     NSDictionary * userInfo = [event userData];
     highlightedControlPoint = [userInfo objectForKey:@"point"];
     highlightedSubpoint = [[userInfo objectForKey:@"subpoint"] intValue];
@@ -237,47 +237,47 @@
     // Don't let the mouse out of the view's rect
     NSPoint mouse = [self convertPointFromBase:
         [[NSApp keyWindow] mouseLocationOutsideOfEventStream]];
-    
+
     if(!NSPointInRect(mouse, [self bounds]))
         return;
-    
+
     // If we're doing box select, don't update any control points
     if(!NSComparePoint(boxPoint, NSFarAwayPoint))
     {
         [self setNeedsDisplay:YES];
         return;
     }
-    
+
     if(!highlightedControlPoint || [selection count] == 0 ||
        NSComparePoint(dragPoint, NSFarAwayPoint))
         return;
-    
+
     BOOL snapAngle = ([event modifierFlags] & NSShiftKeyMask) != 0;
-    
+
     NSPoint delta = NSSubtractPoints(mouse, dragPoint);
     NSPoint point;
-    
+
     // Shift all selected control points by delta
     for(IPControlPointSelection * sel in selection)
     {
         IPControlPoint * controlPoint = sel.controlPoint;
         int subpoint = sel.subpoint;
-        
+
         if(subpoint == 2)
             point = [controlPoint point];
         else
             point = [controlPoint controlPoint:subpoint];
-            
+
         point = NSAddPoints(point, delta);
-        
+
         // Snap angle to 45s
         if(snapAngle && subpoint != 2)
         {
             NSPoint polar = NSCartesianToPolar(point);
-            
+
             double diff = 100.0;
             double ideal = 0.0;
-            
+
             for(double angle = -M_PI; angle <= M_PI; angle += M_PI / 4.0)
             {
                 if(fabs(polar.y - angle) < diff)
@@ -286,18 +286,18 @@
                     ideal = angle;
                 }
             }
-            
+
             polar.y = ideal;
 
             point = NSPolarToCartesian(polar);
         }
-        
+
         if(subpoint == 2)
             [controlPoint setPoint:point];
         else
             [controlPoint setControlPoint:subpoint toPoint:point];
     }
-    
+
     if([selection count])
     {
         // Recalculate tracking areas for selected control points
@@ -305,16 +305,16 @@
         {
             NSArray * areas;
             areas = [controlPointSubareas objectForKey:sel.controlPoint];
-            
+
             for(NSTrackingArea * ta in areas)
                 [self removeTrackingArea:ta];
-            
+
             [self createTrackingAreasForControlPoint:sel.controlPoint];
         }
     }
-    
+
     [self setNeedsDisplay:YES];
-    
+
     dragPoint = mouse;
 }
 
@@ -326,7 +326,7 @@
         nextHighlightedControlPointSet = YES;
         return;
     }
-    
+
     highlightedControlPoint = nil;
 
     [self setNeedsDisplay:YES];
@@ -335,7 +335,7 @@
 - (void)drawPoint:(IPControlPoint *)controlPoint
 {
     CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
-    
+
     // Find our control point, if it's selected
     long selectionIndex = [selection indexOfObjectPassingTest:
         ^ BOOL (id obj, NSUInteger idx, BOOL * stop)
@@ -343,19 +343,19 @@
             IPControlPointSelection * sel = (IPControlPointSelection *)obj;
             return (sel.controlPoint == controlPoint);
         }];
-    
+
     IPControlPointSelection * sel = nil;
     if(selectionIndex >= 0 && selectionIndex != NSNotFound)
         sel = [selection objectAtIndex:selectionIndex];
-    
+
     NSPoint point = [controlPoint point];
     CGRect ell;
-    
+
     // Draw handles and control points
     for(int index = 0; index <= 2; index++)
     {
         NSPoint subpoint;
-        
+
         if(sel && sel.subpoint == index)
         {
             CGContextSetRGBStrokeColor(ctx, 0.788, 0.714, 0.110, 1.0);
@@ -375,7 +375,7 @@
             CGContextSetRGBStrokeColor(ctx, 0.2, 0.2, 0.2, 1.0);
             CGContextSetLineWidth(ctx, 1.0);
         }
-        
+
         if(index != 2)
         {
             subpoint = [controlPoint absoluteControlPoint:index];
@@ -386,7 +386,7 @@
             subpoint = point;
             ell = CGRectAroundPoint(subpoint, 3, 3);
         }
-    
+
         // Draw handles
         if(index != 2)
         {
@@ -394,7 +394,7 @@
             CGContextAddLineToPoint(ctx, subpoint.x, subpoint.y);
             CGContextStrokePath(ctx);
         }
-    
+
         CGContextAddEllipseInRect(ctx, ell);
         CGContextFillPath(ctx);
         CGContextAddEllipseInRect(ctx, ell);
@@ -420,7 +420,7 @@
     p1 = [a absoluteControlPoint:1];
     p2 = [b absoluteControlPoint:0];
     p3 = [b point];
-    
+
     return NSMakePoint(
         [self evaluateBezierParameterAtT:t X1:p0.x X2:p1.x X3:p2.x X4:p3.x],
         [self evaluateBezierParameterAtT:t X1:p0.y X2:p1.y X3:p2.y X4:p3.y]);
@@ -430,7 +430,7 @@ NSInteger controlPointSort(id point1, id point2, void * ctx)
 {
     IPControlPoint * a = (IPControlPoint *)point1;
     IPControlPoint * b = (IPControlPoint *)point2;
-    
+
     return [a point].x > [b point].x ? 1 : -1;
 }
 
@@ -440,25 +440,25 @@ NSInteger controlPointSort(id point1, id point2, void * ctx)
     NSArray * controlPoints = [curve controlPoints];
     controlPoints = [controlPoints sortedArrayUsingFunction:controlPointSort
         context:nil];
-    
+
     CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
     CGContextSetInterpolationQuality(ctx, kCGInterpolationHigh);
     CGContextSetRGBStrokeColor(ctx, 0.937, 0.161, 0.161, 1.0);
     CGContextSetLineWidth(ctx, 1.0);
-    
+
     for(unsigned int i = 0; i < [controlPoints count] - 1; i++)
     {
         a = [controlPoints objectAtIndex:i];
         b = [controlPoints objectAtIndex:i+1];
-    
+
         CGContextMoveToPoint(ctx, [a point].x, [a point].y);
-    
+
         for(double t = 0.0; t < 1.0; t += 0.001)
         {
             NSPoint bzpt = [self evaluateBezierAtT:t pointA:a pointB:b];
             CGContextAddLineToPoint(ctx, bzpt.x, bzpt.y);
         }
-    
+
         CGContextStrokePath(ctx);
     }
 }
@@ -467,24 +467,24 @@ NSInteger controlPointSort(id point1, id point2, void * ctx)
 {
     [[NSColor whiteColor] setFill];
     NSRectFill(dirtyRect);
-    
+
     for(IPCurve * curve in curves)
         [self drawCurve:curve];
-    
+
     if(drawControlPoints) // TODO: disable manipulation too
         for(IPCurve * curve in curves)
             for(IPControlPoint * controlPoint in [curve controlPoints])
                 [self drawPoint:controlPoint];
-    
+
     // Draw box selector
     if(!NSComparePoint(boxPoint, NSFarAwayPoint))
     {
         NSColor * blue = [NSColor colorWithCalibratedRed:0.447 green:0.624
             blue: 0.812 alpha:0.5];
-            
+
         [[blue colorWithAlphaComponent:0.2] setFill];
         [blue setStroke];
-        
+
         NSPoint mouse = [self convertPointFromBase:
             [[NSApp keyWindow] mouseLocationOutsideOfEventStream]];
         [NSBezierPath fillRect:NSRectWithPoints(boxPoint, mouse)];
