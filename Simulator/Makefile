@@ -3,7 +3,7 @@
 all: quick quickdocs
 
 quick:
-	scons -Q
+	cd .. ; scons -Q
 
 quickdocs:
 	doxygen libsimulator/libsimulator.doxyfile

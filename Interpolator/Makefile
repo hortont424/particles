@@ -1,7 +1,7 @@
 .PHONY: all clean run edit
 
 all:
-	scons -Q
+	cd .. ; scons -Q
 
 clean:
 	rm -rf ./build
