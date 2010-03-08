@@ -7,13 +7,13 @@
 - (id)init
 {
     self = [super init];
-    
+
     if(self)
     {
         name = @"Untitled Curveset";
         curves = [[NSMutableArray alloc] init];
     }
-    
+
     return self;
 }
 
@@ -28,12 +28,12 @@
 
 - (id)initWithCoder:(NSCoder *)coder
 {
-    if(self = [super init])
+    if((self = [super init]))
     {
         name = [coder decodeObjectForKey:@"name"];
         curves = [coder decodeObjectForKey:@"curves"];
     }
-    
+
     return self;
 }
 

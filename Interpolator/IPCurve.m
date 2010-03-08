@@ -5,8 +5,8 @@
 - (id)init
 {
     self = [super init];
-    
-    if (self)
+
+    if(self)
     {
         controlPoints = [[NSMutableArray alloc] init];
     }
@@ -36,11 +36,11 @@
 
 - (id)initWithCoder:(NSCoder *)coder
 {
-    if (self = [super init])
+    if((self = [super init]))
     {
         controlPoints = [coder decodeObjectForKey:@"controlPoints"];
     }
-    
+
     return self;
 }
 

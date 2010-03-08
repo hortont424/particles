@@ -1,0 +1,8 @@
+from macosx import TOOL_BUNDLE
+
+Import('env')
+TOOL_BUNDLE(env)
+
+interpolator = env.Program("interpolator", Glob("*.[cm]"))
+
+env.MakeBundle("Interpolator.app", "interpolator", "com.hortont.interpolator", "Interpolator-Info.plist", "APPL", resources=["MainMenu.xib"])

@@ -6,3 +6,4 @@ build/
 *.out
 *.out.bz2
 Simulator/doc
+*.pyc
