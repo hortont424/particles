@@ -1,0 +1,18 @@
+Cinematic Particle Effects with OpenCL : Simulator
+==================================================
+
+Types Of Forces
+---------------
+
+00 - Fixed          nothing is allowed to change any properties
+01 - Normal         numeric integration of position/velocity/acceleration
+02 - Source         emits child particles
+03 - Sink           sucks particles in and destroys them
+04 - Force          applies a force from a point
+05 - Wind           applies a force from a plane
+06 - Vortex         applies a force from a point, in a spiral
+07 - Harmonic
+08 - Gravity        n-body between all particles
+09 - Drag           force opposite the particle's velocity
+10 - Turbulence     (?)
+11 - Boids          boids algorithm between all particles
