@@ -17,63 +17,65 @@ typedef enum _SMPhysicsType
 // Falloff attributes
 typedef struct _SMPhysicsFalloffData
 {
-    double strength, max, min;
-} SMPhysicsFalloffData
+    float strength, max, min;
+} SMPhysicsFalloffData;
 
 // Attributes for various different forces
 typedef struct _SMPhysicsNormalData
 {
-    double strength, noise;
+    float strength, noise;
     SMPhysicsFalloffData falloff;
 } SMPhysicsNormalData;
 
 typedef struct _SMPhysicsWindData
 {
-    double strength, noise;
+    float strength, noise;
     SMPhysicsFalloffData falloff;
 } SMPhysicsWindData;
 
 typedef struct _SMPhysicsVortexData
 {
-    double strength, noise;
+    float strength, noise;
     SMPhysicsFalloffData falloff;
 } SMPhysicsVortexData;
 
 typedef struct _SMPhysicsHarmonicData
 {
-    double strength, damping, restLength, noise;
+    float strength, damping, restLength, noise;
     SMPhysicsFalloffData falloff;
 } SMPhysicsHarmonicData;
 
 typedef struct _SMPhysicsGravityData
 {
-    double strength, noise;
+    float strength, noise;
     SMPhysicsFalloffData falloff;
 } SMPhysicsGravityData;
 
 typedef struct _SMPhysicsDragData
 {
-    double linearStrength, quadraticStrength, noise;
+    float linearStrength, quadraticStrength, noise;
     SMPhysicsFalloffData falloff;
 } SMPhysicsDragData;
 
 typedef struct _SMPhysicsTurbulenceData
 {
-    double strength, size, noise;
+    float strength, size, noise;
     SMPhysicsFalloffData falloff;
 } SMPhysicsTurbulenceData;
 
 typedef struct _SMPhysicsBoidsData
 {
-    double strength, noise;
+    float strength, noise;
     SMPhysicsFalloffData falloff;
 } SMPhysicsBoidsData;
 
-// Overarching force struct (with typed-union attribute blob)
+// There should be one SMPhysicsForce for each particle that exerts a force
+// on others, mapped to said particle (so that force particles can be interacted
+// with, and move just like other particles)
 typedef struct _SMPhysicsForce
 {
-    double particleIndex;   // These need to not be doubles, but I'm afraid
-    double forceType;       // of what will happen if they're not the same size
+    float particleIndex;   // These need to not be floats, but I'm afraid
+    float forceType;       // of what will happen if they're not the same size
                             // as everything else when being passed in...
     union
     {
@@ -87,5 +89,21 @@ typedef struct _SMPhysicsForce
         SMPhysicsBoidsData boids;
     } forceData;
 } SMPhysicsForce;
+
+// There should be one SMPhysicsNewtonian for each particle in the system; this
+// holds universal properties like mass, velocity, and acceleration.
+typedef struct _SMPhysicsNewtonian
+{
+    float fixed, mass;
+    float velocityX, velocityY, velocityZ;
+    float accelerationX, accelerationY, accelerationZ;
+} SMPhysicsNewtonian;
+
+// Basic particle data; all you need to do the most simplistic rendering
+typedef struct _SMPhysicsParticle
+{
+    float enabled;
+    float x, y, z;
+} SMPhysicsParticle;
 
 #endif
