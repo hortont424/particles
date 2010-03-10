@@ -11,4 +11,6 @@
 #include "SMBuffer.h"
 #include "SMArgument.h"
 
+#include "SMPhysics.h"
+
 #endif
