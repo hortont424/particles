@@ -1,18 +1,43 @@
 Cinematic Particle Effects with OpenCL : Simulator
 ==================================================
 
+Data Structures
+---------------
+
+Sources - list of particles(+ their properties) which emit child particles
+     (particleIndex, birthRate, birthRandom, maxGenerations, lifetime,
+     lifetimeRandom, childVelocityX, childVelocityY, childVelocityZ,
+     childVelocityXRandom, childVelocityYRandom, childVelocityZRandom,
+     childVelocityInherit, childTemplate)
+
+Particles - list of all particles
+    (enabled, x, y, z)
+
+Physics - mapping of particles to newtonian properties
+    (fixed, velocityX, velocityY, velocityZ,
+    accelerationX, accelerationY, accelerationZ)
+
+Forces - list of all force particles
+    (particleIndex, forceTypeFlags, all 44+ properties...)
+
 Types Of Forces
 ---------------
 
-00 - Fixed          nothing is allowed to change any properties
-01 - Normal         numeric integration of position/velocity/acceleration
-02 - Source         emits child particles
-03 - Sink           sucks particles in and destroys them
-04 - Force          applies a force from a point
-05 - Wind           applies a force from a plane
-06 - Vortex         applies a force from a point, in a spiral
-07 - Harmonic
-08 - Gravity        n-body between all particles
-09 - Drag           force opposite the particle's velocity
-10 - Turbulence     (?)
-11 - Boids          boids algorithm between all particles
+00 - Force          applies a force from a point
+     (strength, noise, falloffStrength, falloffMax, falloffMin)
+01 - Wind           applies a force from a plane
+     (strength, noise, falloffStrength, falloffMax, falloffMin)
+02 - Vortex         applies a force from a point, in a spiral
+     (strength, noise, falloffStrength, falloffMax, falloffMin)
+03 - Harmonic       springs between point and all particles
+     (strength, damping, restLength, noise, falloffStrength, falloffMax,
+     falloffMin)
+04 - Gravity        n-body between all particles
+     (mass, noise, falloffStrength, falloffMax, falloffMin)
+05 - Drag           force opposite the particle's velocity
+     (linearStrength, quadraticStrength, noise, falloffStrength, falloffMax,
+     falloffMin)
+06 - Turbulence     (?)
+     (strength, size, noise, falloffStrength, falloffMax, falloffMin)
+07 - Boids          boids algorithm between all particles
+     (strength, noise, falloffStrength, falloffMax, falloffMin)
