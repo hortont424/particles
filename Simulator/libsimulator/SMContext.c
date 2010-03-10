@@ -32,6 +32,9 @@ char * cwdSprintf(const char *fmt)
  * the make and model of the OpenCL computation device, and return the newly
  * created SMContext.
  *
+ * Set the compile-time options to the default, which adds the "kernels"
+ * subdirectory of the current directory to the include path.
+ *
  * @return The newly allocated simulation context.
  */
 SMContext * SMContextNew()
