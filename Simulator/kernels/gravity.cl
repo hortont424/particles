@@ -3,6 +3,8 @@
     x y z m vxvyvz
 */
 
+#include "SMPhysics.h"
+
 __kernel void gravity(__global float * input,
                       __global float * output,
                       const unsigned int count)

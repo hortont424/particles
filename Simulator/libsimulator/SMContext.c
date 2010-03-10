@@ -1,8 +1,30 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <string.h>
+#include <unistd.h>
+#include <stdarg.h>
 
 #include "SMSimulator.h"
+
+char * cwdSprintf(const char *fmt)
+{
+    char * workingDir, * defaultIncludePath;
+    size_t maxPathLength, formatLength, totalLength;
+
+    maxPathLength = pathconf(".", _PC_PATH_MAX);
+    formatLength = strlen(fmt);
+    totalLength = maxPathLength + formatLength;
+
+    workingDir = (char *)calloc(maxPathLength, sizeof(char));
+    defaultIncludePath = (char *)calloc(totalLength, sizeof(char));
+
+    workingDir = getcwd(workingDir, maxPathLength);
+
+    /// \todo This should all be magical and formatty and varargs and stuff
+    snprintf(defaultIncludePath, totalLength, fmt, workingDir);
+
+    return defaultIncludePath;
+}
 
 /**
  * Allocate the space required for an SMContext, create an OpenCL context
@@ -16,6 +38,7 @@ SMContext * SMContextNew()
 {
     SMContext * sim;
     int deviceType;
+
     char deviceName[2048], vendorName[2048];
 
     sim = calloc(1, sizeof(SMContext));
@@ -28,9 +51,9 @@ SMContext * SMContextNew()
     sim->ctx = clCreateContext(0, 1, &sim->devs, &raiseOpenCLError, NULL, NULL);
     sim->cmds = clCreateCommandQueue(sim->ctx, sim->devs, 0, NULL);
 
-    sim->buildOptions = strdup("-I kernels/");
+    sim->buildOptions = cwdSprintf("-I %s/kernels/");
 
-    if(sim->ctx && sim->cmds)
+    if(sim->buildOptions && sim->ctx && sim->cmds)
         printf("Created simulator on '%s %s'\n", vendorName, deviceName);
     else
         throwError("failed to create simulator");
