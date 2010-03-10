@@ -17,8 +17,8 @@ Physics - mapping of particles to newtonian properties
     (fixed, velocityX, velocityY, velocityZ,
     accelerationX, accelerationY, accelerationZ)
 
-Forces - list of all force particles
-    (particleIndex, forceTypeFlags, all 44+ properties...)
+Forces - list of all forces (applied at a particular given particle)
+    (particleIndex, forceType, union of properties...)
 
 Types Of Forces
 ---------------
