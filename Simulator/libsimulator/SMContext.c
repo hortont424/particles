@@ -6,7 +6,7 @@
 
 #include "SMSimulator.h"
 
-char * cwdSprintf(const char *fmt)
+char * cwdSprintf(const char * fmt)
 {
     char * workingDir, * defaultIncludePath;
     size_t maxPathLength, formatLength, totalLength;
@@ -22,6 +22,8 @@ char * cwdSprintf(const char *fmt)
 
     /// \todo This should all be magical and formatty and varargs and stuff
     snprintf(defaultIncludePath, totalLength, fmt, workingDir);
+
+    free(workingDir);
 
     return defaultIncludePath;
 }
