@@ -47,7 +47,7 @@ int main(int argc, char * const * argv)
     free(data);
 
     fileBuf = SMBufferNewWithFile(sim, TOTAL_SIZE, sizeof(float), "test.out");
-    printf("Created output file (%d KB)\n", TOTAL_SIZE * sizeof(float) / 1024);
+    printf("Created output file (%ld KB)\n", TOTAL_SIZE * sizeof(float) / 1024);
 
     abufarg = SMArgumentNewWithBuffer(abuf);
     bbufarg = SMArgumentNewWithBuffer(bbuf);

@@ -30,7 +30,7 @@ SMArgument * SMArgumentNewWithBuffer(SMBuffer * buf)
 
     arg->size = sizeof(cl_mem);
     arg->pointer = (void *)nativeBuffer;
-    arg->owned = false;
+    arg->owned = true;
 
     return arg;
 }

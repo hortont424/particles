@@ -16,13 +16,13 @@ typedef struct _SMContext
     cl_context ctx;             /**< OpenCL context */
     cl_command_queue cmds;      /**< OpenCL command queue */
 
-    const char * buildOptions;  /**< Options to pass to OpenCL compiler */
+    char * buildOptions;  /**< Options to pass to OpenCL compiler */
 } SMContext;
 
 SMContext * SMContextNew();
 void SMContextFree(SMContext * sim);
 
-void SMContextSetBuildOptions(SMContext * sim, const char * buildOptions);
+void SMContextSetBuildOptions(SMContext * sim, char * buildOptions);
 const char * SMContextGetBuildOptions(SMContext * sim);
 
 void SMContextWait(SMContext * sim);

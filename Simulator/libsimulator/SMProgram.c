@@ -9,7 +9,7 @@
 
 #include "SMSimulator.h"
 
-SMProgram * compileProgram(SMContext * sim, const char * name,
+SMProgram * compileProgram(SMContext * sim, char * name,
                            const char * source)
 {
     SMProgram * prog = calloc(1, sizeof(SMProgram));
@@ -91,6 +91,8 @@ SMProgram * SMProgramNew(SMContext * sim, const char * filename)
     prog = compileProgram(sim, kernelName, fileContent);
     prog->context = sim;
 
+    free(fileContent);
+
     if(prog)
         printf("Successfully loaded kernel '%s'\n", kernelName);
 
@@ -107,8 +109,10 @@ SMProgram * SMProgramNew(SMContext * sim, const char * filename)
  */
 void SMProgramFree(SMProgram * prog)
 {
-    // TODO: cleanup OpenCL stuff
+    clReleaseKernel(prog->kernel);
+    clReleaseProgram(prog->program);
     free(prog->arguments);
+    free(prog->name);
     free(prog);
 }
 

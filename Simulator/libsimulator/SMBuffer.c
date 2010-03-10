@@ -57,9 +57,6 @@ SMBuffer * SMBufferNewWithFile(SMContext * sim, long elementCount,
     buf->elementCount = elementCount;
     buf->elementSize = elementSize;
 
-    buf->fileBuffer = clCreateBuffer(sim->ctx, CL_MEM_READ_WRITE,
-                                     SMBufferGetSize(buf), NULL, NULL);
-
     buf->file = open(filename, O_CREAT | O_RDWR | O_TRUNC, S_IRUSR | S_IWUSR);
 
     if(buf->file == -1)
@@ -89,7 +86,7 @@ void SMBufferFree(SMBuffer * buf)
     switch(buf->type)
     {
         case SM_OPENCL_BUFFER:
-            // Is there no way to free cl_mem objects?
+            clReleaseMemObject(buf->gpuBuffer);
             break;
         case SM_FILE_BUFFER:
             munmap(buf->fileBuffer, SMBufferGetSize(buf));

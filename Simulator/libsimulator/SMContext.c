@@ -76,6 +76,7 @@ void SMContextFree(SMContext * sim)
 {
     clReleaseCommandQueue(sim->cmds);
     clReleaseContext(sim->ctx);
+    free(sim->buildOptions);
     free(sim);
 }
 
@@ -83,7 +84,7 @@ void SMContextFree(SMContext * sim)
  * @param sim Context for which to modify compile-time options.
  * @param buildOptions New compile-time option string.
  */
-void SMContextSetBuildOptions(SMContext * sim, const char * buildOptions)
+void SMContextSetBuildOptions(SMContext * sim, char * buildOptions)
 {
     free((void *)sim->buildOptions);
 

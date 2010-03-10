@@ -16,7 +16,7 @@ typedef struct _SMProgram
     size_t globalCount;         /**< Total number of kernel instances */
     size_t localCount;          /**< Number of parallel kernel instances */
 
-    const char * name;          /**< Name of represented OpenCL kernel */
+    char * name;                /**< Name of represented OpenCL kernel */
     SMArgument ** arguments;    /**< List of kernel arguments */
 
     cl_program program;         /**< OpenCL program */
