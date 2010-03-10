@@ -14,7 +14,7 @@ Particles - list of all particles
     (enabled, x, y, z)
 
 Physics - mapping of particles to newtonian properties
-    (fixed, velocityX, velocityY, velocityZ,
+    (fixed, mass, velocityX, velocityY, velocityZ,
     accelerationX, accelerationY, accelerationZ)
 
 Forces - list of all forces (applied at a particular given particle)
@@ -23,7 +23,7 @@ Forces - list of all forces (applied at a particular given particle)
 Types Of Forces
 ---------------
 
-00 - Force          applies a force from a point
+00 - Normal         applies a force from a point
      (strength, noise, falloffStrength, falloffMax, falloffMin)
 01 - Wind           applies a force from a plane
      (strength, noise, falloffStrength, falloffMax, falloffMin)
@@ -33,7 +33,7 @@ Types Of Forces
      (strength, damping, restLength, noise, falloffStrength, falloffMax,
      falloffMin)
 04 - Gravity        n-body between all particles
-     (mass, noise, falloffStrength, falloffMax, falloffMin)
+     (strength, noise, falloffStrength, falloffMax, falloffMin)
 05 - Drag           force opposite the particle's velocity
      (linearStrength, quadraticStrength, noise, falloffStrength, falloffMax,
      falloffMin)
