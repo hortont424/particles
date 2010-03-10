@@ -10,14 +10,15 @@
 #include "SMSimulator.h"
 
 SMProgram * compileProgram(SMContext * sim, const char * name,
-                                  const char * source)
+                           const char * source)
 {
     SMProgram * prog = calloc(1, sizeof(SMProgram));
 
     prog->program = clCreateProgramWithSource(sim->ctx, 1, &source, NULL, NULL);
     prog->name = name;
 
-    if(clBuildProgram(prog->program, 0, NULL, NULL, NULL, NULL) != CL_SUCCESS)
+    if(clBuildProgram(prog->program, 0, NULL, SMContextGetBuildOptions(sim),
+                      NULL, NULL) != CL_SUCCESS)
     {
         showBuildLog(sim, prog);
         exit(EXIT_FAILURE);

@@ -12,13 +12,18 @@
 
 typedef struct _SMContext
 {
-    cl_device_id devs;      /**< OpenCL device ID context was created on */
-    cl_context ctx;         /**< OpenCL context */
-    cl_command_queue cmds;  /**< OpenCL command queue */
+    cl_device_id devs;          /**< OpenCL device ID context was created on */
+    cl_context ctx;             /**< OpenCL context */
+    cl_command_queue cmds;      /**< OpenCL command queue */
+
+    const char * buildOptions;  /**< Options to pass to OpenCL compiler */
 } SMContext;
 
 SMContext * SMContextNew();
 void SMContextFree(SMContext * sim);
+
+void SMContextSetBuildOptions(SMContext * sim, const char * buildOptions);
+const char * SMContextGetBuildOptions(SMContext * sim);
 
 void SMContextWait(SMContext * sim);
 

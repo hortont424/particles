@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "SMSimulator.h"
 
@@ -27,6 +28,8 @@ SMContext * SMContextNew()
     sim->ctx = clCreateContext(0, 1, &sim->devs, &raiseOpenCLError, NULL, NULL);
     sim->cmds = clCreateCommandQueue(sim->ctx, sim->devs, 0, NULL);
 
+    sim->buildOptions = strdup("-I kernels/");
+
     if(sim->ctx && sim->cmds)
         printf("Created simulator on '%s %s'\n", vendorName, deviceName);
     else
@@ -46,6 +49,26 @@ void SMContextFree(SMContext * sim)
     clReleaseCommandQueue(sim->cmds);
     clReleaseContext(sim->ctx);
     free(sim);
+}
+
+/**
+ * @param sim Context for which to modify compile-time options.
+ * @param buildOptions New compile-time option string.
+ */
+void SMContextSetBuildOptions(SMContext * sim, const char * buildOptions)
+{
+    free((void *)sim->buildOptions);
+
+    sim->buildOptions = buildOptions;
+}
+
+/**
+ * @param sim Context to inspect.
+ * @return The current compile-time option string for the given context.
+ */
+const char * SMContextGetBuildOptions(SMContext * sim)
+{
+    return sim->buildOptions;
 }
 
 /**

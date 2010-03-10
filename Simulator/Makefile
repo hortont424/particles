@@ -16,11 +16,11 @@ clean:
 
 run:
 	rm -f test.out
-	./build/simulator
+	DYLD_LIBRARY_PATH="build/libsimulator/" ./build/simulator
 
 run-cpu:
 	rm -f test.out
-	./build/simulator -c
+	DYLD_LIBRARY_PATH="build/libsimulator/" ./build/simulator -c
 
 edit:
 	mate .
