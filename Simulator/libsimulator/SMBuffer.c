@@ -43,6 +43,7 @@ SMBuffer * SMBufferNew(SMContext * sim, long elementCount, size_t elementSize)
  * @param sim The context in which to create the new buffer.
  * @param elementCount The number of elements in the buffer.
  * @param elementSize The size of an element in the buffer.
+ * @param filename The filename to map into the buffer's memory.
  * @return The newly allocated buffer.
  */
 SMBuffer * SMBufferNewWithFile(SMContext * sim, long elementCount,

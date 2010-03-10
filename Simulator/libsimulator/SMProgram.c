@@ -151,7 +151,7 @@ void SMProgramExecute(SMProgram * prog)
 }
 
 /**
- * @param buf The SMBuffer to modify.
+ * @param prog The SMProgram to modify.
  * @param globalCount The total number of kernel instances to be spawned.
  */
 void SMProgramSetGlobalCount(SMProgram * prog, size_t globalCount)
@@ -160,7 +160,7 @@ void SMProgramSetGlobalCount(SMProgram * prog, size_t globalCount)
 }
 
 /**
- * @param buf The SMBuffer to modify.
+ * @param prog The SMProgram to modify.
  * @param i The index of the argument to set.
  * @param arg A pointer to the SMArgument object representing the value of
  * the kernel argument.
