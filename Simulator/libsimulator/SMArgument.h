@@ -2,6 +2,7 @@
 #define _SM_ARGUMENT_H_
 
 #include <stdbool.h>
+#include <sys/types.h>
 #include <OpenCL/opencl.h>
 
 #include "SMBuffer.h"
@@ -20,7 +21,7 @@ typedef struct _SMArgument
 } SMArgument;
 
 SMArgument * SMArgumentNew();
-SMArgument * SMArgumentNewWithBuffer(SMBuffer * buf);
+SMArgument * SMArgumentNewWithBuffer(SMBuffer * buf, bool backBuffer);
 SMArgument * SMArgumentNewWithFloat(float f);
 SMArgument * SMArgumentNewWithInt(int i);
 void SMArgumentFree(SMArgument * arg);

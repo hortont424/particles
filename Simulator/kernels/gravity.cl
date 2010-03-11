@@ -1,8 +1,9 @@
 #include "SMPhysics.h"
 
 __kernel void gravity(__global SMPhysicsParticle * input,
-                      __global SMPhysicsNewtonian * newton,
                       __global SMPhysicsParticle * output,
+                      __global SMPhysicsNewtonian * newtonIn,
+                      __global SMPhysicsNewtonian * newtonOut,
                       const unsigned int count)
 {
     float4 loc, accel, vel, iloc, dir;
@@ -14,7 +15,7 @@ __kernel void gravity(__global SMPhysicsParticle * input,
         return;
 
     loc = (float4)(input[id].x, input[id].y, input[id].z, 0.0f);
-    vel = (float4)(newton[id].vx, newton[id].vy, newton[id].vz, 0.0f);
+    vel = (float4)(newtonIn[id].vx, newtonIn[id].vy, newtonIn[id].vz, 0.0f);
     accel = (float4)(0.0f);
     int n = 0;
     for(int i = 0; i < count; i++)
@@ -27,7 +28,7 @@ __kernel void gravity(__global SMPhysicsParticle * input,
         dist = distance(loc, iloc);
         if(dist < 2.0)
             dist = 2.0;
-        accel += dir * ((grav * newton[i].mass) / pow(dist, 2));
+        accel += dir * ((grav * newtonIn[i].mass) / pow(dist, 2));
 
         n = i;
     }
@@ -41,7 +42,10 @@ __kernel void gravity(__global SMPhysicsParticle * input,
     output[id].y = loc.y;
     output[id].z = loc.z;
 
-    newton[id].vx = vel.x;
-    newton[id].vy = vel.y;
-    newton[id].vz = vel.z;
+    // eventually, just add ourself to Newtonian as force (or accel)
+    // and have some other kernel do the interpolation...
+    newtonOut[id].vx = vel.x;
+    newtonOut[id].vy = vel.y;
+    newtonOut[id].vz = vel.z;
+    newtonOut[id].mass = newtonIn[id].mass;
 }

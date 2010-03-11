@@ -19,14 +19,15 @@ SMArgument * SMArgumentNew()
  * kernel).
  *
  * @param buf The OpenCL-backed SMBuffer the argument should point at.
+ * @param backBuffer Whether to use the front or back buffer.
  * @return The newly allocated argument, pointing at an SMBuffer.
  */
-SMArgument * SMArgumentNewWithBuffer(SMBuffer * buf)
+SMArgument * SMArgumentNewWithBuffer(SMBuffer * buf, bool backBuffer)
 {
     SMArgument * arg = SMArgumentNew();
 
     cl_mem * nativeBuffer = (cl_mem *)calloc(1, sizeof(cl_mem));
-    (*nativeBuffer) = SMBufferGetCLBuffer(buf);
+    (*nativeBuffer) = SMBufferGetCLBuffer(buf, backBuffer);
 
     arg->size = sizeof(cl_mem);
     arg->pointer = (void *)nativeBuffer;

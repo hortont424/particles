@@ -20,8 +20,11 @@ typedef enum _SMBufferType
 typedef struct _SMBuffer
 {
     SMBufferType type;      /**< Type of buffer */
+    bool doubleBuffered;    /**< If buffer is double-buffered */
 
     cl_mem gpuBuffer;       /**< OpenCL buffer (for SM_OPENCL_BUFFER) */
+    cl_mem gpuBackBuffer;   /**< OpenCL back buffer (for double-buffered
+                                 SM_OPENCL_BUFFER) */
     void * fileBuffer;      /**< Native buffer (for SM_FILE_BUFFER) */
     int file;               /**< File descriptor (for SM_FILE_BUFFER) */
 
@@ -31,7 +34,8 @@ typedef struct _SMBuffer
     SMContext * context;    /**< The context that owns the buffer */
 } SMBuffer;
 
-SMBuffer * SMBufferNew(SMContext * sim, long elementCount, size_t elementSize);
+SMBuffer * SMBufferNew(SMContext * sim, long elementCount,
+                       size_t elementSize, bool doubleBuffered);
 SMBuffer * SMBufferNewWithFile(SMContext * sim, long elementCount,
                                size_t elementSize, const char * filename);
 void SMBufferFree(SMBuffer * buf);
@@ -39,11 +43,13 @@ void SMBufferFree(SMBuffer * buf);
 size_t SMBufferGetSize(SMBuffer * buf);
 long SMBufferGetElementCount(SMBuffer * buf);
 size_t SMBufferGetElementSize(SMBuffer * buf);
-cl_mem SMBufferGetCLBuffer(SMBuffer * buf);
+cl_mem SMBufferGetCLBuffer(SMBuffer * buf, bool backBuffer);
 void * SMBufferGetNativeBuffer(SMBuffer * buf);
 
 void SMBufferGet(SMBuffer * buf, void ** data);
 void SMBufferSet(SMBuffer * buf, void * data);
+
+void SMBufferSwap(SMBuffer * buf);
 
 /** @} */
 

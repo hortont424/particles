@@ -18,21 +18,28 @@
  * @param sim The context in which to create the new buffer.
  * @param elementCount The number of elements in the buffer.
  * @param elementSize The size of an element in the buffer.
+ * @param doubleBuffered If we should double-buffer or not.
  * @return The newly allocated buffer.
  */
-SMBuffer * SMBufferNew(SMContext * sim, long elementCount, size_t elementSize)
+SMBuffer * SMBufferNew(SMContext * sim, long elementCount,
+                       size_t elementSize, bool doubleBuffered)
 {
     SMBuffer * buf = (SMBuffer *)calloc(1, sizeof(SMBuffer));
 
     buf->context = sim;
     buf->type = SM_OPENCL_BUFFER;
+    buf->doubleBuffered = doubleBuffered;
 
     buf->elementCount = elementCount;
     buf->elementSize = elementSize;
 
-    /// \todo Use host pointers (OpenCL page 49)
+    /// \todo Use host pointers? (OpenCL page 49)
     buf->gpuBuffer = clCreateBuffer(sim->ctx, CL_MEM_READ_WRITE,
                                     SMBufferGetSize(buf), NULL, NULL);
+
+    if(buf->doubleBuffered)
+        buf->gpuBackBuffer = clCreateBuffer(sim->ctx, CL_MEM_READ_WRITE,
+                                            SMBufferGetSize(buf), NULL, NULL);
 
     return buf;
 }
@@ -88,10 +95,15 @@ void SMBufferFree(SMBuffer * buf)
     {
         case SM_OPENCL_BUFFER:
             clReleaseMemObject(buf->gpuBuffer);
+
+            if(buf->doubleBuffered)
+                clReleaseMemObject(buf->gpuBackBuffer);
+
             break;
         case SM_FILE_BUFFER:
             munmap(buf->fileBuffer, SMBufferGetSize(buf));
             close(buf->file);
+
             break;
         default:
             throwError("tried to free unknown buffer type");
@@ -128,15 +140,21 @@ size_t SMBufferGetSize(SMBuffer * buf)
 }
 
 /**
+ * Return the cl_mem object that currently backs the buffer. If the back
+ * buffer is requested and the buffer isn't double-buffered, return the sole
+ * front buffer.
+ *
  * @param buf The SMBuffer to inspect.
+ * @param backBuffer If true and we're double-buffered, return secondary buffer.
  * @return The cl_mem object which backs OpenCL buffers.
  */
-cl_mem SMBufferGetCLBuffer(SMBuffer * buf)
+cl_mem SMBufferGetCLBuffer(SMBuffer * buf, bool backBuffer)
 {
     if(buf->type != SM_OPENCL_BUFFER)
         throwError("tried to get cl_mem from non-OpenCL buffer");
 
-    return buf->gpuBuffer;
+    return ((backBuffer && buf->doubleBuffered) ?
+        buf->gpuBackBuffer : buf->gpuBuffer);
 }
 
 /**
@@ -205,4 +223,17 @@ void SMBufferSet(SMBuffer * buf, void * data)
         default:
             throwError("tried to copy to unknown buffer type");
     }
+}
+
+/**
+ * Swap front and back buffers (if this is a double-buffered buffer).
+ *
+ * @param buf The buffer to swap.
+ */
+void SMBufferSwap(SMBuffer * buf)
+{
+    cl_mem temp;
+    temp = buf->gpuBuffer;
+    buf->gpuBuffer = buf->gpuBackBuffer;
+    buf->gpuBackBuffer = temp;
 }

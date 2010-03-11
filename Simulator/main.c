@@ -15,8 +15,8 @@ int main(int argc, char * const * argv)
     SMProgram * prog;
     SMPhysicsParticle * data, * partialResults;
     SMPhysicsNewtonian * newton;
-    SMBuffer * abuf, * bbuf, * fileBuf, * anewt, * bnewt;
-    SMArgument * abufarg, * bbufarg, * countarg, * anewtarg, * bnewtarg;
+    SMBuffer * parts, * newts, * fileBuf;
+    SMArgument * partsFront, * partsBack, * countarg, * newtFront, * newtBack;
 
     srand((int)time(NULL));
 
@@ -40,17 +40,14 @@ int main(int argc, char * const * argv)
         data[i].y = (SMFloat)rand()/(SMFloat)RAND_MAX;
         data[i].z = (SMFloat)rand()/(SMFloat)RAND_MAX;
 
-        newton[i].mass = 10000000.0;
+        newton[i].mass = 100000000.0 * (SMFloat)rand()/(SMFloat)RAND_MAX;
     }
 
-    abuf = SMBufferNew(sim, ELEMENT_COUNT, sizeof(SMPhysicsParticle));
-    bbuf = SMBufferNew(sim, ELEMENT_COUNT, sizeof(SMPhysicsParticle));
+    parts = SMBufferNew(sim, ELEMENT_COUNT, sizeof(SMPhysicsParticle), true);
+    newts = SMBufferNew(sim, ELEMENT_COUNT, sizeof(SMPhysicsNewtonian), true);
 
-    anewt = SMBufferNew(sim, ELEMENT_COUNT, sizeof(SMPhysicsNewtonian));
-    bnewt = SMBufferNew(sim, ELEMENT_COUNT, sizeof(SMPhysicsNewtonian));
-
-    SMBufferSet(abuf, data);
-    SMBufferSet(anewt, newton);
+    SMBufferSet(parts, data);
+    SMBufferSet(newts, newton);
     free(data);
     free(newton);
 
@@ -58,10 +55,6 @@ int main(int argc, char * const * argv)
                                   sizeof(SMPhysicsParticle), "test.out");
     printf("Created output file (%ld KB)\n", TOTAL_SIZE / 1024);
 
-    abufarg = SMArgumentNewWithBuffer(abuf);
-    bbufarg = SMArgumentNewWithBuffer(bbuf);
-    anewtarg = SMArgumentNewWithBuffer(anewt);
-    bnewtarg = SMArgumentNewWithBuffer(bnewt);
     countarg = SMArgumentNewWithInt(ELEMENT_COUNT);
 
     partialResults = (SMPhysicsParticle *)SMBufferGetNativeBuffer(fileBuf);
@@ -70,27 +63,36 @@ int main(int argc, char * const * argv)
     {
         printf("Computing frame %d/%d (%d%%)...\n", step + 1, FRAME_COUNT,
                (int)((float)(step + 1) / FRAME_COUNT * 100));
-        SMProgramSetArgument(prog, 0, (step % 2 ? bbufarg : abufarg));
-        SMProgramSetArgument(prog, 1, (step % 2 ? bnewtarg : anewtarg));
-        SMProgramSetArgument(prog, 2, (step % 2 ? abufarg : bbufarg));
-        SMProgramSetArgument(prog, 3, countarg);
+
+        partsFront = SMArgumentNewWithBuffer(parts, 0);
+        partsBack = SMArgumentNewWithBuffer(parts, 1);
+        newtFront = SMArgumentNewWithBuffer(newts, 0);
+        newtBack = SMArgumentNewWithBuffer(newts, 1);
+
+        SMProgramSetArgument(prog, 0, partsFront);
+        SMProgramSetArgument(prog, 1, partsBack);
+        SMProgramSetArgument(prog, 2, newtFront);
+        SMProgramSetArgument(prog, 3, newtBack);
+        SMProgramSetArgument(prog, 4, countarg);
 
         SMProgramExecute(prog);
         SMContextWait(sim);
 
-        SMBufferGet((step % 2 ? abuf : bbuf), (void**)&partialResults);
+        SMBufferSwap(parts);
+        SMBufferSwap(newts);
+
+        SMBufferGet(parts, (void**)&partialResults);
+
+        SMArgumentFree(partsFront);
+        SMArgumentFree(partsBack);
+        SMArgumentFree(newtFront);
+        SMArgumentFree(newtBack);
     }
 
-    SMBufferFree(abuf);
-    SMBufferFree(bbuf);
-    SMBufferFree(anewt);
-    SMBufferFree(bnewt);
+    SMBufferFree(parts);
+    SMBufferFree(newts);
     SMBufferFree(fileBuf);
-    SMArgumentFree(abufarg);
-    SMArgumentFree(bbufarg);
     SMArgumentFree(countarg);
-    SMArgumentFree(anewtarg);
-    SMArgumentFree(bnewtarg);
     SMProgramFree(prog);
     SMContextFree(sim);
 
