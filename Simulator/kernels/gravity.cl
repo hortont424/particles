@@ -1,12 +1,8 @@
-/*
-    0 1 2 3 4 5 6
-    x y z m vxvyvz
-*/
-
 #include "SMPhysics.h"
 
-__kernel void gravity(__global float * input,
-                      __global float * output,
+__kernel void gravity(__global SMPhysicsParticle * input,
+                      __global SMPhysicsNewtonian * newton,
+                      __global SMPhysicsParticle * output,
                       const unsigned int count)
 {
     float4 loc, accel, vel, iloc, dir;
@@ -17,23 +13,21 @@ __kernel void gravity(__global float * input,
     if(id > count)
         return;
 
-    id *= 7;
-
-    loc = (float4)(input[id + 0], input[id + 1], input[id + 2], 0.0f);
-    vel = (float4)(input[id + 4], input[id + 5], input[id + 6], 0.0f);
+    loc = (float4)(input[id].x, input[id].y, input[id].z, 0.0f);
+    vel = (float4)(newton[id].vx, newton[id].vy, newton[id].vz, 0.0f);
     accel = (float4)(0.0f);
     int n = 0;
-    for(int i = 0; i < count * 7; i += 7)
+    for(int i = 0; i < count; i++)
     {
         if(i == id)
             continue;
 
-        iloc = (float4)(input[i + 0], input[i + 1], input[i + 2], 0.0f);
+        iloc = (float4)(input[i].x, input[i].y, input[i].z, 0.0f);
         dir = normalize(iloc - loc);
         dist = distance(loc, iloc);
         if(dist < 2.0)
             dist = 2.0;
-        accel += dir * ((grav * input[i + 3]) / pow(dist, 2));
+        accel += dir * ((grav * newton[i].mass) / pow(dist, 2));
 
         n = i;
     }
@@ -43,11 +37,11 @@ __kernel void gravity(__global float * input,
 
     loc += vel * 0.01;
 
-    output[id + 0] = loc.x;
-    output[id + 1] = loc.y;
-    output[id + 2] = loc.z;
+    output[id].x = loc.x;
+    output[id].y = loc.y;
+    output[id].z = loc.z;
 
-    output[id + 4] = vel.x;
-    output[id + 5] = vel.y;
-    output[id + 6] = vel.z;
+    newton[id].vx = vel.x;
+    newton[id].vy = vel.y;
+    newton[id].vz = vel.z;
 }

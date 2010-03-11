@@ -101,8 +101,8 @@ typedef struct _SMPhysicsForce
 typedef struct _SMPhysicsNewtonian
 {
     SMFloat fixed, mass;
-    SMFloat velocityX, velocityY, velocityZ;
-    SMFloat accelerationX, accelerationY, accelerationZ;
+    SMFloat vx, vy, vz;
+    SMFloat ax, ay, az;
 } SMPhysicsNewtonian;
 
 // Basic particle data; all you need to do the most simplistic rendering

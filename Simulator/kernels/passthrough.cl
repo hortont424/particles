@@ -1,6 +1,7 @@
 #include "SMPhysics.h"
 
 __kernel void passthrough(__global SMPhysicsParticle * input,
+                          __global SMPhysicsNewtonian * newton,
                           __global SMPhysicsParticle * output,
                           const unsigned int count)
 {
