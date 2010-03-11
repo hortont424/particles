@@ -21,7 +21,7 @@ int main(int argc, char * const * argv)
 
     SMOptionsParse(argc, argv);
 
-    sim = SMContextNew(argc, argv);
+    sim = SMContextNew();
     prog = SMProgramNew(sim, "./kernels/passthrough.cl");
     SMProgramSetGlobalCount(prog, ELEMENT_COUNT);
     showBuildLog(sim, prog);
