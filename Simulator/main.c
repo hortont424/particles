@@ -4,28 +4,36 @@
 
 #include "SMSimulator.h"
 
-#define ELEMENT_COUNT   (1024*2)
+#define ELEMENT_COUNT   (4096)
 #define FRAME_SIZE      (ELEMENT_COUNT * sizeof(SMPhysicsParticle))
-#define FRAME_COUNT     100
+#define FRAME_COUNT     500
 #define TOTAL_SIZE      (FRAME_SIZE * FRAME_COUNT)
 
 int main(int argc, char * const * argv)
 {
     SMContext * sim;
-    SMProgram * prog;
+    SMProgram ** programs;
     SMPhysicsParticle * data, * partialResults;
     SMPhysicsNewtonian * newton;
     SMBuffer * parts, * newts, * fileBuf;
     SMArgument * partsFront, * partsBack, * countarg, * newtFront, * newtBack;
+    int programCount = 2;
 
     srand((int)time(NULL));
 
     SMOptionsParse(argc, argv);
 
     sim = SMContextNew();
-    prog = SMProgramNew(sim, "./kernels/gravity.cl");
-    SMProgramSetGlobalCount(prog, ELEMENT_COUNT);
-    showBuildLog(sim, prog);
+
+    programs = (SMProgram **)calloc(programCount, sizeof(SMProgram *));
+    programs[0] = SMProgramNew(sim, "./kernels/gravity.cl");
+    programs[1] = SMProgramNew(sim, "./kernels/euler_integration.cl");
+
+    for(int program = 0; program < programCount; program++)
+    {
+        SMProgramSetGlobalCount(programs[program], ELEMENT_COUNT);
+        showBuildLog(sim, programs[program]);
+    }
 
     data = (SMPhysicsParticle *)calloc(ELEMENT_COUNT,
                                        sizeof(SMPhysicsParticle));
@@ -55,8 +63,6 @@ int main(int argc, char * const * argv)
                                   sizeof(SMPhysicsParticle), "test.out");
     printf("Created output file (%ld KB)\n", TOTAL_SIZE / 1024);
 
-    countarg = SMArgumentNewWithInt(ELEMENT_COUNT);
-
     partialResults = (SMPhysicsParticle *)SMBufferGetNativeBuffer(fileBuf);
 
     for(int step = 0; step < FRAME_COUNT; step++, partialResults += ELEMENT_COUNT)
@@ -68,15 +74,19 @@ int main(int argc, char * const * argv)
         partsBack = SMArgumentNewWithBuffer(parts, 1);
         newtFront = SMArgumentNewWithBuffer(newts, 0);
         newtBack = SMArgumentNewWithBuffer(newts, 1);
+        countarg = SMArgumentNewWithInt(ELEMENT_COUNT);
 
-        SMProgramSetArgument(prog, 0, partsFront);
-        SMProgramSetArgument(prog, 1, partsBack);
-        SMProgramSetArgument(prog, 2, newtFront);
-        SMProgramSetArgument(prog, 3, newtBack);
-        SMProgramSetArgument(prog, 4, countarg);
+        for(int program = 0; program < programCount; program++)
+        {
+            SMProgramSetArgument(programs[program], 0, partsFront);
+            SMProgramSetArgument(programs[program], 1, partsBack);
+            SMProgramSetArgument(programs[program], 2, newtFront);
+            SMProgramSetArgument(programs[program], 3, newtBack);
+            SMProgramSetArgument(programs[program], 4, countarg);
 
-        SMProgramExecute(prog);
-        SMContextWait(sim);
+            SMProgramExecute(programs[program]);
+            SMContextWait(sim);
+        }
 
         SMBufferSwap(parts);
         SMBufferSwap(newts);
@@ -87,13 +97,16 @@ int main(int argc, char * const * argv)
         SMArgumentFree(partsBack);
         SMArgumentFree(newtFront);
         SMArgumentFree(newtBack);
+        SMArgumentFree(countarg);
     }
 
     SMBufferFree(parts);
     SMBufferFree(newts);
     SMBufferFree(fileBuf);
-    SMArgumentFree(countarg);
-    SMProgramFree(prog);
+
+    for(int program = 0; program < programCount; program++)
+        SMProgramFree(programs[program]);
+
     SMContextFree(sim);
 
     return EXIT_SUCCESS;

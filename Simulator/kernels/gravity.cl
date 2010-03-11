@@ -11,13 +11,13 @@ __kernel void gravity(__global SMPhysicsParticle * input,
     float dist;
     int id = get_global_id(0);
 
-    if(id > count)
+    if(id > count || input[id].enabled == 0.0)
         return;
 
-    loc = (float4)(input[id].x, input[id].y, input[id].z, 0.0f);
-    vel = (float4)(newtonIn[id].vx, newtonIn[id].vy, newtonIn[id].vz, 0.0f);
     accel = (float4)(0.0f);
-    int n = 0;
+
+    loc = (float4)(input[id].x, input[id].y, input[id].z, 0.0f);
+
     for(int i = 0; i < count; i++)
     {
         if(i == id)
@@ -29,23 +29,9 @@ __kernel void gravity(__global SMPhysicsParticle * input,
         if(dist < 2.0)
             dist = 2.0;
         accel += dir * ((grav * newtonIn[i].mass) / pow(dist, 2));
-
-        n = i;
     }
 
-    vel += (accel * 0.01);
-    //vel *= 0.95;
-
-    loc += vel * 0.01;
-
-    output[id].x = loc.x;
-    output[id].y = loc.y;
-    output[id].z = loc.z;
-
-    // eventually, just add ourself to Newtonian as force (or accel)
-    // and have some other kernel do the interpolation...
-    newtonOut[id].vx = vel.x;
-    newtonOut[id].vy = vel.y;
-    newtonOut[id].vz = vel.z;
-    newtonOut[id].mass = newtonIn[id].mass;
+    newtonOut[id].ax += accel.x;
+    newtonOut[id].ay += accel.y;
+    newtonOut[id].az += accel.z;
 }

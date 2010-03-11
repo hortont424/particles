@@ -6,6 +6,7 @@
 #include <sys/uio.h>
 #include <sys/stat.h>
 #include <string.h>
+#include <math.h>
 
 #include "SMSimulator.h"
 
@@ -138,14 +139,6 @@ void SMProgramExecute(SMProgram * prog)
                        SMArgumentGetPointer(arg));
     }
 
-    /// \todo Make not-evenly-divisible globalCounts still work, somehow
-    clGetKernelWorkGroupInfo(prog->kernel, prog->context->devs,
-                             CL_KERNEL_WORK_GROUP_SIZE,
-                             sizeof(prog->localCount), &prog->localCount, NULL);
-
-    if(prog->globalCount < prog->localCount)
-        prog->localCount = prog->globalCount;
-
     printf("Running '%s' on %zd elements, %zd at a time\n",
            prog->name, prog->globalCount, prog->localCount);
 
@@ -161,6 +154,21 @@ void SMProgramExecute(SMProgram * prog)
 void SMProgramSetGlobalCount(SMProgram * prog, size_t globalCount)
 {
     prog->globalCount = globalCount;
+
+    clGetKernelWorkGroupInfo(prog->kernel, prog->context->devs,
+                             CL_KERNEL_WORK_GROUP_SIZE,
+                             sizeof(prog->localCount), &prog->localCount, NULL);
+
+    // If we don't have enough elements to fill one run, reduce the
+    // number per run
+    if(prog->globalCount < prog->localCount)
+        prog->localCount = prog->globalCount;
+
+    // If the number of elements we have doesn't evenly divide into the number
+    // of elements per run, reduce the number of elements per run to fit
+    /// \todo There is a more efficient way to do this, for sure.
+    while(prog->globalCount % prog->localCount)
+        prog->localCount--;
 }
 
 /**
