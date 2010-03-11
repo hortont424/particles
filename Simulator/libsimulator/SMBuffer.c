@@ -30,6 +30,7 @@ SMBuffer * SMBufferNew(SMContext * sim, long elementCount, size_t elementSize)
     buf->elementCount = elementCount;
     buf->elementSize = elementSize;
 
+    /// \todo Use host pointers (OpenCL page 49)
     buf->gpuBuffer = clCreateBuffer(sim->ctx, CL_MEM_READ_WRITE,
                                     SMBufferGetSize(buf), NULL, NULL);
 

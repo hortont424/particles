@@ -4,9 +4,8 @@
 
 #include "SMSimulator.h"
 
-#define ELEMENT_SIZE    7
-#define ELEMENT_COUNT   2048
-#define FRAME_SIZE      (ELEMENT_SIZE * ELEMENT_COUNT)
+#define ELEMENT_COUNT   (1024*2)
+#define FRAME_SIZE      (ELEMENT_COUNT * sizeof(SMPhysicsParticle))
 #define FRAME_COUNT     100
 #define TOTAL_SIZE      (FRAME_SIZE * FRAME_COUNT)
 
@@ -14,7 +13,7 @@ int main(int argc, char * const * argv)
 {
     SMContext * sim;
     SMProgram * prog;
-    float * data, * partialResults;
+    SMPhysicsParticle * data, * partialResults;
     SMBuffer * abuf, * bbuf, * fileBuf;
     SMArgument * abufarg, * bbufarg, * countarg;
 
@@ -23,39 +22,39 @@ int main(int argc, char * const * argv)
     SMOptionsParse(argc, argv);
 
     sim = SMContextNew(argc, argv);
-    prog = SMProgramNew(sim, "./kernels/gravity.cl");
+    prog = SMProgramNew(sim, "./kernels/passthrough.cl");
     SMProgramSetGlobalCount(prog, ELEMENT_COUNT);
     showBuildLog(sim, prog);
 
-    data = (float *)calloc(FRAME_SIZE, sizeof(float));
+    data = (SMPhysicsParticle *)calloc(ELEMENT_COUNT,
+                                       sizeof(SMPhysicsParticle));
 
-    for(unsigned int i = 0; i < FRAME_SIZE; i += ELEMENT_SIZE)
+    for(unsigned int i = 0; i < ELEMENT_COUNT; i++)
     {
-        data[i + 0] = (float)rand()/(float)RAND_MAX;
-        data[i + 1] = (float)rand()/(float)RAND_MAX;
-        data[i + 2] = (float)rand()/(float)RAND_MAX;
-        data[i + 3] = 10000000.0;
-        data[i + 4] = 0.0;
-        data[i + 5] = 0.0;
-        data[i + 6] = 0.0;
+        data[i].enabled = 1.0;
+        data[i].x = (SMFloat)rand()/(SMFloat)RAND_MAX;
+        data[i].y = (SMFloat)rand()/(SMFloat)RAND_MAX;
+        data[i].z = (SMFloat)rand()/(SMFloat)RAND_MAX;
     }
 
-    abuf = SMBufferNew(sim, FRAME_SIZE, sizeof(float));
-    bbuf = SMBufferNew(sim, FRAME_SIZE, sizeof(float));
+    abuf = SMBufferNew(sim, ELEMENT_COUNT, sizeof(SMPhysicsParticle));
+    bbuf = SMBufferNew(sim, ELEMENT_COUNT, sizeof(SMPhysicsParticle));
 
     SMBufferSet(abuf, data);
     free(data);
 
-    fileBuf = SMBufferNewWithFile(sim, TOTAL_SIZE, sizeof(float), "test.out");
-    printf("Created output file (%ld KB)\n", TOTAL_SIZE * sizeof(float) / 1024);
+    fileBuf = SMBufferNewWithFile(sim, ELEMENT_COUNT * FRAME_COUNT,
+                                  sizeof(SMPhysicsParticle), "test.out");
+    printf("Created output file (%ld KB)\n",
+           TOTAL_SIZE / 1024);
 
     abufarg = SMArgumentNewWithBuffer(abuf);
     bbufarg = SMArgumentNewWithBuffer(bbuf);
     countarg = SMArgumentNewWithInt(ELEMENT_COUNT);
 
-    partialResults = (float*)SMBufferGetNativeBuffer(fileBuf);
+    partialResults = (SMPhysicsParticle *)SMBufferGetNativeBuffer(fileBuf);
 
-    for(int step = 0; step < FRAME_COUNT; step++, partialResults += FRAME_SIZE)
+    for(int step = 0; step < FRAME_COUNT; step++, partialResults += ELEMENT_COUNT)
     {
         printf("Computing frame %d/%d (%d%%)...\n", step + 1, FRAME_COUNT,
                (int)((float)(step + 1) / FRAME_COUNT * 100));
@@ -66,8 +65,11 @@ int main(int argc, char * const * argv)
         SMProgramExecute(prog);
         SMContextWait(sim);
 
-        SMBufferGet((step % 2 == 0 ? bbuf : abuf), (void**)&partialResults);
+        SMBufferGet((step % 2 ? abuf : bbuf), (void**)&partialResults);
+        printf("%f %f %f %f %p\n", partialResults[0].enabled, partialResults[0].y, partialResults[0].y, partialResults[0].z, partialResults);
     }
+
+    printf("%d\n", sizeof(SMPhysicsParticle));
 
     SMBufferFree(abuf);
     SMBufferFree(bbuf);
