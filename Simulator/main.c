@@ -45,8 +45,7 @@ int main(int argc, char * const * argv)
 
     fileBuf = SMBufferNewWithFile(sim, ELEMENT_COUNT * FRAME_COUNT,
                                   sizeof(SMPhysicsParticle), "test.out");
-    printf("Created output file (%ld KB)\n",
-           TOTAL_SIZE / 1024);
+    printf("Created output file (%ld KB)\n", TOTAL_SIZE / 1024);
 
     abufarg = SMArgumentNewWithBuffer(abuf);
     bbufarg = SMArgumentNewWithBuffer(bbuf);
@@ -66,10 +65,7 @@ int main(int argc, char * const * argv)
         SMContextWait(sim);
 
         SMBufferGet((step % 2 ? abuf : bbuf), (void**)&partialResults);
-        printf("%f %f %f %f %p\n", partialResults[0].enabled, partialResults[0].y, partialResults[0].y, partialResults[0].z, partialResults);
     }
-
-    printf("%d\n", sizeof(SMPhysicsParticle));
 
     SMBufferFree(abuf);
     SMBufferFree(bbuf);
