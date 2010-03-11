@@ -1,8 +1,9 @@
 #include "SMPhysics.h"
 
 __kernel void passthrough(__global SMPhysicsParticle * input,
-                          __global SMPhysicsNewtonian * newton,
                           __global SMPhysicsParticle * output,
+                          __global SMPhysicsNewtonian * newtonIn,
+                          __global SMPhysicsNewtonian * newtonOut,
                           const unsigned int count)
 {
     int id = get_global_id(0);
