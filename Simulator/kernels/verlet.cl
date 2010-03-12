@@ -11,14 +11,11 @@ __kernel void verlet(__global SMPhysicsParticle * input,
     if(id > count || input[id].enabled == 0.0)
         return;
 
-    // Compute acceleration
-    float4 accel;
-    accel.x = newtonOut[id].ax;
-    accel.y = newtonOut[id].ay;
-    accel.z = newtonOut[id].az;
-
-    // Perform Verlet integration
-    float4 position, oldPosition;
+    // Extract useful vectors; set the next frame's old position to our position
+    float4 acceleration, position, oldPosition;
+    acceleration.x = newtonOut[id].ax;
+    acceleration.y = newtonOut[id].ay;
+    acceleration.z = newtonOut[id].az;
     newtonOut[id].ox = position.x = input[id].x;
     newtonOut[id].oy = position.y = input[id].y;
     newtonOut[id].oz = position.z = input[id].z;
@@ -26,7 +23,8 @@ __kernel void verlet(__global SMPhysicsParticle * input,
     oldPosition.y = newtonIn[id].oy;
     oldPosition.z = newtonIn[id].oz;
 
-    position += (position - oldPosition) + (accel * 0.005 * 0.005);
+    // Perform Verlet integration
+    position += (position - oldPosition) + (acceleration * 0.005 * 0.005);
 
     output[id].x = position.x;
     output[id].y = position.y;
