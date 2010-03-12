@@ -2,7 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 
-#include "SMSimulator.h"
+#include "libsimulator/Simulator.h"
 
 #define ELEMENT_COUNT   2048
 #define FRAME_SIZE      (ELEMENT_COUNT * sizeof(SMPhysicsParticle))

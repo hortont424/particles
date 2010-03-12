@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "SMSimulator.h"
+#include "Simulator.h"
 
 /**
  * Allocate the space required for an empty SMArgument.

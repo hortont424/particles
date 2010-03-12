@@ -1,6 +1,6 @@
 #include <stdio.h>
 
-#include "SMSimulator.h"
+#include "Simulator.h"
 
 /// \todo This file is a joke. Should be cleaned up at some point.
 

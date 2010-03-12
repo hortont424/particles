@@ -3,7 +3,7 @@
 #include <unistd.h>
 #include <stdbool.h>
 
-#include "SMSimulator.h"
+#include "Simulator.h"
 
 int simulatorUsesCPU = false;
 

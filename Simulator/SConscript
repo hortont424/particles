@@ -3,7 +3,7 @@ Import("libsimulator")
 env = Environment(CC="clang", CCFLAGS="--std=c99 -O4 -Wall -Werror")
 env.AppendUnique(FRAMEWORKS=["OpenCL"])
 
-simulator = env.Program("simulator", Glob("*.c"), LIBS=["simulator"], CPPPATH="libsimulator", LIBPATH="libsimulator")
+simulator = env.Program("simulator", Glob("*.c"), LIBS=["simulator"],  LIBPATH="libsimulator")
 Depends(simulator, libsimulator)
 
 Return("simulator")

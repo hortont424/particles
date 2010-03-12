@@ -2,7 +2,7 @@
 #include "string.h"
 #include "stdlib.h"
 
-#include "SMSimulator.h"
+#include "Simulator.h"
 
 #define LIBRARY_PATH "./kernels/"
 

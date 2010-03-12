@@ -4,7 +4,7 @@
 #include <unistd.h>
 #include <stdarg.h>
 
-#include "SMSimulator.h"
+#include "Simulator.h"
 
 char * cwdSprintf(const char * fmt)
 {
