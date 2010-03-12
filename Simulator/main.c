@@ -101,6 +101,7 @@ int main(int argc, char * const * argv)
 
     for(int program = 0; program < programCount; program++)
         SMProgramFree(programs[program]);
+    free(programs);
 
     SMContextFree(sim);
 

@@ -110,6 +110,11 @@ SMProgram * SMProgramNew(SMContext * sim, const char * filename)
  */
 void SMProgramFree(SMProgram * prog)
 {
+    for(int i = 0; i < SMProgramGetArgumentCount(prog); i++)
+    {
+        SMArgumentFree(prog->arguments[i]);
+    }
+
     clReleaseKernel(prog->kernel);
     clReleaseProgram(prog->program);
     free(prog->arguments);

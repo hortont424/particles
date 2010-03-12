@@ -91,6 +91,9 @@ void SMArgumentFree(SMArgument * arg)
     if(arg->owned)
         free(arg->pointer);
 
+    if(arg->bufferCache)
+        free(arg->bufferCache);
+
     free(arg);
 }
 
