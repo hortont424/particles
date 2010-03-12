@@ -32,6 +32,7 @@ void SMProgramExecute(SMProgram * prog);
 
 void SMProgramSetGlobalCount(SMProgram * prog, size_t globalCount);
 void SMProgramSetArgument(SMProgram * prog, unsigned int i, SMArgument * arg);
+SMArgument * SMProgramGetArgument(SMProgram * prog, unsigned int i);
 unsigned int SMProgramGetArgumentCount(SMProgram * prog);
 
 /** @} */

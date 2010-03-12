@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include <stdlib.h>
 
 #include "SMSimulator.h"
@@ -14,24 +15,27 @@ SMArgument * SMArgumentNew()
 
 /**
  * Allocate the space required for an SMArgument, and fill it with a pointer
- * to the given OpenCL buffer (this doesn't work with file buffers, because
+ * to the given SMBuffer (this doesn't work with file buffers, because
  * they aren't cl_mem objects and as such can't be passed into an OpenCL
  * kernel).
  *
+ * The native pointer will be retrieved when requested with
+ * SMArgumentGetPointer - that way, the correct front/back buffer will be
+ * returned without having to create a new argument each time.
+ *
  * @param buf The OpenCL-backed SMBuffer the argument should point at.
- * @param backBuffer Whether to use the front or back buffer.
+ * @param backBuffer If true, use the SMBuffer's back buffer.
  * @return The newly allocated argument, pointing at an SMBuffer.
  */
 SMArgument * SMArgumentNewWithBuffer(SMBuffer * buf, bool backBuffer)
 {
     SMArgument * arg = SMArgumentNew();
 
-    cl_mem * nativeBuffer = (cl_mem *)calloc(1, sizeof(cl_mem));
-    (*nativeBuffer) = SMBufferGetCLBuffer(buf, backBuffer);
-
+    arg->type = SM_BUFFER_ARGUMENT;
     arg->size = sizeof(cl_mem);
-    arg->pointer = (void *)nativeBuffer;
-    arg->owned = true;
+    arg->pointer = (void *)buf;
+    arg->owned = false;
+    arg->backBuffer = backBuffer;
 
     return arg;
 }
@@ -47,6 +51,7 @@ SMArgument * SMArgumentNewWithFloat(float f)
 {
     SMArgument * arg = SMArgumentNew();
 
+    arg->type = SM_POINTER_ARGUMENT;
     arg->size = sizeof(float);
     arg->pointer = (float *)calloc(1, sizeof(float));
     *((float *)arg->pointer) = f;
@@ -66,6 +71,7 @@ SMArgument * SMArgumentNewWithInt(int i)
 {
     SMArgument * arg = SMArgumentNew();
 
+    arg->type = SM_POINTER_ARGUMENT;
     arg->size = sizeof(int);
     arg->pointer = (float *)calloc(1, sizeof(int));
     *((int *)arg->pointer) = i;
@@ -103,5 +109,24 @@ size_t SMArgumentGetSize(SMArgument * arg)
  */
 void * SMArgumentGetPointer(SMArgument * arg)
 {
+    switch(arg->type)
+    {
+        case SM_POINTER_ARGUMENT:
+            return arg->pointer;
+            break;
+        case SM_BUFFER_ARGUMENT:
+            if(arg->bufferCache)
+                free(arg->bufferCache);
+
+            arg->bufferCache = (cl_mem *)calloc(1, sizeof(cl_mem));
+            (*arg->bufferCache) = SMBufferGetCLBuffer((SMBuffer *)arg->pointer,
+                                                      arg->backBuffer);
+            return arg->bufferCache;
+            break;
+        default:
+            throwError("tried to get pointer from uninitialized argument");
+            break;
+    }
+
     return arg->pointer;
 }

@@ -16,7 +16,6 @@ int main(int argc, char * const * argv)
     SMPhysicsParticle * data, * partialResults;
     SMPhysicsNewtonian * newton;
     SMBuffer * parts, * newts, * fileBuf;
-    SMArgument * partsFront, * partsBack, * countarg, * newtFront, * newtBack;
     int programCount = 2;
 
     srand((int)time(NULL));
@@ -65,25 +64,27 @@ int main(int argc, char * const * argv)
 
     partialResults = (SMPhysicsParticle *)SMBufferGetNativeBuffer(fileBuf);
 
+    for(int program = 0; program < programCount; program++)
+    {
+        SMProgramSetArgument(programs[program], 0,
+                             SMArgumentNewWithBuffer(parts, 0));
+        SMProgramSetArgument(programs[program], 1,
+                             SMArgumentNewWithBuffer(parts, 1));
+        SMProgramSetArgument(programs[program], 2,
+                             SMArgumentNewWithBuffer(newts, 0));
+        SMProgramSetArgument(programs[program], 3,
+                             SMArgumentNewWithBuffer(newts, 1));
+        SMProgramSetArgument(programs[program], 4,
+                             SMArgumentNewWithInt(ELEMENT_COUNT));
+    }
+
     for(int step = 0; step < FRAME_COUNT; step++, partialResults += ELEMENT_COUNT)
     {
         printf("Computing frame %d/%d (%d%%)...\n", step + 1, FRAME_COUNT,
                (int)((float)(step + 1) / FRAME_COUNT * 100));
 
-        partsFront = SMArgumentNewWithBuffer(parts, 0);
-        partsBack = SMArgumentNewWithBuffer(parts, 1);
-        newtFront = SMArgumentNewWithBuffer(newts, 0);
-        newtBack = SMArgumentNewWithBuffer(newts, 1);
-        countarg = SMArgumentNewWithInt(ELEMENT_COUNT);
-
         for(int program = 0; program < programCount; program++)
         {
-            SMProgramSetArgument(programs[program], 0, partsFront);
-            SMProgramSetArgument(programs[program], 1, partsBack);
-            SMProgramSetArgument(programs[program], 2, newtFront);
-            SMProgramSetArgument(programs[program], 3, newtBack);
-            SMProgramSetArgument(programs[program], 4, countarg);
-
             SMProgramExecute(programs[program]);
             SMContextWait(sim);
         }
@@ -92,12 +93,6 @@ int main(int argc, char * const * argv)
         SMBufferSwap(newts);
 
         SMBufferGet(parts, (void**)&partialResults);
-
-        SMArgumentFree(partsFront);
-        SMArgumentFree(partsBack);
-        SMArgumentFree(newtFront);
-        SMArgumentFree(newtBack);
-        SMArgumentFree(countarg);
     }
 
     SMBufferFree(parts);

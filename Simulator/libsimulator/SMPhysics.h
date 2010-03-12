@@ -54,13 +54,11 @@ typedef struct _SMPhysicsHarmonicData
 typedef struct _SMPhysicsGravityData
 {
     SMFloat strength, noise;
-    SMPhysicsFalloffData falloff;
 } SMPhysicsGravityData;
 
 typedef struct _SMPhysicsDragData
 {
     SMFloat linearStrength, quadraticStrength, noise;
-    SMPhysicsFalloffData falloff;
 } SMPhysicsDragData;
 
 typedef struct _SMPhysicsTurbulenceData
@@ -72,7 +70,6 @@ typedef struct _SMPhysicsTurbulenceData
 typedef struct _SMPhysicsBoidsData
 {
     SMFloat strength, noise;
-    SMPhysicsFalloffData falloff;
 } SMPhysicsBoidsData;
 
 // There should be one SMPhysicsForce for each particle that exerts a force

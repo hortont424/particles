@@ -176,6 +176,11 @@ void SMProgramSetGlobalCount(SMProgram * prog, size_t globalCount)
 }
 
 /**
+ * Set an argument to be passed into the kernel when it is executed;
+ * arguments are owned by the program, so don't try to reuse them.
+ *
+ * @todo We could reference-count arguments... and everything, really!
+ *
  * @param prog The SMProgram to modify.
  * @param i The index of the argument to set.
  * @param arg A pointer to the SMArgument object representing the value of
@@ -183,13 +188,34 @@ void SMProgramSetGlobalCount(SMProgram * prog, size_t globalCount)
  */
 void SMProgramSetArgument(SMProgram * prog, unsigned int i, SMArgument * arg)
 {
+    SMArgument * oldArg;
+
     if(i > SMProgramGetArgumentCount(prog))
     {
         throwError("trying to set nonexistent argument #%d", i);
         return;
     }
 
+    oldArg = SMProgramGetArgument(prog, i);
+    if(oldArg)
+        SMArgumentFree(oldArg);
+
     prog->arguments[i] = arg;
+}
+
+/**
+ * @param prog The SMProgram to inspect.
+ * @param i The index of the argument to return.
+ */
+SMArgument * SMProgramGetArgument(SMProgram * prog, unsigned int i)
+{
+    if(i > SMProgramGetArgumentCount(prog))
+    {
+        throwError("trying to access nonexistent argument #%d", i);
+        return NULL;
+    }
+
+    return prog->arguments[i];
 }
 
 /**

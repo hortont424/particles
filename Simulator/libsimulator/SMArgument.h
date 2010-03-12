@@ -12,12 +12,23 @@
  * @{
  */
 
+typedef enum _SMArgumentType
+{
+    SM_BUFFER_ARGUMENT,         /**< argument points to an SMBuffer */
+    SM_POINTER_ARGUMENT         /**< argument points to an arbitrary pointer */
+} SMArgumentType;
+
 typedef struct _SMArgument
 {
-    void * pointer;     /**< Pointer to arbitrary argument object */
-    size_t size;        /**< Size of arbitrary argument object */
+    SMArgumentType type;    /**< Type of argument */
+    void * pointer;         /**< Pointer to arbitrary argument object */
+    size_t size;            /**< Size of arbitrary argument object */
 
-    bool owned;         /**< Whether we own (and should free) the pointer */
+    bool owned;             /**< Whether we own (and should free) the pointer */
+    bool backBuffer;        /**< If true (and this is a buffer argument), use
+                                 the back buffer when accessing the buffer */
+
+    cl_mem * bufferCache;   /**< For buffer args, a cached native pointer */
 } SMArgument;
 
 SMArgument * SMArgumentNew();
