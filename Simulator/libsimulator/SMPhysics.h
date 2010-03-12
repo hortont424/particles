@@ -82,7 +82,7 @@ typedef struct _SMPhysicsForce
 {
     SMFloat particleIndex;   // These need to not be SMFloats, but I'm afraid
     SMFloat forceType;       // of what will happen if they're not the same size
-                            // as everything else when being passed in...
+                             // as everything else when being passed in...
     union
     {
         SMPhysicsNormalData normal;
@@ -101,8 +101,8 @@ typedef struct _SMPhysicsForce
 typedef struct _SMPhysicsNewtonian
 {
     SMFloat fixed, mass;
-    SMFloat vx, vy, vz;
     SMFloat ax, ay, az;
+    SMFloat ox, oy, oz;
 } SMPhysicsNewtonian;
 
 // Basic particle data; all you need to do the most simplistic rendering

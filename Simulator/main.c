@@ -4,9 +4,9 @@
 
 #include "SMSimulator.h"
 
-#define ELEMENT_COUNT   (4096)
+#define ELEMENT_COUNT   (2048)
 #define FRAME_SIZE      (ELEMENT_COUNT * sizeof(SMPhysicsParticle))
-#define FRAME_COUNT     500
+#define FRAME_COUNT     200
 #define TOTAL_SIZE      (FRAME_SIZE * FRAME_COUNT)
 
 int main(int argc, char * const * argv)
@@ -27,7 +27,7 @@ int main(int argc, char * const * argv)
 
     programs = (SMProgram **)calloc(programCount, sizeof(SMProgram *));
     programs[0] = SMProgramNew(sim, "./kernels/gravity.cl");
-    programs[1] = SMProgramNew(sim, "./kernels/euler_integration.cl");
+    programs[1] = SMProgramNew(sim, "./kernels/verlet.cl");
 
     for(int program = 0; program < programCount; program++)
     {
@@ -44,9 +44,9 @@ int main(int argc, char * const * argv)
     for(unsigned int i = 0; i < ELEMENT_COUNT; i++)
     {
         data[i].enabled = 1.0;
-        data[i].x = (SMFloat)rand()/(SMFloat)RAND_MAX;
-        data[i].y = (SMFloat)rand()/(SMFloat)RAND_MAX;
-        data[i].z = (SMFloat)rand()/(SMFloat)RAND_MAX;
+        newton[i].ox = data[i].x = (SMFloat)rand()/(SMFloat)RAND_MAX;
+        newton[i].oy = data[i].y = (SMFloat)rand()/(SMFloat)RAND_MAX;
+        newton[i].oz = data[i].z = (SMFloat)rand()/(SMFloat)RAND_MAX;
 
         newton[i].mass = 100000000.0 * (SMFloat)rand()/(SMFloat)RAND_MAX;
     }
