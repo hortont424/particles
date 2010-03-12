@@ -1,6 +1,6 @@
 from Build.macosx import TOOL_BUNDLE
 
-env = Environment(CCFLAGS="--std=c99 -O4 -Wall -Werror -fobjc-gc")
+env = Environment(CC="clang", CCFLAGS="--std=c99 -O4 -Wall -Werror -fobjc-gc")
 env.AppendUnique(FRAMEWORKS=['OpenCL','Cocoa','AppKit','Foundation'])
 TOOL_BUNDLE(env)
 
