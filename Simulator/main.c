@@ -4,7 +4,7 @@
 
 #include "SMSimulator.h"
 
-#define ELEMENT_COUNT   (2048)
+#define ELEMENT_COUNT   2048
 #define FRAME_SIZE      (ELEMENT_COUNT * sizeof(SMPhysicsParticle))
 #define FRAME_COUNT     200
 #define TOTAL_SIZE      (FRAME_SIZE * FRAME_COUNT)
@@ -12,11 +12,12 @@
 int main(int argc, char * const * argv)
 {
     SMContext * sim;
-    SMProgram ** programs;
+    SMProgram * gravProg, * intProg;
+    SMProgramLibrary * library;
     SMPhysicsParticle * data, * partialResults;
     SMPhysicsNewtonian * newton;
     SMBuffer * parts, * newts, * fileBuf;
-    int programCount = 2;
+    int step;
 
     srand((int)time(NULL));
 
@@ -24,15 +25,8 @@ int main(int argc, char * const * argv)
 
     sim = SMContextNew();
 
-    programs = (SMProgram **)calloc(programCount, sizeof(SMProgram *));
-    programs[0] = SMProgramNew(sim, "./kernels/gravity.cl");
-    programs[1] = SMProgramNew(sim, "./kernels/verlet.cl");
-
-    for(int program = 0; program < programCount; program++)
-    {
-        SMProgramSetGlobalCount(programs[program], ELEMENT_COUNT);
-        showBuildLog(sim, programs[program]);
-    }
+    library = SMProgramLibraryNew(sim);
+    SMProgramLibrarySetGlobalCount(library, ELEMENT_COUNT);
 
     data = (SMPhysicsParticle *)calloc(ELEMENT_COUNT,
                                        sizeof(SMPhysicsParticle));
@@ -64,30 +58,30 @@ int main(int argc, char * const * argv)
 
     partialResults = (SMPhysicsParticle *)SMBufferGetNativeBuffer(fileBuf);
 
-    for(int program = 0; program < programCount; program++)
-    {
-        SMProgramSetArgument(programs[program], 0,
-                             SMArgumentNewWithBuffer(parts, 0));
-        SMProgramSetArgument(programs[program], 1,
-                             SMArgumentNewWithBuffer(parts, 1));
-        SMProgramSetArgument(programs[program], 2,
-                             SMArgumentNewWithBuffer(newts, 0));
-        SMProgramSetArgument(programs[program], 3,
-                             SMArgumentNewWithBuffer(newts, 1));
-        SMProgramSetArgument(programs[program], 4,
-                             SMArgumentNewWithInt(ELEMENT_COUNT));
-    }
+    gravProg = SMProgramLibraryGetProgram(library, SMPhysicsGravityType);
+    intProg = SMProgramLibraryGetProgram(library, SMPhysicsIntegrationType);
 
-    for(int step = 0; step < FRAME_COUNT; step++, partialResults += ELEMENT_COUNT)
+    SMProgramSetArgument(gravProg, 0, SMArgumentNewWithBuffer(parts, 0));
+    SMProgramSetArgument(gravProg, 1, SMArgumentNewWithBuffer(parts, 1));
+    SMProgramSetArgument(gravProg, 2, SMArgumentNewWithBuffer(newts, 0));
+    SMProgramSetArgument(gravProg, 3, SMArgumentNewWithBuffer(newts, 1));
+    SMProgramSetArgument(gravProg, 4, SMArgumentNewWithInt(ELEMENT_COUNT));
+
+    SMProgramSetArgument(intProg, 0, SMArgumentNewWithBuffer(parts, 0));
+    SMProgramSetArgument(intProg, 1, SMArgumentNewWithBuffer(parts, 1));
+    SMProgramSetArgument(intProg, 2, SMArgumentNewWithBuffer(newts, 0));
+    SMProgramSetArgument(intProg, 3, SMArgumentNewWithBuffer(newts, 1));
+    SMProgramSetArgument(intProg, 4, SMArgumentNewWithInt(ELEMENT_COUNT));
+
+    for(step = 0; step < FRAME_COUNT; step++, partialResults += ELEMENT_COUNT)
     {
         printf("Computing frame %d/%d (%d%%)...\n", step + 1, FRAME_COUNT,
                (int)((float)(step + 1) / FRAME_COUNT * 100));
 
-        for(int program = 0; program < programCount; program++)
-        {
-            SMProgramExecute(programs[program]);
-            SMContextWait(sim);
-        }
+        SMProgramExecute(gravProg);
+        SMContextWait(sim);
+        SMProgramExecute(intProg);
+        SMContextWait(sim);
 
         SMBufferSwap(parts);
         SMBufferSwap(newts);
@@ -98,11 +92,7 @@ int main(int argc, char * const * argv)
     SMBufferFree(parts);
     SMBufferFree(newts);
     SMBufferFree(fileBuf);
-
-    for(int program = 0; program < programCount; program++)
-        SMProgramFree(programs[program]);
-    free(programs);
-
+    SMProgramLibraryFree(library);
     SMContextFree(sim);
 
     return EXIT_SUCCESS;

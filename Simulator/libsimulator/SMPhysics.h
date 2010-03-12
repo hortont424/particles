@@ -3,8 +3,10 @@
 
 #ifndef cl_float
 typedef float SMFloat;
+typedef int SMInt;
 #else
 typedef cl_float SMFloat;
+typedef cl_int SMInt;
 #endif
 
 // Types of different supported forces
@@ -17,7 +19,11 @@ typedef enum _SMPhysicsType
     SMPhysicsGravityType,
     SMPhysicsDragType,
     SMPhysicsTurbulenceType,
-    SMPhysicsBoidsType
+    SMPhysicsBoidsType,
+
+    SMPhysicsIntegrationType,
+
+    SMPhysicsLastType
 } SMPhysicsType;
 
 // Falloff attributes

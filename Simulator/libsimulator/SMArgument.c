@@ -47,14 +47,14 @@ SMArgument * SMArgumentNewWithBuffer(SMBuffer * buf, bool backBuffer)
  * @param f A float for the argument to point at.
  * @return The newly allocated argument, pointing at a copy of the given float.
  */
-SMArgument * SMArgumentNewWithFloat(float f)
+SMArgument * SMArgumentNewWithFloat(SMFloat f)
 {
     SMArgument * arg = SMArgumentNew();
 
     arg->type = SM_POINTER_ARGUMENT;
-    arg->size = sizeof(float);
-    arg->pointer = (float *)calloc(1, sizeof(float));
-    *((float *)arg->pointer) = f;
+    arg->size = sizeof(SMFloat);
+    arg->pointer = (void *)calloc(1, sizeof(SMFloat));
+    *((SMFloat *)arg->pointer) = f;
     arg->owned = true;
 
     return arg;
@@ -67,14 +67,14 @@ SMArgument * SMArgumentNewWithFloat(float f)
  * @param i A int for the argument to point at.
  * @return The newly allocated argument, pointing at a copy of the given int.
  */
-SMArgument * SMArgumentNewWithInt(int i)
+SMArgument * SMArgumentNewWithInt(SMInt i)
 {
     SMArgument * arg = SMArgumentNew();
 
     arg->type = SM_POINTER_ARGUMENT;
-    arg->size = sizeof(int);
-    arg->pointer = (float *)calloc(1, sizeof(int));
-    *((int *)arg->pointer) = i;
+    arg->size = sizeof(SMInt);
+    arg->pointer = (void *)calloc(1, sizeof(SMInt));
+    *((SMInt *)arg->pointer) = i;
     arg->owned = true;
 
     return arg;

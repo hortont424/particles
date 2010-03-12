@@ -6,6 +6,7 @@
 #include <OpenCL/opencl.h>
 
 #include "SMBuffer.h"
+#include "SMPhysics.h"
 
 /**
  * @defgroup SMArgument SMArgument
@@ -33,8 +34,8 @@ typedef struct _SMArgument
 
 SMArgument * SMArgumentNew();
 SMArgument * SMArgumentNewWithBuffer(SMBuffer * buf, bool backBuffer);
-SMArgument * SMArgumentNewWithFloat(float f);
-SMArgument * SMArgumentNewWithInt(int i);
+SMArgument * SMArgumentNewWithFloat(SMFloat f);
+SMArgument * SMArgumentNewWithInt(SMInt i);
 void SMArgumentFree(SMArgument * arg);
 
 size_t SMArgumentGetSize(SMArgument * arg);

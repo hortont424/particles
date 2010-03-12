@@ -10,6 +10,7 @@
 #include "SMProgram.h"
 #include "SMBuffer.h"
 #include "SMArgument.h"
+#include "SMProgramLibrary.h"
 
 #include "SMPhysics.h"
 
