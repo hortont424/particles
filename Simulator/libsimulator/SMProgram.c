@@ -153,6 +153,8 @@ void SMProgramExecute(SMProgram * prog)
  */
 void SMProgramSetGlobalCount(SMProgram * prog, size_t globalCount)
 {
+    int multiplier;
+
     prog->globalCount = globalCount;
 
     clGetKernelWorkGroupInfo(prog->kernel, prog->context->devs,
@@ -167,8 +169,10 @@ void SMProgramSetGlobalCount(SMProgram * prog, size_t globalCount)
     // If the number of elements we have doesn't evenly divide into the number
     // of elements per run, reduce the number of elements per run to fit
     /// \todo There is a more efficient way to do this, for sure.
+    multiplier = ceil((float)prog->globalCount / prog->localCount);
+
     while(prog->globalCount % prog->localCount)
-        prog->localCount--;
+        prog->localCount = prog->globalCount / (multiplier++);
 }
 
 /**
