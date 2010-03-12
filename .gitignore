@@ -7,3 +7,5 @@ build/
 *.out.bz2
 Simulator/doc
 *.pyc
+libsimulator.xml
+libsimulator.py
