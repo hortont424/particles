@@ -28,14 +28,16 @@ typedef struct _CUCurve
     CUControlPoint * controlPoints;
     CUControlPoint * currentControlPoint;
 
-    unsigned int pointCount;
+    uint32_t pointCount;
 } CUCurve;
 
 CUPoint CUPointMake(float x, float y);
 
-CUCurve * CUCurveNew(unsigned int pointCount);
+CUCurve * CUCurveNew(uint32_t pointCount);
+CUCurve * CUCurveNewFromFile(char * filename);
 void CUCurveFree(CUCurve * curve);
 
+void CUCurveSave(CUCurve * curve, char * filename);
 void CUCurveClear(CUCurve * curve);
 void CUCurvePush(CUCurve * curve, CUPoint p, CUPoint cp1, CUPoint cp2);
 

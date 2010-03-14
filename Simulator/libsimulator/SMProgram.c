@@ -88,6 +88,7 @@ SMProgram * SMProgramNew(SMContext * sim, const char * filename)
 
     fileContent = (char *)calloc(fileInfo.st_size + 1, sizeof(char));
     read(fileHandle, fileContent, fileInfo.st_size + 1);
+    close(fileHandle);
 
     prog = compileProgram(sim, kernelName, fileContent);
     prog->context = sim;
