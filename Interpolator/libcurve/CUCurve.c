@@ -50,6 +50,8 @@ CUCurve * CUCurveNewFromFile(char * filename)
         return NULL;
     }
 
+    /// \todo ugh. I hate input-side code. this is absolutely horrible.
+
     read(fileHandle, &curve->pointCount, sizeof(uint32_t));
 
     curve->controlPoints = (CUControlPoint *)calloc(curve->pointCount,
