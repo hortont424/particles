@@ -7,7 +7,7 @@ clean:
 	rm -rf ./build
 
 run:
-	./build/Interpolator.app/Contents/MacOS/Interpolator
+	DYLD_LIBRARY_PATH="../External/BWToolkit/BWToolkitFramework.Framework" ./build/Interpolator.app/Contents/MacOS/Interpolator
 
 edit:
 	mate .
