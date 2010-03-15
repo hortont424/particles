@@ -80,7 +80,7 @@ int main(int argc, char *argv[])
     glutTimerFunc(0, timer, 0);
 
     csize = sizeof(float) * ELEMENT_COUNT * 4 * FRAME_COUNT;
-    fd = open("/Users/hortont/Desktop/particles/Simulator/test.out", O_RDWR);
+    fd = open("../Simulator/test.out", O_RDWR);
     points = (float*)mmap(NULL, csize, PROT_READ|PROT_WRITE, MAP_SHARED, fd, 0);
 
     glutMainLoop();
