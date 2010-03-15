@@ -50,7 +50,7 @@ def TOOL_BUNDLE(env):
             for f in resources:
                 if f.find(".xib") != -1:
                     newF = f.replace(".xib", ".nib")
-                    env.Command(newF, f, "ibtool --errors --warnings --output-format human-readable-text --compile $TARGET $SOURCE")
+                    env.Command(newF, f, "ibtool --plugin External/BWToolkit/BWToolkit.ibplugin --errors --warnings --output-format human-readable-text --compile $TARGET $SOURCE")
                     resources.append(newF)
                     resources.remove(f)
 
