@@ -12,7 +12,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="880"/>
+			<integer value="902"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2427,6 +2427,78 @@
 					</object>
 					<int key="connectionID">930</int>
 				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">curveStorage</string>
+						<reference key="source" ref="722545332"/>
+						<reference key="destination" ref="231665071"/>
+					</object>
+					<int key="connectionID">931</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">controlPointView</string>
+						<reference key="source" ref="722545332"/>
+						<reference key="destination" ref="285160"/>
+					</object>
+					<int key="connectionID">932</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">addCurveSet:</string>
+						<reference key="source" ref="1061912924"/>
+						<reference key="destination" ref="260498684"/>
+					</object>
+					<int key="connectionID">933</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBActionConnection" key="connection">
+						<string key="label">removeCurveSet:</string>
+						<reference key="source" ref="1061912924"/>
+						<reference key="destination" ref="7197996"/>
+					</object>
+					<int key="connectionID">934</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">curveSetChooser</string>
+						<reference key="source" ref="1061912924"/>
+						<reference key="destination" ref="134380199"/>
+					</object>
+					<int key="connectionID">936</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">controlPointView</string>
+						<reference key="source" ref="1061912924"/>
+						<reference key="destination" ref="285160"/>
+					</object>
+					<int key="connectionID">937</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">controlPointTypeButtons</string>
+						<reference key="source" ref="1061912924"/>
+						<reference key="destination" ref="312038426"/>
+					</object>
+					<int key="connectionID">938</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">drawControlPointsButton</string>
+						<reference key="source" ref="1061912924"/>
+						<reference key="destination" ref="628525316"/>
+					</object>
+					<int key="connectionID">939</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">curveSetChooser</string>
+						<reference key="source" ref="722545332"/>
+						<reference key="destination" ref="134380199"/>
+					</object>
+					<int key="connectionID">940</int>
+				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
 				<object class="NSArray" key="orderedObjects">
@@ -3910,7 +3982,6 @@
 					<string>925.IBPluginDependency</string>
 					<string>926.IBPluginDependency</string>
 					<string>927.IBPluginDependency</string>
-					<string>928.IBPluginDependency</string>
 				</object>
 				<object class="NSMutableArray" key="dict.values">
 					<bool key="EncodedWithXMLCoder">YES</bool>
@@ -4157,7 +4228,6 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
-					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 				</object>
 			</object>
 			<object class="NSMutableDictionary" key="unlocalizedProperties">
@@ -4176,7 +4246,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">930</int>
+			<int key="maxID">940</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4208,14 +4278,12 @@
 						<object class="NSArray" key="dict.sortedKeys">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>addCurveSet:</string>
-							<string>changeCurveSet:</string>
 							<string>removeCurveSet:</string>
 							<string>setControlPointType:</string>
 							<string>setDrawControlPoints:</string>
 						</object>
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
-							<string>id</string>
 							<string>id</string>
 							<string>id</string>
 							<string>id</string>
@@ -4236,7 +4304,7 @@
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>NSSegmentedControl</string>
 							<string>IPCurveView</string>
-							<string>NSPopUpButton</string>
+							<string>NSTableView</string>
 							<string>IPCurveStorage</string>
 							<string>NSSegmentedControl</string>
 						</object>
@@ -4273,6 +4341,21 @@
 				<object class="IBPartialClassDescription">
 					<string key="className">IPSourceController</string>
 					<string key="superclassName">NSObject</string>
+					<object class="NSMutableDictionary" key="outlets">
+						<bool key="EncodedWithXMLCoder">YES</bool>
+						<object class="NSArray" key="dict.sortedKeys">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>controlPointView</string>
+							<string>curveSetChooser</string>
+							<string>curveStorage</string>
+						</object>
+						<object class="NSMutableArray" key="dict.values">
+							<bool key="EncodedWithXMLCoder">YES</bool>
+							<string>IPCurveView</string>
+							<string>NSTableView</string>
+							<string>IPCurveStorage</string>
+						</object>
+					</object>
 					<object class="IBClassDescriptionSource" key="sourceIdentifier">
 						<string key="majorKey">IBDocumentRelativeSource</string>
 						<string key="minorKey">IPSourceController.h</string>

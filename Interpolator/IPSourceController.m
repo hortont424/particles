@@ -4,13 +4,19 @@
 
 - (int)numberOfRowsInTableView:(NSTableView *)tableView
 {
-    return 5;
+    return [[curveStorage curveSets] count];
 }
 
 - (id)tableView:(NSTableView *)tableView
     objectValueForTableColumn:(NSTableColumn *)tableColumn row:(int)row
 {
-    return @"arst";
+    return [[[curveStorage curveSets] objectAtIndex:row] name];
+}
+
+- (void)tableViewSelectionDidChange:(NSNotification *)aNotification
+{
+    [controlPointView setCurvesIndex:[curveSetChooser selectedRow]];
+    [controlPointView updateCurves];
 }
 
 @end
