@@ -6,6 +6,6 @@ TOOL_BUNDLE(env)
 
 interpolator = env.Program("Interpolator", Glob("*.[cm]"))
 
-env.MakeBundle("Interpolator.app", "Interpolator", "com.hortont.interpolator", "Interpolator-Info.plist", "APPL", resources=["MainMenu.xib"])
+env.MakeBundle("Interpolator.app", "Interpolator", "com.hortont.interpolator", "Interpolator-Info.plist", "APPL", resources=["MainMenu.xib"], frameworks=["../../External/BWToolkit/BWToolkitFramework.framework"])
 
 Return("interpolator")

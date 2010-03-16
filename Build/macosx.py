@@ -39,7 +39,7 @@ def TOOL_BUNDLE(env):
         def MakeBundle(env, bundledir, app,
                        key, info_plist,
                        typecode='BNDL', creator='SapP',
-                       resources=None):
+                       resources=None, frameworks=None):
             """Install a bundle into its dir, in the proper format"""
             resources = resources or []
             # Substitute construction vars:
@@ -81,6 +81,12 @@ def TOOL_BUNDLE(env):
                                   r[0])
                 else:
                     env.Install(bundledir+'/Contents/Resources', r)
+            for r in frameworks:
+                if SCons.Util.is_List(r):
+                    env.InstallAs(join(bundledir+'/Contents/Frameworks', r[1]),
+                                  r[0])
+                else:
+                    env.Install(bundledir+'/Contents/Frameworks', r)
             return [ SCons.Node.FS.default_fs.Dir(bundledir) ]
 
         # This is not a regular Builder; it's a wrapper function.
