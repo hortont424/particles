@@ -21,7 +21,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="947"/>
+			<integer value="367"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -1311,6 +1311,7 @@
 				<string key="NSWindowClass">NSWindow</string>
 				<nil key="NSViewClass"/>
 				<string key="NSWindowContentMaxSize">{1.79769e+308, 1.79769e+308}</string>
+				<string key="NSWindowContentMinSize">{515, 200}</string>
 				<object class="NSView" key="NSWindowView" id="414427165">
 					<reference key="NSNextResponder"/>
 					<int key="NSvFlags">256</int>
@@ -1318,7 +1319,7 @@
 						<bool key="EncodedWithXMLCoder">YES</bool>
 						<object class="BWSplitView" id="627951676">
 							<reference key="NSNextResponder" ref="414427165"/>
-							<int key="NSvFlags">268</int>
+							<int key="NSvFlags">274</int>
 							<object class="NSMutableArray" key="NSSubviews">
 								<bool key="EncodedWithXMLCoder">YES</bool>
 								<object class="BWCustomView" id="991523825">
@@ -1721,12 +1722,12 @@
 														<object class="NSCustomView" id="285160">
 															<reference key="NSNextResponder" ref="1008498570"/>
 															<int key="NSvFlags">274</int>
-															<string key="NSFrameSize">{2013, 498}</string>
+															<string key="NSFrameSize">{2013, 529}</string>
 															<reference key="NSSuperview" ref="1008498570"/>
 															<string key="NSClassName">IPCurveView</string>
 														</object>
 													</object>
-													<string key="NSFrameSize">{555, 498}</string>
+													<string key="NSFrameSize">{555, 529}</string>
 													<reference key="NSSuperview" ref="306058069"/>
 													<reference key="NSNextKeyView" ref="285160"/>
 													<reference key="NSDocView" ref="285160"/>
@@ -1751,7 +1752,7 @@
 												<object class="NSScroller" id="457074961">
 													<reference key="NSNextResponder" ref="306058069"/>
 													<int key="NSvFlags">256</int>
-													<string key="NSFrame">{{0, 498}, {555, 15}}</string>
+													<string key="NSFrame">{{0, 529}, {555, 15}}</string>
 													<reference key="NSSuperview" ref="306058069"/>
 													<bool key="NSEnabled">YES</bool>
 													<int key="NSsFlags">1</int>
@@ -1760,7 +1761,7 @@
 													<double key="NSPercent">0.27570789865871831</double>
 												</object>
 											</object>
-											<string key="NSFrame">{{0, 76}, {555, 513}}</string>
+											<string key="NSFrame">{{0, 45}, {555, 544}}</string>
 											<reference key="NSSuperview" ref="253593587"/>
 											<reference key="NSNextKeyView" ref="1008498570"/>
 											<int key="NSsFlags">160</int>
@@ -1894,6 +1895,7 @@
 					<reference key="NSSuperview"/>
 				</object>
 				<string key="NSScreenRect">{{0, 0}, {1440, 878}}</string>
+				<string key="NSMinSize">{515, 222}</string>
 				<string key="NSMaxSize">{1.79769e+308, 1.79769e+308}</string>
 			</object>
 			<object class="NSCustomObject" id="231665071">
@@ -4147,7 +4149,9 @@
 					<string>367.IBWindowTemplateEditedContentRect</string>
 					<string>367.NSWindowTemplate.visibleAtLaunch</string>
 					<string>367.editorWindowContentRectSynchronizationRect</string>
+					<string>367.windowTemplate.hasMinSize</string>
 					<string>367.windowTemplate.maxSize</string>
+					<string>367.windowTemplate.minSize</string>
 					<string>368.IBPluginDependency</string>
 					<string>375.IBPluginDependency</string>
 					<string>376.IBEditorWindowLastContentRect</string>
@@ -4409,7 +4413,9 @@
 					<string>{{309, 32}, {759, 589}}</string>
 					<integer value="1"/>
 					<string>{{11, 666}, {480, 270}}</string>
+					<boolean value="YES"/>
 					<string>{3.40282e+38, 3.40282e+38}</string>
+					<string>{515, 200}</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>{{583, 1041}, {83, 43}}</string>
