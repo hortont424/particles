@@ -38,6 +38,16 @@
     NSLog(@"remove curve set");
 }
 
+- (IBAction)addCurve:(id)sender
+{
+
+}
+
+- (IBAction)removeCurve:(id)sender
+{
+
+}
+
 - (void)updateCurveSets
 {
     [curveSetChooser reloadData];

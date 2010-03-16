@@ -9,6 +9,8 @@
     IBOutlet NSSegmentedControl * drawControlPointsButton;
     IBOutlet NSTableView * curveSetChooser;
 
+    IBOutlet NSMenu * addMenu, * removeMenu;
+
     IBOutlet IPCurveView * controlPointView;
 	IBOutlet IPCurveStorage * curveStorage;
 }
@@ -18,6 +20,9 @@
 
 - (IBAction)addCurveSet:(id)sender;
 - (IBAction)removeCurveSet:(id)sender;
+
+- (IBAction)addCurve:(id)sender;
+- (IBAction)removeCurve:(id)sender;
 
 - (void)updateCurveSets;
 
