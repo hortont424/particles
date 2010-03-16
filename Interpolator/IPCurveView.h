@@ -52,5 +52,6 @@
 // Mutators
 - (void)setDrawControlPoints:(BOOL)newDrawControlPoints;
 - (void)setCurvesIndex:(unsigned int)newCurvesIndex;
+- (void)clearSelection;
 
 @end

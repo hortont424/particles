@@ -21,7 +21,8 @@
 
         dragPoint = boxPoint = NSFarAwayPoint;
         highlightedControlPoint = nil;
-        selection = [[NSMutableArray alloc] init];
+
+        [self clearSelection];
     }
     return self;
 }
@@ -510,8 +511,16 @@ NSInteger controlPointSort(id point1, id point2, void * ctx)
 
 - (void)setCurvesIndex:(unsigned int)newCurvesIndex
 {
+    if(curvesIndex != newCurvesIndex)
+        [self clearSelection];
+
     curvesIndex = newCurvesIndex;
     [self updateCurves];
+}
+
+- (void)clearSelection
+{
+    selection = [[NSMutableArray alloc] init];
 }
 
 @end

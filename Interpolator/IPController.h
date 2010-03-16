@@ -7,7 +7,7 @@
 {
     IBOutlet NSSegmentedControl * controlPointTypeButtons;
     IBOutlet NSSegmentedControl * drawControlPointsButton;
-    IBOutlet NSTableView * curveSetChooser;
+    IBOutlet NSOutlineView * curveSetChooser;
 
     IBOutlet NSMenu * addMenu, * removeMenu;
 

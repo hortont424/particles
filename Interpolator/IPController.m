@@ -28,9 +28,6 @@
 {
     IPCurveSet * newSet = [curveStorage addCurveSet];
     [self updateCurveSets];
-    //[curveSetChooser selectItemWithTitle:[newSet name]];
-    // TODO: select new item
-    //[self changeCurveSet:self];
 }
 
 - (IBAction)removeCurveSet:(id)sender
