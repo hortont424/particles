@@ -20,8 +20,7 @@
 
 - (IBAction)setDrawControlPoints:(id)sender
 {
-    [controlPointView setDrawControlPoints:
-        [drawControlPointsButton isSelectedForSegment:0]];
+    [controlPointView setDrawControlPoints:![sender state]];
 }
 
 - (IBAction)addCurveSet:(id)sender

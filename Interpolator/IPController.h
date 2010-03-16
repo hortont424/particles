@@ -6,7 +6,7 @@
 @interface IPController : NSObject
 {
     IBOutlet NSSegmentedControl * controlPointTypeButtons;
-    IBOutlet NSSegmentedControl * drawControlPointsButton;
+    IBOutlet NSButton * drawControlPointsButton;
     IBOutlet NSOutlineView * curveSetChooser;
 
     IBOutlet NSMenu * addMenu, * removeMenu;
