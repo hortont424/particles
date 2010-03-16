@@ -20,6 +20,9 @@ char * cwdSprintf(const char * fmt)
 
     workingDir = getcwd(workingDir, maxPathLength);
 
+    /** \todo It seems that the OpenCL compiler simply *cannot* handle arguments
+              with spaces in them; so, please don't pass them... */
+
     /// \todo This should all be magical and formatty and varargs and stuff
     snprintf(defaultIncludePath, totalLength, fmt, workingDir);
 
