@@ -5,6 +5,7 @@
 @interface IPCurve : NSObject
 {
     NSMutableArray * controlPoints;
+    NSString * name;
 }
 
 // Accessors
@@ -17,5 +18,7 @@
 // (De)Coding
 - (id)initWithCoder:(NSCoder *)coder;
 - (void)encodeWithCoder:(NSCoder *)coder;
+
+@property (nonatomic,retain) NSString * name;
 
 @end

@@ -21,7 +21,7 @@
 		</object>
 		<object class="NSMutableArray" key="IBDocument.EditedObjectIDs">
 			<bool key="EncodedWithXMLCoder">YES</bool>
-			<integer value="960"/>
+			<integer value="885"/>
 		</object>
 		<object class="NSArray" key="IBDocument.PluginDependencies">
 			<bool key="EncodedWithXMLCoder">YES</bool>
@@ -2523,14 +2523,6 @@
 				</object>
 				<object class="IBConnectionRecord">
 					<object class="IBOutletConnection" key="connection">
-						<string key="label">curveSetChooser</string>
-						<reference key="source" ref="1061912924"/>
-						<reference key="destination" ref="134380199"/>
-					</object>
-					<int key="connectionID">936</int>
-				</object>
-				<object class="IBConnectionRecord">
-					<object class="IBOutletConnection" key="connection">
 						<string key="label">controlPointView</string>
 						<reference key="source" ref="1061912924"/>
 						<reference key="destination" ref="285160"/>
@@ -2576,6 +2568,14 @@
 						<reference key="destination" ref="214423060"/>
 					</object>
 					<int key="connectionID">955</int>
+				</object>
+				<object class="IBConnectionRecord">
+					<object class="IBOutletConnection" key="connection">
+						<string key="label">curveSetChooser</string>
+						<reference key="source" ref="1061912924"/>
+						<reference key="destination" ref="134380199"/>
+					</object>
+					<int key="connectionID">964</int>
 				</object>
 			</object>
 			<object class="IBMutableOrderedSet" key="objectRecords">
@@ -4045,6 +4045,7 @@
 					<string>880.IBPluginDependency</string>
 					<string>881.IBPluginDependency</string>
 					<string>882.IBPluginDependency</string>
+					<string>883.CustomClassName</string>
 					<string>883.IBPluginDependency</string>
 					<string>885.IBPluginDependency</string>
 					<string>888.IBPluginDependency</string>
@@ -4292,6 +4293,7 @@
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
+					<string>NSOutlineView</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
 					<string>com.apple.InterfaceBuilder.CocoaPlugin</string>
@@ -4338,7 +4340,7 @@
 				</object>
 			</object>
 			<nil key="sourceID"/>
-			<int key="maxID">962</int>
+			<int key="maxID">964</int>
 		</object>
 		<object class="IBClassDescriber" key="IBDocument.Classes">
 			<object class="NSMutableArray" key="referencedPartialClassDescriptions">
@@ -4444,7 +4446,7 @@
 						<object class="NSMutableArray" key="dict.values">
 							<bool key="EncodedWithXMLCoder">YES</bool>
 							<string>IPCurveView</string>
-							<string>NSTableView</string>
+							<string>NSOutlineView</string>
 							<string>IPCurveStorage</string>
 						</object>
 					</object>

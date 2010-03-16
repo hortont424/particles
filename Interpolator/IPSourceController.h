@@ -3,22 +3,12 @@
 #import "IPCurveStorage.h"
 #import "IPCurveView.h"
 
-@interface IPSourceController : NSObject <NSTableViewDelegate>
+@interface IPSourceController : NSObject <NSOutlineViewDelegate, NSOutlineViewDataSource>
 {
-    IBOutlet NSTableView * curveSetChooser;
+    IBOutlet NSOutlineView * curveSetChooser;
 
     IBOutlet IPCurveView * controlPointView;
     IBOutlet IPCurveStorage * curveStorage;
 }
-
-- (int)numberOfRowsInTableView:(NSTableView *)tableView;
-
-- (id)tableView:(NSTableView *)tableView
-    objectValueForTableColumn:(NSTableColumn *)tableColumn row:(int)row;
-
-- (void)tableViewSelectionDidChange:(NSNotification *)aNotification;
-
-- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject
-    forTableColumn:(NSTableColumn *)aTableColumn row:(int)row;
 
 @end
