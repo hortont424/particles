@@ -18,4 +18,7 @@
 
 - (void)tableViewSelectionDidChange:(NSNotification *)aNotification;
 
+- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject
+    forTableColumn:(NSTableColumn *)aTableColumn row:(int)row;
+
 @end
