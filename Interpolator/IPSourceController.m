@@ -19,4 +19,11 @@
     [controlPointView updateCurves];
 }
 
+- (void)tableView:(NSTableView *)aTableView setObjectValue:(id)anObject
+    forTableColumn:(NSTableColumn *)aTableColumn row:(int)row
+{
+    IPCurveSet * set = [[curveStorage curveSets] objectAtIndex:row];
+    [set setName:(NSString *)anObject];
+}
+
 @end
