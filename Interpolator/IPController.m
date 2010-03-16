@@ -15,7 +15,8 @@
 
 - (IBAction)setControlPointType:(id)sender
 {
-    //[controlPointType setEnabled:YES];
+    [controlPointView setSelectedControlPointType:
+        [controlPointTypeButtons selectedSegment]];
 }
 
 - (IBAction)setDrawControlPoints:(id)sender
@@ -47,6 +48,21 @@
 - (void)updateCurveSets
 {
     [curveSetChooser reloadData];
+}
+
+- (void)enableControlPointTypeButtons
+{
+    [controlPointTypeButtons setEnabled:YES];
+}
+
+- (void)disableControlPointTypeButtons
+{
+    [controlPointTypeButtons setEnabled:NO];
+}
+
+- (void)updateControlPointType:(int)type
+{
+    [controlPointTypeButtons setSelectedSegment:type];
 }
 
 @end

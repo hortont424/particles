@@ -1,10 +1,13 @@
 #import "IPCurveView.h"
+#import "IPController.h"
 
 @implementation IPControlPointSelection
 @synthesize controlPoint, subpoint;
 @end
 
 @implementation IPCurveView
+
+@synthesize delegate;
 
 - (id)initWithFrame:(NSRect)frame
 {
@@ -21,6 +24,7 @@
 
         dragPoint = boxPoint = NSFarAwayPoint;
         highlightedControlPoint = nil;
+        selection = nil;
 
         [self clearSelection];
     }
@@ -134,7 +138,7 @@
         // held down, we have to reset the selection.
         if(highlightedSubpoint != 2 || selectingHandles || !appendSelection)
         {
-            [selection removeAllObjects];
+            [self clearSelection];
         }
 
         // Add new control point
@@ -142,6 +146,7 @@
         sel.controlPoint = highlightedControlPoint;
         sel.subpoint = highlightedSubpoint;
         [selection addObject:sel];
+        [self updateSelection];
     }
 
     [self setNeedsDisplay:YES];
@@ -158,7 +163,7 @@
 
         if(!appendSelection ||
            ((IPControlPointSelection *)[selection lastObject]).subpoint != 2)
-            [selection removeAllObjects];
+            [self clearSelection];
 
         // Add control points within box select to selection
         for(IPCurve * curve in curves)
@@ -189,6 +194,7 @@
                     sel.controlPoint = controlPoint;
                     sel.subpoint = 2;
                     [selection addObject:sel];
+                    [self updateSelection];
                 }
             }
         }
@@ -520,7 +526,46 @@ NSInteger controlPointSort(id point1, id point2, void * ctx)
 
 - (void)clearSelection
 {
-    selection = [[NSMutableArray alloc] init];
+    if(selection == nil)
+        selection = [[NSMutableArray alloc] init];
+    else
+        [selection removeAllObjects];
+
+    [self updateSelection];
+}
+
+- (void)updateSelection
+{
+    IPControlPointSelection * sel = [selection lastObject];
+
+    // Update control point type button state. Disable it if selection is
+    // comprised of handles or empty, update the selected state otherwise.
+    if([selection count] == 0 || sel.subpoint != 2)
+    {
+        [delegate disableControlPointTypeButtons];
+        return;
+    }
+
+    [delegate enableControlPointTypeButtons];
+    /// \todo if multiple selection, don't press any buttons (or something)?
+    [delegate updateControlPointType:sel.controlPoint.type];
+}
+
+- (void)setSelectedControlPointType:(int)type
+{
+    IPControlPointSelection * sel = [selection lastObject];
+
+    // This should never happen, because in this case, the button should always
+    // be disabled.
+    if([selection count] == 0 || sel.subpoint != 2)
+        return;
+
+    for(IPControlPointSelection * sel in selection)
+    {
+        [sel.controlPoint setType:type];
+    }
+
+    [self setNeedsDisplay:YES];
 }
 
 @end

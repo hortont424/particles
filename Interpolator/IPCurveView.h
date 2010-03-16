@@ -36,10 +36,12 @@
     BOOL drawControlPoints;
 
     IBOutlet IPCurveStorage * curveStorage;
+    IBOutlet id delegate;
 }
 
 - (void)createTrackingAreasForControlPoint:(IPControlPoint *)controlPoint;
 - (void)updateCurves;
+- (void)updateSelection;
 
 // Drawing
 - (void)drawPoint:(IPControlPoint *)controlPoint;
@@ -52,6 +54,9 @@
 // Mutators
 - (void)setDrawControlPoints:(BOOL)newDrawControlPoints;
 - (void)setCurvesIndex:(unsigned int)newCurvesIndex;
+- (void)setSelectedControlPointType:(int)type;
 - (void)clearSelection;
+
+@property (nonatomic,retain) IBOutlet id delegate;
 
 @end

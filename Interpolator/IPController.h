@@ -6,10 +6,7 @@
 @interface IPController : NSObject
 {
     IBOutlet NSSegmentedControl * controlPointTypeButtons;
-    IBOutlet NSButton * drawControlPointsButton;
     IBOutlet NSOutlineView * curveSetChooser;
-
-    IBOutlet NSMenu * addMenu, * removeMenu;
 
     IBOutlet IPCurveView * controlPointView;
 	IBOutlet IPCurveStorage * curveStorage;
@@ -23,6 +20,10 @@
 
 - (IBAction)addCurve:(id)sender;
 - (IBAction)removeCurve:(id)sender;
+
+- (void)enableControlPointTypeButtons;
+- (void)disableControlPointTypeButtons;
+- (void)updateControlPointType:(int)type;
 
 - (void)updateCurveSets;
 
