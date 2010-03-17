@@ -15,6 +15,21 @@ platforms with OpenCL and OpenGL.
 All code is being released under the two-clause BSD license, which can be found
 in the LICENSE file in each project's subtree.
 
+Dependencies
+------------
+
+* Mac OS 10.6+
+* XCode Developer Tools (with OpenCL)
+* SCons
+* Doxygen
+
+Optional Dependencies
+---------------------
+
+* Python
+* GCCXML
+* ctypeslib (dev)
+
 Components
 ----------
 
@@ -34,10 +49,6 @@ The on-disk file format will be a ZIP with various parts:
 * Master simulation file; describes emitters, forces, etc., and links
   properties of objects to curves files
 
-* Curves files; each is linked in the master simulation file to a particular 
+* Curves files; each is linked in the master simulation file to a particular
   object in the simulation, and contains a set of named curves which map to
   properties of said object
-
-* Kernel files; these are OpenCL kernel programs used by Simulator to actually
-  perform the simulation; they will differ based on how the particles interact
-  with their environment, but will be relatively flexible and reusable
