@@ -366,9 +366,8 @@
         NSPoint subpoint;
         NSArray * controlPoints = [[controlPoint parent] controlPoints];
 
-        NSLog(@"%@", [controlPoint parent]);
-
         // Don't draw first and last control points, as they're not used
+        /// \todo Also don't allow dragging them!!
         if((controlPoint == [controlPoints lastObject] && index == 1) ||
            (controlPoint == [controlPoints objectAtIndex:0] && index == 0))
             continue;

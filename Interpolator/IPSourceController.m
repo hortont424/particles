@@ -10,7 +10,6 @@
         item = [curveSetChooser parentForItem:item];
 
     [controlPointView setCurvesIndex:[curveSetChooser rowForItem:item]];
-    [controlPointView updateCurves];
 }
 
 - (void)outlineView:(NSOutlineView *)outlineView setObjectValue:(id)object

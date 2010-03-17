@@ -43,9 +43,26 @@
     if([item isMemberOfClass:[IPCurve class]])
         item = [curveSetChooser parentForItem:item];
 
-    //[item addCurve:[[IPCurve alloc] init]];
-    //NSLog(@"%@", item);
+    IPControlPoint * pt;
+    IPCurve * curve = [[IPCurve alloc] init];
+
+    pt = [[IPControlPoint alloc] init];
+    [pt setPoint:NSMakePoint(20, 20)];
+    [pt setType:CU_CONTROL_POINT_CORNER];
+    [pt setControlPoint:0 toPoint:NSMakePoint(-2, -12)];
+    [pt setControlPoint:1 toPoint:NSMakePoint(15, 15)];
+    [curve addControlPoint:pt];
+
+    pt = [[IPControlPoint alloc] init];
+    [pt setPoint:NSMakePoint(120, 120)];
+    [pt setType:CU_CONTROL_POINT_CORNER];
+    [pt setControlPoint:0 toPoint:NSMakePoint(-2, -12)];
+    [pt setControlPoint:1 toPoint:NSMakePoint(15, 15)];
+    [curve addControlPoint:pt];
+
+    [item addCurve:curve];
     [self updateCurveSets];
+    [controlPointView updateCurves];
 }
 
 - (IBAction)removeCurve:(id)sender

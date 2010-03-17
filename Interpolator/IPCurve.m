@@ -10,6 +10,7 @@
 
     if(self)
     {
+        IPControlPoint * pt;
         controlPoints = [[NSMutableArray alloc] init];
         name = @"x";
     }
