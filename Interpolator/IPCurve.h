@@ -14,6 +14,7 @@
 // Mutators
 - (void)addControlPoint:(IPControlPoint *)controlPoint;
 - (void)removeControlPoint:(IPControlPoint *)controlPoint;
+- (void)setControlPoints:(NSArray *)cps;
 
 // (De)Coding
 - (id)initWithCoder:(NSCoder *)coder;

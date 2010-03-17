@@ -461,6 +461,7 @@ NSInteger controlPointSort(id point1, id point2, void * ctx)
     NSArray * controlPoints = [curve controlPoints];
     controlPoints = [controlPoints sortedArrayUsingFunction:controlPointSort
         context:nil];
+    [curve setControlPoints:controlPoints];
 
     CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
     CGContextSetInterpolationQuality(ctx, kCGInterpolationHigh);

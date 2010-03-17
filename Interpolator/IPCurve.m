@@ -38,6 +38,16 @@
     [controlPoint setParent:nil];
 }
 
+- (void)setControlPoints:(NSArray *)cps
+{
+    controlPoints = [cps mutableCopy];
+
+    for(IPControlPoint * cp in controlPoints)
+    {
+        [cp setParent:self];
+    }
+}
+
 // (De)Coding
 
 - (id)initWithCoder:(NSCoder *)coder
