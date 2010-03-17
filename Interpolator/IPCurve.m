@@ -28,11 +28,13 @@
 - (void)addControlPoint:(IPControlPoint *)controlPoint
 {
     [controlPoints addObject:controlPoint];
+    [controlPoint setParent:self];
 }
 
 - (void)removeControlPoint:(IPControlPoint *)controlPoint
 {
     [controlPoints removeObject:controlPoint];
+    [controlPoint setParent:nil];
 }
 
 // (De)Coding
@@ -42,6 +44,12 @@
     if((self = [super init]))
     {
         controlPoints = [coder decodeObjectForKey:@"controlPoints"];
+
+        for(IPControlPoint * cp in controlPoints)
+        {
+            [cp setParent:self];
+        }
+
         name = [coder decodeObjectForKey:@"name"];
     }
 

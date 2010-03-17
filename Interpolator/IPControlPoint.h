@@ -9,6 +9,7 @@
     CUControlPointType type;
 
     NSPoint controlPoints[2];
+    id parent;
 }
 
 // Accessors
@@ -28,5 +29,7 @@
 // (De)Coding
 - (id)initWithCoder:(NSCoder *)coder;
 - (void)encodeWithCoder:(NSCoder *)coder;
+
+@property (nonatomic, assign) id parent;
 
 @end

@@ -341,7 +341,7 @@
     [self setNeedsDisplay:YES];
 }
 
-- (void)drawPoint:(IPControlPoint *)controlPoint forCurve:(IPCurve *)curve
+- (void)drawPoint:(IPControlPoint *)controlPoint
 {
     CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
 
@@ -364,11 +364,13 @@
     for(int index = 0; index <= 2; index++)
     {
         NSPoint subpoint;
+        NSArray * controlPoints = [[controlPoint parent] controlPoints];
+
+        NSLog(@"%@", [controlPoint parent]);
 
         // Don't draw first and last control points, as they're not used
-        if((controlPoint == [[curve controlPoints] lastObject] && index == 1) ||
-           (controlPoint == [[curve controlPoints] objectAtIndex:0]
-            && index == 0))
+        if((controlPoint == [controlPoints lastObject] && index == 1) ||
+           (controlPoint == [controlPoints objectAtIndex:0] && index == 0))
             continue;
 
         if(sel && sel.subpoint == index)
@@ -494,7 +496,7 @@ NSInteger controlPointSort(id point1, id point2, void * ctx)
     if(drawControlPoints) // TODO: disable manipulation too
         for(IPCurve * curve in curves)
             for(IPControlPoint * controlPoint in [curve controlPoints])
-                [self drawPoint:controlPoint forCurve:curve];
+                [self drawPoint:controlPoint];
 
     // Draw box selector
     if(!NSComparePoint(boxPoint, NSFarAwayPoint))

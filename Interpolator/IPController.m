@@ -37,7 +37,15 @@
 
 - (IBAction)addCurve:(id)sender
 {
+    // Find selected curve set (if a curve is selected, take its parent)
+    id item = [curveSetChooser itemAtRow:[curveSetChooser selectedRow]];
 
+    if([item isMemberOfClass:[IPCurve class]])
+        item = [curveSetChooser parentForItem:item];
+
+    //[item addCurve:[[IPCurve alloc] init]];
+    //NSLog(@"%@", item);
+    [self updateCurveSets];
 }
 
 - (IBAction)removeCurve:(id)sender

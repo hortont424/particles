@@ -2,6 +2,8 @@
 
 @implementation IPControlPoint
 
+@synthesize parent;
+
 // Accessors
 
 - (NSPoint)point
