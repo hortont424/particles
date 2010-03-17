@@ -44,7 +44,7 @@
 - (void)updateSelection;
 
 // Drawing
-- (void)drawPoint:(IPControlPoint *)controlPoint;
+- (void)drawPoint:(IPControlPoint *)controlPoint forCurve:(IPCurve *)curve;
 - (void)drawCurve:(IPCurve *)curve;
 
 // Accessors
