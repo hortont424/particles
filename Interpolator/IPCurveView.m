@@ -327,6 +327,8 @@
 
 - (void)mouseExited:(NSEvent *)event
 {
+    // If mouse is released from dragging, empty our highlight
+
     if(!NSComparePoint(dragPoint, NSFarAwayPoint))
     {
         nextHighlightedControlPoint = nil;
@@ -371,6 +373,7 @@
 
         if(sel && sel.subpoint == index)
         {
+            // Subpoint is selected
             CGContextSetRGBStrokeColor(ctx, 0.788, 0.714, 0.110, 1.0);
             CGContextSetRGBFillColor(ctx, 0.988, 0.914, 0.310, 1.0);
             CGContextSetLineWidth(ctx, 1.5);
@@ -378,12 +381,14 @@
         else if(controlPoint == highlightedControlPoint &&
                 highlightedSubpoint == index)
         {
+            // Subpoint is highlighted
             CGContextSetRGBStrokeColor(ctx, 0.247, 0.424, 0.612, 1.0);
             CGContextSetRGBFillColor(ctx, 0.447, 0.624, 0.812, 1.0);
             CGContextSetLineWidth(ctx, 1.5);
         }
         else
         {
+            // Subpoint is neither selected nor highlighted
             CGContextSetRGBFillColor(ctx, 0.8, 0.8, 0.8, 1.0);
             CGContextSetRGBStrokeColor(ctx, 0.2, 0.2, 0.2, 1.0);
             CGContextSetLineWidth(ctx, 1.0);
@@ -391,16 +396,18 @@
 
         if(index != 2)
         {
+            // Draw small point for subpoints
             subpoint = [controlPoint absoluteControlPoint:index];
             ell = CGRectAroundPoint(subpoint, 2, 2);
         }
         else
         {
+            // Draw large point for main control point
             subpoint = point;
             ell = CGRectAroundPoint(subpoint, 3, 3);
         }
 
-        // Draw handles
+        // Draw lines for handles
         if(index != 2)
         {
             CGContextMoveToPoint(ctx, point.x, point.y);
