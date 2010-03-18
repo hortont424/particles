@@ -45,7 +45,6 @@
 - (IBAction)removeCurveSet:(id)sender;
 
 - (IBAction)addCurve:(id)sender;
-- (IBAction)removeCurve:(id)sender;
 
 - (void)enableControlPointTypeButtons;
 - (void)disableControlPointTypeButtons;

@@ -91,11 +91,6 @@
     [controlPointView updateCurves];
 }
 
-- (IBAction)removeCurve:(id)sender
-{
-
-}
-
 - (void)updateCurveSets
 {
     [curveSetChooser reloadData];
