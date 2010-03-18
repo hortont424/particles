@@ -506,14 +506,17 @@ NSInteger controlPointSort(id point1, id point2, void * ctx)
     BOOL validPath = YES;
     CGFloat dashPhase[] = {3, 6};
     NSPoint lastPoint;
+    IPColor color;
 
     controlPoints = [controlPoints sortedArrayUsingFunction:controlPointSort
         context:nil];
     [curve setControlPoints:controlPoints];
 
+    color = [[IPColors colors] colorAtIndex:[curves indexOfObject:curve]];
+
     CGContextRef ctx = [[NSGraphicsContext currentContext] graphicsPort];
     CGContextSetInterpolationQuality(ctx, kCGInterpolationHigh);
-    CGContextSetRGBStrokeColor(ctx, 0.937, 0.161, 0.161, 1.0);
+    CGContextSetRGBStrokeColor(ctx, color.r, color.g, color.b, color.a);
     CGContextSetLineWidth(ctx, 1.0);
 
     for(unsigned int i = 0; i < [controlPoints count] - 1; i++)

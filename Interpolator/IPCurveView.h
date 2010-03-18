@@ -31,6 +31,7 @@
 #import "IPControlPoint.h"
 #import "IPCurve.h"
 #import "IPCurveSet.h"
+#import "IPColors.h"
 
 @interface IPControlPointSelection : NSObject
 {
