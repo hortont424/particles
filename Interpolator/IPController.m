@@ -104,11 +104,15 @@
 - (void)enableControlPointTypeButtons
 {
     [controlPointTypeButtons setEnabled:YES];
+    [[controlPointTypeButtons cell] setTrackingMode:
+        NSSegmentSwitchTrackingSelectOne];
 }
 
 - (void)disableControlPointTypeButtons
 {
     [controlPointTypeButtons setEnabled:NO];
+    [[controlPointTypeButtons cell] setTrackingMode:
+        NSSegmentSwitchTrackingMomentary];
 }
 
 - (void)updateControlPointType:(int)type
