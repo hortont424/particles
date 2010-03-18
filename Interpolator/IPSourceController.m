@@ -35,7 +35,7 @@
     if([item isMemberOfClass:[IPCurve class]])
         item = [curveSetChooser parentForItem:item];
 
-    [controlPointView setCurvesIndex:[curveSetChooser rowForItem:item]];
+    [controlPointView setCurveSet:item];
 }
 
 - (void)outlineView:(NSOutlineView *)outlineView setObjectValue:(id)object

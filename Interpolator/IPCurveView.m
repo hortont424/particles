@@ -59,7 +59,7 @@
 
 - (void)updateCurves
 {
-    curves = [[[curveStorage curveSets] objectAtIndex:curvesIndex] curves];
+    curves = [displayCurveSet curves];
 
     for(NSTrackingArea * ta in [self trackingAreas])
         [self removeTrackingArea:ta];
@@ -468,6 +468,18 @@
     p2 = [b absoluteControlPoint:0];
     p3 = [b point];
 
+    if(p1.x > p3.x)
+    {
+        //p1.y = (p1.y / p1.x) * (p3.x - 0.001);
+        //p1.x = p3.x - 0.001;
+    }
+
+    if(p2.x < p0.x)
+    {
+        //p2.y = (p2.y / p2.x) * (p0.x + 0.001);
+        //p2.x = p0.x + 0.001;
+    }
+
     return NSMakePoint(
         [self evaluateBezierParameterAtT:t X1:p0.x X2:p1.x X3:p2.x X4:p3.x],
         [self evaluateBezierParameterAtT:t X1:p0.y X2:p1.y X3:p2.y X4:p3.y]);
@@ -545,23 +557,18 @@ NSInteger controlPointSort(id point1, id point2, void * ctx)
     return drawControlPoints;
 }
 
-- (unsigned int)curvesIndex
-{
-    return curvesIndex;
-}
-
 - (void)setDrawControlPoints:(BOOL)newDrawControlPoints
 {
     drawControlPoints = newDrawControlPoints;
     [self setNeedsDisplay:YES];
 }
 
-- (void)setCurvesIndex:(unsigned int)newCurvesIndex
+- (void)setCurveSet:(IPCurveSet *)newCurves
 {
-    if(curvesIndex != newCurvesIndex)
+    if(displayCurveSet != newCurves)
         [self clearSelection];
 
-    curvesIndex = newCurvesIndex;
+    displayCurveSet = newCurves;
     [self updateCurves];
 }
 

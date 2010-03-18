@@ -30,6 +30,7 @@
 #import "IPCurveStorage.h"
 #import "IPControlPoint.h"
 #import "IPCurve.h"
+#import "IPCurveSet.h"
 
 @interface IPControlPointSelection : NSObject
 {
@@ -45,7 +46,7 @@
 @interface IPCurveView : NSView
 {
     NSMutableArray * curves;
-    unsigned int curvesIndex;
+    IPCurveSet * displayCurveSet;
     NSMapTable * controlPointSubareas;
 
     NSMutableArray * selection;
@@ -75,11 +76,10 @@
 
 // Accessors
 - (BOOL)drawControlPoints;
-- (unsigned int)curvesIndex;
 
 // Mutators
 - (void)setDrawControlPoints:(BOOL)newDrawControlPoints;
-- (void)setCurvesIndex:(unsigned int)newCurvesIndex;
+- (void)setCurveSet:(IPCurveSet *)newCurves;
 - (void)setSelectedControlPointType:(int)type;
 - (void)clearSelection;
 
