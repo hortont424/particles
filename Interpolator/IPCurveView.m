@@ -463,26 +463,31 @@
     pointB:(IPControlPoint *)b
 {
     NSPoint p0, p1, p2, p3;
+
     p0 = [a point];
     p1 = [a absoluteControlPoint:1];
     p2 = [b absoluteControlPoint:0];
     p3 = [b point];
 
-    if(p1.x > p3.x)
-    {
-        //p1.y = (p1.y / p1.x) * (p3.x - 0.001);
-        //p1.x = p3.x - 0.001;
-    }
-
-    if(p2.x < p0.x)
-    {
-        //p2.y = (p2.y / p2.x) * (p0.x + 0.001);
-        //p2.x = p0.x + 0.001;
-    }
-
     return NSMakePoint(
         [self evaluateBezierParameterAtT:t X1:p0.x X2:p1.x X3:p2.x X4:p3.x],
         [self evaluateBezierParameterAtT:t X1:p0.y X2:p1.y X3:p2.y X4:p3.y]);
+}
+
+- (BOOL)validBezierWithPointA:(IPControlPoint *)a pointB:(IPControlPoint *)b
+{
+    NSPoint p0, p1, p2, p3;
+    double normalThrow, oppositeThrow;
+
+    p0 = [a point];
+    p1 = [a absoluteControlPoint:1];
+    p2 = [b absoluteControlPoint:0];
+    p3 = [b point];
+
+    normalThrow = fabs(p1.x - p0.x) - fabs(p3.x - p2.x);
+    oppositeThrow = fabs(p1.x - p3.x) - fabs(p2.x - p0.x);
+
+    return !(normalThrow == oppositeThrow);
 }
 
 NSInteger controlPointSort(id point1, id point2, void * ctx)
@@ -497,6 +502,9 @@ NSInteger controlPointSort(id point1, id point2, void * ctx)
 {
     IPControlPoint * a, * b;
     NSArray * controlPoints = [curve controlPoints];
+    BOOL validPath = YES;
+    CGFloat dashPhase[] = {3, 6};
+
     controlPoints = [controlPoints sortedArrayUsingFunction:controlPointSort
         context:nil];
     [curve setControlPoints:controlPoints];
@@ -506,6 +514,23 @@ NSInteger controlPointSort(id point1, id point2, void * ctx)
     CGContextSetRGBStrokeColor(ctx, 0.937, 0.161, 0.161, 1.0);
     CGContextSetLineWidth(ctx, 1.0);
 
+    // Go through the entire path, see if control point positions break
+    // one-to-one mapping that we require. If so, draw dashed line.
+    for(unsigned int i = 0; i < [controlPoints count] - 1; i++)
+    {
+        a = [controlPoints objectAtIndex:i];
+        b = [controlPoints objectAtIndex:i+1];
+
+        if(![self validBezierWithPointA:a pointB:b])
+        {
+            validPath = NO;
+            break;
+        }
+    }
+
+    if(!validPath)
+        CGContextSetLineDash(ctx, 0, dashPhase, 2);
+
     for(unsigned int i = 0; i < [controlPoints count] - 1; i++)
     {
         a = [controlPoints objectAtIndex:i];
@@ -513,7 +538,7 @@ NSInteger controlPointSort(id point1, id point2, void * ctx)
 
         CGContextMoveToPoint(ctx, [a point].x, [a point].y);
 
-        for(double t = 0.0; t < 1.0; t += 0.001)
+        for(double t = 0.0; t < 1.0; t += 0.001) /// \todo Adaptive timestep?
         {
             NSPoint bzpt = [self evaluateBezierAtT:t pointA:a pointB:b];
             CGContextAddLineToPoint(ctx, bzpt.x, bzpt.y);
@@ -521,6 +546,8 @@ NSInteger controlPointSort(id point1, id point2, void * ctx)
 
         CGContextStrokePath(ctx);
     }
+
+    CGContextSetLineDash(ctx, 0, NULL, 0);
 }
 
 - (void)drawRect:(NSRect)dirtyRect
@@ -614,7 +641,6 @@ NSInteger controlPointSort(id point1, id point2, void * ctx)
     }
 
     [self updateCurves];
-    [self setNeedsDisplay:YES];
 }
 
 @end
