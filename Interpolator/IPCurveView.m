@@ -613,6 +613,7 @@ NSInteger controlPointSort(id point1, id point2, void * ctx)
         [sel.controlPoint setType:type];
     }
 
+    [self updateCurves];
     [self setNeedsDisplay:YES];
 }
 
