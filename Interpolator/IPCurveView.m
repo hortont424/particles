@@ -417,7 +417,7 @@
         {
             // Subpoint is neither selected nor highlighted
             CGContextSetRGBFillColor(ctx, 0.8, 0.8, 0.8, 1.0);
-            CGContextSetRGBStrokeColor(ctx, 0.2, 0.2, 0.2, 1.0);
+            CGContextSetRGBStrokeColor(ctx, 0.4, 0.4, 0.4, 1.0);
             CGContextSetLineWidth(ctx, 1.0);
         }
 
@@ -442,10 +442,27 @@
             CGContextStrokePath(ctx);
         }
 
-        CGContextAddEllipseInRect(ctx, ell);
-        CGContextFillPath(ctx);
-        CGContextAddEllipseInRect(ctx, ell);
-        CGContextStrokePath(ctx);
+        if(index == 2)
+            CGContextSetLineWidth(ctx, 1.5);
+
+        if(index == 2 && [controlPoint type] == CU_CONTROL_POINT_CORNER)
+        {
+            // Draw *corner* main control points as squares
+            CGContextAddRect(ctx, ell);
+            CGContextFillPath(ctx);
+            CGContextAddRect(ctx, ell);
+            CGContextStrokePath(ctx);
+        }
+        else
+        {
+            CGContextAddEllipseInRect(ctx, ell);
+            CGContextFillPath(ctx);
+            CGContextAddEllipseInRect(ctx, ell);
+            CGContextStrokePath(ctx);
+        }
+
+        if(index == 2)
+            CGContextSetLineWidth(ctx, 1);
     }
 }
 
