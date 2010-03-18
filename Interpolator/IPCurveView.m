@@ -240,6 +240,9 @@
             nextHighlightedControlPointSet = NO;
             highlightedControlPoint = nextHighlightedControlPoint;
             highlightedSubpoint = nextHighlightedSubpoint;
+
+            if(highlightedControlPoint == nil)
+                [[NSCursor arrowCursor] set];
         }
     }
 
