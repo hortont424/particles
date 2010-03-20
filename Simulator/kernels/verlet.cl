@@ -39,6 +39,8 @@ __kernel void verlet(__global SMPhysicsParticle * input,
 
     // Extract useful vectors; set the next frame's old position to our position
     float4 acceleration, position, oldPosition;
+    acceleration = position = oldPosition = (float4)(0.0f);
+
     acceleration.x = newtonOut[id].ax;
     acceleration.y = newtonOut[id].ay;
     acceleration.z = newtonOut[id].az;

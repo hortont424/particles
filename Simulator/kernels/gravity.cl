@@ -34,15 +34,15 @@ __kernel void gravity(__global SMPhysicsParticle * input,
                       __global SMPhysicsNewtonian * newtonOut,
                       const unsigned int count)
 {
-    float4 loc, accel, vel, iloc, dir;
-
     float dist;
+    float4 loc, accel, vel, iloc, dir;
+    loc = accel = vel = iloc = dir = (float4)(0.0f);
+
     int id = get_global_id(0);
 
     if(id > count || input[id].enabled == 0.0)
         return;
 
-    accel = (float4)(0.0f);
     loc = (float4)(input[id].x, input[id].y, input[id].z, 0.0f);
 
     for(int i = 0; i < count; i++)
