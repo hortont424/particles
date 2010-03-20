@@ -1,6 +1,6 @@
 Import("outerEnv")
 
-env = outerEnv.Clone(CC="clang", CCFLAGS="--std=c99 -O4 -Wall -Werror -fobjc-gc")
+env = outerEnv.Clone(CCFLAGS="--std=c99 -O4 -Wall -Werror -fobjc-gc")
 env.AppendUnique(FRAMEWORKS=['OpenCL','Cocoa','AppKit','Foundation', 'BWToolkitFramework'], FRAMEWORKPATH=['External/BWToolkit/'])
 
 interpolator = env.Program("Interpolator", Glob("*.[cm]"))

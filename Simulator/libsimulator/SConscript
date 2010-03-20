@@ -1,6 +1,6 @@
 Import("outerEnv")
 
-env = outerEnv.Clone(CC="clang", CCFLAGS="--std=c99 -O4 -Wall -Werror")
+env = outerEnv.Clone(CCFLAGS="--std=c99 -O4 -Wall -Werror")
 env.AppendUnique(FRAMEWORKS=["OpenCL"])
 
 libsimulator = env.SharedLibrary("simulator", Glob("*.c"))
