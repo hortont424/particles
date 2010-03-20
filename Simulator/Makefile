@@ -1,14 +1,10 @@
-.PHONY: all clean run run-cpu edit quick docs quickdocs
+.PHONY: all clean run run-cpu edit docs
 
-all: quick quickdocs
-
-quick:
+all:
 	cd .. ; scons -Q
 
-quickdocs:
+docs:
 	doxygen libsimulator/libsimulator.doxyfile
-
-docs: quickdocs
 	open build/doc/html/modules.html
 
 clean:
