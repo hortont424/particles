@@ -8,9 +8,25 @@ VariantDir('Interpolator/build', 'Interpolator', duplicate = 0)
 VariantDir('Previewer/build', 'Previewer', duplicate = 0)
 VariantDir('External/json-c/build', 'External/json-c', duplicate = 0)
 
-outerEnv = Environment(ENV = {'PATH' : os.environ['PATH']},
-                       CC = "clang",
-                       CCFLAGS = "--std=c99 -O4 -Wall -Werror -fobjc-gc")
+releaseFlags = ["--std=c99", "-O4", "-Wall", "-Werror", "-fobjc-gc"]
+debugFlags = ["--std=c99", "-g", "-Wall", "-Werror", "-fobjc-gc"]
+
+buildMode = ARGUMENTS.get("mode", "release")
+
+if buildMode == "debug":
+    useFlags = debugFlags
+elif buildMode == "release":
+    useFlags = releaseFlags
+else:
+    print "Error: unknown build mode: %s" % buildMode
+    exit()
+
+print "=== Building in %s mode ===" % buildMode
+
+outerEnv = Environment(
+    ENV = {'PATH' : os.environ['PATH']},
+    CC = "clang",
+    CCFLAGS = useFlags)
 
 Build.InstallTools(outerEnv)
 Export("outerEnv")
