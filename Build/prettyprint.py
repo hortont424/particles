@@ -26,6 +26,8 @@ def TOOL_PRETTY_PRINT(env):
         ARCOMSTR = message("Linking static library", False),
         SHLINKCOMSTR = message("Linking shared library", False),
         LINKCOMSTR = message("Linking program", False),
-        INSTALLSTR = message("Installing", False))
+        INSTALLSTR = message("Copying"),
+        IBTOOLCOMSTR = message("Compiling XIB"),
+        WRITEVALCOMSTR = message("Writing value to file", False))
 
     return env

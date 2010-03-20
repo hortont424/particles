@@ -2,6 +2,7 @@
 
 import os
 
+from SCons.Action import *
 from SCons.Builder import *
 
 def TOOL_COMPILE_XIB(env):
@@ -19,6 +20,6 @@ def TOOL_COMPILE_XIB(env):
         os.system("ibtool %s --compile %s %s" % (args, target[0], source[0]))
 
     env['BUILDERS']['CompileXIB'] = Builder(
-        action = compile_xib,
+        action = Action(compile_xib, "$IBTOOLCOMSTR"),
         suffix = ".nib",
         src_suffix = ".xib")

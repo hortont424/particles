@@ -6,6 +6,6 @@ env.Append(IBPLUGINSPATH=['External/BWToolkit'])
 
 interpolator = env.Program("Interpolator", Glob("*.[cm]"))
 
-env.MakeBundle("Interpolator.app", "Interpolator", "com.hortont.interpolator", "Interpolator-Info.plist", "APPL", resources=["MainMenu.xib"], frameworks=["../../External/BWToolkit/BWToolkitFramework.framework"])
+env.MacApplication("Interpolator", creator="TimH", resources=["MainMenu.xib"], frameworks=["#External/BWToolkit/BWToolkitFramework.framework"])
 
 Return("interpolator")
