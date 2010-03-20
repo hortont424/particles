@@ -13,7 +13,6 @@ docs: quickdocs
 
 clean:
 	rm -rf ./build
-	rm -f libsimulator.py libsimulator.pyc libsimulator.xml
 
 run:
 	rm -f test.out
