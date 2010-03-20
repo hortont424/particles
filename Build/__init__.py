@@ -5,7 +5,7 @@ import CompileXIB
 
 from SCons.Environment import *
 
-def installTools(env):
+def InstallTools(env):
     WriteVal.TOOL_WRITE_VAL(env)
     CompileXIB.TOOL_COMPILE_XIB(env)
     MacApplication.TOOL_MAC_APPLICATION(env)

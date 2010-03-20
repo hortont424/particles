@@ -1,7 +1,7 @@
 Import("outerEnv")
 
-env = outerEnv.Clone(CCFLAGS="--std=c99 -O4 -Wall -Werror")
-env.AppendUnique(FRAMEWORKS=["OpenGL", "GLUT"])
+env = outerEnv.Clone()
+env.AppendUnique(FRAMEWORKS = ["OpenGL", "GLUT"])
 
 previewer = env.Program("previewer", Glob("*.c"))
 

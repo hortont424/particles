@@ -1,10 +1,11 @@
 Import("libsimulator")
 Import("outerEnv")
 
-env = outerEnv.Clone(CCFLAGS="--std=c99 -O4 -Wall -Werror")
-env.AppendUnique(FRAMEWORKS=["OpenCL"])
+env = outerEnv.Clone()
+env.AppendUnique(FRAMEWORKS = ["OpenCL"])
 
-simulator = env.Program("simulator", Glob("*.c"), LIBS=["simulator"],  LIBPATH="libsimulator")
+simulator = env.Program("simulator", Glob("*.c"),
+                        LIBS = ["simulator"], LIBPATH = "libsimulator")
 Depends(simulator, libsimulator)
 
 Return("simulator")

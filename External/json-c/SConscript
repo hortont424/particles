@@ -1,6 +1,6 @@
 Import("outerEnv")
 
-env = outerEnv.Clone(CCFLAGS="--std=c99 -O4 -Wall -Werror")
+env = outerEnv.Clone()
 
 libjsonc = env.SharedLibrary("jsonc", Glob("*.c"))
 
