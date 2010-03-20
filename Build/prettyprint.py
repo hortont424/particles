@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 
-def TOOL_PRETTY_OUTPUT(env):
+def TOOL_PRETTY_PRINT(env):
+    if 'PRETTY_PRINT' in env['TOOLS']:
+        return
+    else:
+        env.Append(TOOLS = 'PRETTY_PRINT')
+
     greenColor = '\033[92m'
     yellowColor = '\033[93m'
     resetColor = '\033[0m'
@@ -21,6 +26,6 @@ def TOOL_PRETTY_OUTPUT(env):
         ARCOMSTR = message("Linking static library", False),
         SHLINKCOMSTR = message("Linking shared library", False),
         LINKCOMSTR = message("Linking program", False),
-        INSTALLSTR = message("Installing", False)
-    )
+        INSTALLSTR = message("Installing", False))
+
     return env

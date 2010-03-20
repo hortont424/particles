@@ -14,7 +14,8 @@ from SCons.Defaults import SharedCheck, ProgScan
 from SCons.Script.SConscript import SConsEnvironment
 
 def TOOL_BUNDLE(env):
-    if 'BUNDLE' in env['TOOLS']: return
+    if 'BUNDLE' in env['TOOLS']:
+        return
     if env['PLATFORM'] == 'darwin':
         env.Append(TOOLS = 'BUNDLE')
         # This is like the regular linker, but uses different vars.
@@ -33,8 +34,6 @@ def TOOL_BUNDLE(env):
         env['BUNDLE'] = '$SHLINK'
         env['BUNDLEFLAGS'] = ' -bundle'
         env['BUNDLECOM'] = '$BUNDLE $BUNDLEFLAGS -o ${TARGET} $SOURCES $_LIBDIRFLAGS $_LIBFLAGS $FRAMEWORKS'
-        # This requires some other tools:
-        TOOL_WRITE_VAL(env)
 
         def MakeBundle(env, bundledir, app,
                        key, info_plist,
@@ -50,7 +49,7 @@ def TOOL_BUNDLE(env):
             for f in resources:
                 if f.find(".xib") != -1:
                     newF = f.replace(".xib", ".nib")
-                    env.Command(newF, f, "ibtool --plugin External/BWToolkit/BWToolkit.ibplugin --errors --warnings --output-format human-readable-text --compile $TARGET $SOURCE")
+                    env.CompileXIB(f)
                     resources.append(newF)
                     resources.remove(f)
 
@@ -92,13 +91,3 @@ def TOOL_BUNDLE(env):
         # This is not a regular Builder; it's a wrapper function.
         # So just make it available as a method of Environment.
         SConsEnvironment.MakeBundle = MakeBundle
-
-def TOOL_WRITE_VAL(env):
-    env.Append(TOOLS = 'WRITE_VAL')
-    def write_val(target, source, env):
-        """Write the contents of the first source into the target.
-        source is usually a Value() node, but could be a file."""
-        f = open(str(target[0]), 'wb')
-        f.write(source[0].get_contents())
-        f.close()
-    env['BUILDERS']['WriteVal'] = Builder(action=write_val)
