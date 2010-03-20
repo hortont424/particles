@@ -35,7 +35,7 @@
 #define FRAME_COUNT     200
 #define TOTAL_SIZE      (FRAME_SIZE * FRAME_COUNT)
 
-int main(int argc, char * const * argv)
+int main(int argc, char ** argv)
 {
     SMContext * sim;
     SMProgram * gravProg, * intProg;
