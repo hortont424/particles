@@ -1,4 +1,4 @@
-from SCons.Environment import *
+#!/usr/bin/env python
 
 def TOOL_PRETTY_OUTPUT(env):
     greenColor = '\033[92m'
@@ -11,7 +11,7 @@ def TOOL_PRETTY_OUTPUT(env):
             fileVar = '$SOURCE'
         else:
             color = yellowColor
-            fileVar = '$TARGET\n'
+            fileVar = '$TARGET'
 
         return '%s%s: %s%s' % (color, mes, resetColor, fileVar)
 
