@@ -27,12 +27,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <math.h>
 
 #include "libsimulator/Simulator.h"
 
-#define ELEMENT_COUNT   2048
+#define ELEMENT_COUNT   16384
 #define FRAME_SIZE      (ELEMENT_COUNT * sizeof(SMPhysicsParticle))
-#define FRAME_COUNT     200
+#define FRAME_COUNT     2000
 #define TOTAL_SIZE      (FRAME_SIZE * FRAME_COUNT)
 
 int main(int argc, char ** argv)
@@ -65,10 +66,41 @@ int main(int argc, char ** argv)
         data[i].enabled = 1.0;
         newton[i].ox = data[i].x = (SMFloat)rand()/(SMFloat)RAND_MAX;
         newton[i].oy = data[i].y = (SMFloat)rand()/(SMFloat)RAND_MAX;
-        newton[i].oz = data[i].z = (SMFloat)rand()/(SMFloat)RAND_MAX;
+        newton[i].oz = data[i].z = (SMFloat)rand()/(SMFloat)RAND_MAX/5.0;
 
-        newton[i].mass = 100000000.0 * (SMFloat)rand()/(SMFloat)RAND_MAX;
+        newton[i].mass = 1000000.0 * (SMFloat)rand()/(SMFloat)RAND_MAX;
+
+        if(data[i].x >= 0.49 && data[i].x <= 0.50 &&
+           data[i].y >= 0.49 && data[i].y <= 0.50)
+            newton[i].mass = 10000000000.0;
+
+        float dist = sqrt(((data[i].x - 0.5) * (data[i].x - 0.5)) + ((data[i].y - 0.5) * (data[i].y - 0.5)));
+
+        if(data[i].x > 0.5 && data[i].y > 0.5)
+        {
+            newton[i].ox -= 0.01 * dist;
+            newton[i].oy += 0.01 * dist;
+        }
+        else if(data[i].x < 0.5 && data[i].y > 0.5)
+        {
+            newton[i].ox -= 0.01 * dist;
+            newton[i].oy -= 0.01 * dist;
+        }
+        else if(data[i].x < 0.5 && data[i].y < 0.5)
+        {
+            newton[i].ox += 0.01 * dist;
+            newton[i].oy -= 0.01 * dist;
+        }
+        else if(data[i].x > 0.5 && data[i].y < 0.5)
+        {
+            newton[i].ox += 0.01 * dist;
+            newton[i].oy += 0.01 * dist;
+        }
     }
+
+    printf("Will require approximately %d KB of video memory...\n",
+           ((2 * ELEMENT_COUNT * sizeof(SMPhysicsParticle)) +
+           (2 * ELEMENT_COUNT * sizeof(SMPhysicsNewtonian))) / 1024);
 
     parts = SMBufferNew(sim, ELEMENT_COUNT, sizeof(SMPhysicsParticle), true);
     newts = SMBufferNew(sim, ELEMENT_COUNT, sizeof(SMPhysicsNewtonian), true);
