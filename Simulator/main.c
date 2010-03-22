@@ -26,15 +26,27 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <time.h>
+#include <sys/time.h>
 #include <math.h>
 
 #include "libsimulator/Simulator.h"
 
-#define ELEMENT_COUNT   16384
+#define ELEMENT_COUNT   4096
 #define FRAME_SIZE      (ELEMENT_COUNT * sizeof(SMPhysicsParticle))
 #define FRAME_COUNT     2000
 #define TOTAL_SIZE      (FRAME_SIZE * FRAME_COUNT)
+
+void drawProgressBar(int width, double progress)
+{
+    printf(" [");
+
+    for(int i = 0; i < width; i++)
+    {
+        printf(((double)i/width) < progress ? "=" : " ");
+    }
+
+    printf("]");
+}
 
 int main(int argc, char ** argv)
 {
@@ -45,6 +57,7 @@ int main(int argc, char ** argv)
     SMPhysicsNewtonian * newton;
     SMBuffer * parts, * newts, * fileBuf;
     int step;
+    struct timeval startTime, currentTime;
 
     srand((int)time(NULL));
 
@@ -98,12 +111,12 @@ int main(int argc, char ** argv)
         }
     }
 
-    printf("Will require approximately %d KB of video memory...\n",
-           ((2 * ELEMENT_COUNT * sizeof(SMPhysicsParticle)) +
-           (2 * ELEMENT_COUNT * sizeof(SMPhysicsNewtonian))) / 1024);
-
     parts = SMBufferNew(sim, ELEMENT_COUNT, sizeof(SMPhysicsParticle), true);
     newts = SMBufferNew(sim, ELEMENT_COUNT, sizeof(SMPhysicsNewtonian), true);
+
+    printf("Allocated video memory (%ld KB)\n",
+           ((2 * ELEMENT_COUNT * sizeof(SMPhysicsParticle)) +
+           (2 * ELEMENT_COUNT * sizeof(SMPhysicsNewtonian))) / 1024);
 
     SMBufferSet(parts, data);
     SMBufferSet(newts, newton);
@@ -131,10 +144,30 @@ int main(int argc, char ** argv)
     SMProgramSetArgument(intProg, 3, SMArgumentNewWithBuffer(newts, 1));
     SMProgramSetArgument(intProg, 4, SMArgumentNewWithInt(ELEMENT_COUNT));
 
+    printf("\n");
+    gettimeofday(&startTime, NULL);
+
     for(step = 0; step < FRAME_COUNT; step++, partialResults += ELEMENT_COUNT)
     {
-        printf("Computing frame %d/%d (%d%%)...\n", step + 1, FRAME_COUNT,
-               (int)((float)(step + 1) / FRAME_COUNT * 100));
+        // Clear the line
+        printf("\033[K");
+        printf("%*d/%d", (int)ceil(log10(FRAME_COUNT)), step + 1, FRAME_COUNT);
+        drawProgressBar(50, ((double)step) / FRAME_COUNT);
+
+        // Print time estimate
+        if(step > 0)
+        {
+            gettimeofday(&currentTime, NULL);
+            double elapsed = (currentTime.tv_sec - startTime.tv_sec) +
+                (double)(currentTime.tv_usec - startTime.tv_usec) / 1000000;
+
+            printf("%*.1lf sec",
+                   (int)ceil(log10(FRAME_COUNT * (elapsed / step))) + 3,
+                   (FRAME_COUNT - step) * (elapsed / step));
+        }
+
+        printf("\r");
+        fflush(stdout);
 
         SMProgramExecute(gravProg);
         SMContextWait(sim);
@@ -146,6 +179,8 @@ int main(int argc, char ** argv)
 
         SMBufferGet(parts, (void**)&partialResults);
     }
+
+    printf("\n\n");
 
     SMBufferFree(parts);
     SMBufferFree(newts);

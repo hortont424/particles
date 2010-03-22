@@ -171,9 +171,6 @@ void SMProgramExecute(SMProgram * prog)
                        SMArgumentGetPointer(arg));
     }
 
-    printf("Running '%s' on %zd elements, %zd at a time\n",
-           prog->name, prog->globalCount, prog->localCount);
-
     clEnqueueNDRangeKernel(prog->context->cmds, prog->kernel, 1, NULL,
                            &prog->globalCount, &prog->localCount, 0, NULL,
                            NULL);
@@ -205,6 +202,9 @@ void SMProgramSetGlobalCount(SMProgram * prog, size_t globalCount)
 
     while(prog->globalCount % prog->localCount)
         prog->localCount = prog->globalCount / (multiplier++);
+
+    printf("Will run '%s' on %zd elements, %zd at a time\n",
+           prog->name, prog->globalCount, prog->localCount);
 }
 
 /**

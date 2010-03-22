@@ -45,7 +45,7 @@
 #include <GL/glut.h>
 #endif
 
-#define ELEMENT_COUNT 16384
+#define ELEMENT_COUNT 4096
 #define FRAME_COUNT 2000
 
 float * points;
