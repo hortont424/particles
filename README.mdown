@@ -7,10 +7,11 @@ particle systems in real time, it will utilize OpenCL - and thus, the parallel
 processing power of modern GPUs - to enable systems with enormous particle
 counts.
 
-All software will be built and tested on Mac OS 10.6 - some components
-(Interpolator) will require Cocoa, which is only available on OS X; other
-components (Simulator, Renderer) will theoretically be portable to alternative
-platforms with OpenCL and OpenGL.
+The rendering component of this project is my final project for RPI's
+CSCI-4530, Advanced Computer Graphics.
+
+All software will be built and tested on Mac OS 10.6 and will likely not run on
+other platforms due to dependence on Apple-specific libraries.
 
 All code is being released under the two-clause BSD license, which can be found
 in the LICENSE file in each project's subtree.
@@ -23,15 +24,25 @@ Dependencies
 * SCons
 * Doxygen
 
-Optional Dependencies
----------------------
+Libraries
+---------
 
-* Python
-* GCCXML
-* ctypeslib (dev)
+* (PA) libparticles - data structures for various global things
 
-Components
-----------
+* (CU) libcurve - manipulation of and interpolation along b-splines
+
+* (CO) libcomputer - generic, reusable OpenCL wrappers
+
+* (SM) libsimulator - physical simulation of particle interactions
+
+* (RE) librenderer - cinematic rendering of particle simulations
+
+* (IP) libinterpolator - widgets for editing curves and curve sets
+
+* (PV) libpreviewer - widgets for previewing simulations
+
+Tools
+-----
 
 * Interpolator - curve editor for animating various properties of systems
 
