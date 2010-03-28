@@ -7,11 +7,13 @@ particle systems in real time, it will utilize OpenCL - and thus, the parallel
 processing power of modern GPUs - to enable systems with enormous particle
 counts.
 
-The rendering component of this project is my final project for RPI's
+The rendering component of this software is my final project for RPI's
 CSCI-4530, Advanced Computer Graphics.
 
 All software will be built and tested on Mac OS 10.6 and will likely not run on
-other platforms due to dependence on Apple-specific libraries.
+other platforms due to dependence on Apple-specific libraries. However, it may
+be possible to port Simulator and Renderer to other POSIX platforms which
+have OpenCL drivers with some effort.
 
 All code is being released under the two-clause BSD license, which can be found
 in the LICENSE file in each project's subtree.
@@ -27,7 +29,7 @@ Dependencies
 Libraries
 ---------
 
-* (PA) libparticles - data structures for various global things
+* (PA) libparticles - various global data structures
 
 * (CU) libcurve - manipulation of and interpolation along b-splines
 
