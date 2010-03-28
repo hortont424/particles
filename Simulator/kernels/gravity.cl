@@ -24,14 +24,14 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "SMPhysics.h"
+#include "libparticles.h"
 
 #define GRAV_CONSTANT 0.0000000000667300f
 
-__kernel void gravity(__global SMPhysicsParticle * input,
-                      __global SMPhysicsParticle * output,
-                      __global SMPhysicsNewtonian * newtonIn,
-                      __global SMPhysicsNewtonian * newtonOut,
+__kernel void gravity(__global PAPhysicsParticle * input,
+                      __global PAPhysicsParticle * output,
+                      __global PAPhysicsNewtonian * newtonIn,
+                      __global PAPhysicsNewtonian * newtonOut,
                       const unsigned int count)
 {
     float dist;

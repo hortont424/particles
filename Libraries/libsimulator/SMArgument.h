@@ -61,8 +61,8 @@ typedef struct _SMArgument
 
 SMArgument * SMArgumentNew();
 SMArgument * SMArgumentNewWithBuffer(SMBuffer * buf, bool backBuffer);
-SMArgument * SMArgumentNewWithFloat(SMFloat f);
-SMArgument * SMArgumentNewWithInt(SMInt i);
+SMArgument * SMArgumentNewWithFloat(PAFloat f);
+SMArgument * SMArgumentNewWithInt(PAInt i);
 void SMArgumentFree(SMArgument * arg);
 
 size_t SMArgumentGetSize(SMArgument * arg);

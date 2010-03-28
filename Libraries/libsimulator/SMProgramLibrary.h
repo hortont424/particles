@@ -50,11 +50,11 @@ typedef struct _SMProgramLibrary
 SMProgramLibrary * SMProgramLibraryNew(SMContext * sim);
 void SMProgramLibraryFree(SMProgramLibrary * lib);
 
-void SMProgramLibraryLoadProgram(SMProgramLibrary * lib, SMPhysicsType type,
+void SMProgramLibraryLoadProgram(SMProgramLibrary * lib, PAPhysicsType type,
                                  char * filename);
 void SMProgramLibrarySetGlobalCount(SMProgramLibrary * lib, size_t globalCount);
 SMProgram * SMProgramLibraryGetProgram(SMProgramLibrary * lib,
-                                       SMPhysicsType type);
+                                       PAPhysicsType type);
 
 /** @} */
 

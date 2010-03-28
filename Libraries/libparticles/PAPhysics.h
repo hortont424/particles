@@ -30,102 +30,102 @@
 #include "PATypes.h"
 
 // Types of different supported forces
-typedef enum _SMPhysicsType
+typedef enum _PAPhysicsType
 {
-    SMPhysicsNormalType,
-    SMPhysicsWindType,
-    SMPhysicsVortexType,
-    SMPhysicsHarmonicType,
-    SMPhysicsGravityType,
-    SMPhysicsDragType,
-    SMPhysicsTurbulenceType,
-    SMPhysicsBoidsType,
+    PAPhysicsNormalType,
+    PAPhysicsWindType,
+    PAPhysicsVortexType,
+    PAPhysicsHarmonicType,
+    PAPhysicsGravityType,
+    PAPhysicsDragType,
+    PAPhysicsTurbulenceType,
+    PAPhysicsBoidsType,
 
-    SMPhysicsIntegrationType,
+    PAPhysicsIntegrationType,
 
-    SMPhysicsLastType
-} SMPhysicsType;
+    PAPhysicsLastType
+} PAPhysicsType;
 
 // Falloff attributes
-typedef struct _SMPhysicsFalloffData
+typedef struct _PAPhysicsFalloffData
 {
-    SMFloat strength, max, min;
-} SMPhysicsFalloffData;
+    PAFloat strength, max, min;
+} PAPhysicsFalloffData;
 
 // Attributes for various different forces
-typedef struct _SMPhysicsNormalData
+typedef struct _PAPhysicsNormalData
 {
-    SMFloat strength, noise;
-    SMPhysicsFalloffData falloff;
-} SMPhysicsNormalData;
+    PAFloat strength, noise;
+    PAPhysicsFalloffData falloff;
+} PAPhysicsNormalData;
 
-typedef struct _SMPhysicsWindData
+typedef struct _PAPhysicsWindData
 {
-    SMFloat strength, noise;
-    SMPhysicsFalloffData falloff;
-} SMPhysicsWindData;
+    PAFloat strength, noise;
+    PAPhysicsFalloffData falloff;
+} PAPhysicsWindData;
 
-typedef struct _SMPhysicsVortexData
+typedef struct _PAPhysicsVortexData
 {
-    SMFloat strength, noise;
-    SMPhysicsFalloffData falloff;
-} SMPhysicsVortexData;
+    PAFloat strength, noise;
+    PAPhysicsFalloffData falloff;
+} PAPhysicsVortexData;
 
-typedef struct _SMPhysicsHarmonicData
+typedef struct _PAPhysicsHarmonicData
 {
-    SMFloat strength, damping, restLength, noise;
-    SMPhysicsFalloffData falloff;
-} SMPhysicsHarmonicData;
+    PAFloat strength, damping, restLength, noise;
+    PAPhysicsFalloffData falloff;
+} PAPhysicsHarmonicData;
 
-typedef struct _SMPhysicsGravityData
+typedef struct _PAPhysicsGravityData
 {
-    SMFloat strength, noise;
-} SMPhysicsGravityData;
+    PAFloat strength, noise;
+} PAPhysicsGravityData;
 
-typedef struct _SMPhysicsDragData
+typedef struct _PAPhysicsDragData
 {
-    SMFloat linearStrength, quadraticStrength, noise;
-} SMPhysicsDragData;
+    PAFloat linearStrength, quadraticStrength, noise;
+} PAPhysicsDragData;
 
-typedef struct _SMPhysicsTurbulenceData
+typedef struct _PAPhysicsTurbulenceData
 {
-    SMFloat strength, size, noise;
-    SMPhysicsFalloffData falloff;
-} SMPhysicsTurbulenceData;
+    PAFloat strength, size, noise;
+    PAPhysicsFalloffData falloff;
+} PAPhysicsTurbulenceData;
 
-typedef struct _SMPhysicsBoidsData
+typedef struct _PAPhysicsBoidsData
 {
-    SMFloat strength, noise;
-} SMPhysicsBoidsData;
+    PAFloat strength, noise;
+} PAPhysicsBoidsData;
 
-// There should be one SMPhysicsForce for each particle that exerts a force
+// There should be one PAPhysicsForce for each particle that exerts a force
 // on others, mapped to said particle (so that force particles can be interacted
 // with, and move just like other particles)
-typedef struct _SMPhysicsForce
+typedef struct _PAPhysicsForce
 {
-    SMFloat particleIndex;   // These need to not be SMFloats, but I'm afraid
-    SMFloat forceType;       // of what will happen if they're not the same size
+    PAFloat particleIndex;   // These need to not be PAFloats, but I'm afraid
+    PAFloat forceType;       // of what will happen if they're not the same size
                              // as everything else when being passed in...
     union
     {
-        SMPhysicsNormalData normal;
-        SMPhysicsWindData wind;
-        SMPhysicsVortexData vortex;
-        SMPhysicsHarmonicData harmonic;
-        SMPhysicsGravityData gravity;
-        SMPhysicsDragData drag;
-        SMPhysicsTurbulenceData turbulence;
-        SMPhysicsBoidsData boids;
+        PAPhysicsNormalData normal;
+        PAPhysicsWindData wind;
+        PAPhysicsVortexData vortex;
+        PAPhysicsHarmonicData harmonic;
+        PAPhysicsGravityData gravity;
+        PAPhysicsDragData drag;
+        PAPhysicsTurbulenceData turbulence;
+        PAPhysicsBoidsData boids;
     } forceData;
-} SMPhysicsForce;
+} PAPhysicsForce;
 
-// There should be one SMPhysicsNewtonian for each particle in the system; this
+// There should be one PAPhysicsNewtonian for each particle in the system; this
 // holds universal properties like mass, velocity, and acceleration.
-typedef struct _SMPhysicsNewtonian
+typedef struct _PAPhysicsNewtonian
 {
-    SMFloat fixed, mass;
-    SMFloat ax, ay, az;
-    SMFloat ox, oy, oz;
-} SMPhysicsNewtonian;
+    PAFloat fixed, mass;
+    PAFloat ax, ay, az;
+    PAFloat ox, oy, oz;
+} PAPhysicsNewtonian;
 
 #endif

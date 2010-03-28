@@ -1,4 +1,4 @@
-/* particles - libparticles - PATypes.h
+/* particles - libparticles - libparticles.h
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *

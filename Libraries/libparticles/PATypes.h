@@ -28,11 +28,11 @@
 #define _PA_TYPES_H_
 
 #ifndef cl_float
-typedef float SMFloat;
-typedef int SMInt;
+typedef float PAFloat;
+typedef int PAInt;
 #else
-typedef cl_float SMFloat;
-typedef cl_int SMInt;
+typedef cl_float PAFloat;
+typedef cl_int PAInt;
 #endif
 
 #endif

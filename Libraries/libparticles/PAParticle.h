@@ -30,10 +30,10 @@
 #include "PATypes.h"
 
 // Basic particle data; all you need to do the most simplistic rendering
-typedef struct _SMPhysicsParticle
+typedef struct _PAPhysicsParticle
 {
-    SMFloat enabled;
-    SMFloat x, y, z;
-} SMPhysicsParticle;
+    PAFloat enabled;
+    PAFloat x, y, z;
+} PAPhysicsParticle;
 
 #endif

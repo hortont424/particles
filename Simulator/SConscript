@@ -1,10 +1,12 @@
 Import("libsimulator")
+Import("libparticles")
 Import("outerEnv")
 
 env = outerEnv.Clone()
 env.AppendUnique(FRAMEWORKS = ["OpenCL"])
 
-simulator = env.Program("simulator", Glob("*.c"), LIBS = ["simulator"])
+simulator = env.Program("simulator", Glob("*.c"), LIBS = ["simulator", "particles"])
 Depends(simulator, libsimulator)
+Depends(simulator, libparticles)
 
 Return("simulator")

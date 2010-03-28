@@ -33,7 +33,7 @@
 #include <libsimulator/libsimulator.h>
 
 #define ELEMENT_COUNT   4096
-#define FRAME_SIZE      (ELEMENT_COUNT * sizeof(SMPhysicsParticle))
+#define FRAME_SIZE      (ELEMENT_COUNT * sizeof(PAPhysicsParticle))
 #define FRAME_COUNT     2000
 #define TOTAL_SIZE      (FRAME_SIZE * FRAME_COUNT)
 
@@ -54,8 +54,8 @@ int main(int argc, char ** argv)
     SMContext * sim;
     SMProgram * gravProg, * intProg;
     SMProgramLibrary * library;
-    SMPhysicsParticle * data, * partialResults;
-    SMPhysicsNewtonian * newton;
+    PAPhysicsParticle * data, * partialResults;
+    PAPhysicsNewtonian * newton;
     SMBuffer * parts, * newts, * fileBuf;
     int step;
     struct timeval startTime, currentTime;
@@ -69,20 +69,20 @@ int main(int argc, char ** argv)
     library = SMProgramLibraryNew(sim);
     SMProgramLibrarySetGlobalCount(library, ELEMENT_COUNT);
 
-    data = (SMPhysicsParticle *)calloc(ELEMENT_COUNT,
-                                       sizeof(SMPhysicsParticle));
+    data = (PAPhysicsParticle *)calloc(ELEMENT_COUNT,
+                                       sizeof(PAPhysicsParticle));
 
-    newton = (SMPhysicsNewtonian *)calloc(ELEMENT_COUNT,
-                                          sizeof(SMPhysicsNewtonian));
+    newton = (PAPhysicsNewtonian *)calloc(ELEMENT_COUNT,
+                                          sizeof(PAPhysicsNewtonian));
 
     for(unsigned int i = 0; i < ELEMENT_COUNT; i++)
     {
         data[i].enabled = 1.0;
-        newton[i].ox = data[i].x = (SMFloat)rand()/(SMFloat)RAND_MAX;
-        newton[i].oy = data[i].y = (SMFloat)rand()/(SMFloat)RAND_MAX;
-        newton[i].oz = data[i].z = (SMFloat)rand()/(SMFloat)RAND_MAX/5.0;
+        newton[i].ox = data[i].x = (PAFloat)rand()/(PAFloat)RAND_MAX;
+        newton[i].oy = data[i].y = (PAFloat)rand()/(PAFloat)RAND_MAX;
+        newton[i].oz = data[i].z = (PAFloat)rand()/(PAFloat)RAND_MAX/5.0;
 
-        newton[i].mass = 1000000.0 * (SMFloat)rand()/(SMFloat)RAND_MAX;
+        newton[i].mass = 1000000.0 * (PAFloat)rand()/(PAFloat)RAND_MAX;
 
         if(data[i].x >= 0.49 && data[i].x <= 0.50 &&
            data[i].y >= 0.49 && data[i].y <= 0.50)
@@ -112,12 +112,12 @@ int main(int argc, char ** argv)
         }
     }
 
-    parts = SMBufferNew(sim, ELEMENT_COUNT, sizeof(SMPhysicsParticle), true);
-    newts = SMBufferNew(sim, ELEMENT_COUNT, sizeof(SMPhysicsNewtonian), true);
+    parts = SMBufferNew(sim, ELEMENT_COUNT, sizeof(PAPhysicsParticle), true);
+    newts = SMBufferNew(sim, ELEMENT_COUNT, sizeof(PAPhysicsNewtonian), true);
 
     printf("Allocated video memory (%ld KB)\n",
-           ((2 * ELEMENT_COUNT * sizeof(SMPhysicsParticle)) +
-           (2 * ELEMENT_COUNT * sizeof(SMPhysicsNewtonian))) / 1024);
+           ((2 * ELEMENT_COUNT * sizeof(PAPhysicsParticle)) +
+           (2 * ELEMENT_COUNT * sizeof(PAPhysicsNewtonian))) / 1024);
 
     SMBufferSet(parts, data);
     SMBufferSet(newts, newton);
@@ -125,13 +125,13 @@ int main(int argc, char ** argv)
     free(newton);
 
     fileBuf = SMBufferNewWithFile(sim, ELEMENT_COUNT * FRAME_COUNT,
-                                  sizeof(SMPhysicsParticle), "test.out");
+                                  sizeof(PAPhysicsParticle), "test.out");
     printf("Created output file (%ld KB)\n", TOTAL_SIZE / 1024);
 
-    partialResults = (SMPhysicsParticle *)SMBufferGetNativeBuffer(fileBuf);
+    partialResults = (PAPhysicsParticle *)SMBufferGetNativeBuffer(fileBuf);
 
-    gravProg = SMProgramLibraryGetProgram(library, SMPhysicsGravityType);
-    intProg = SMProgramLibraryGetProgram(library, SMPhysicsIntegrationType);
+    gravProg = SMProgramLibraryGetProgram(library, PAPhysicsGravityType);
+    intProg = SMProgramLibraryGetProgram(library, PAPhysicsIntegrationType);
 
     SMProgramSetArgument(gravProg, 0, SMArgumentNewWithBuffer(parts, 0));
     SMProgramSetArgument(gravProg, 1, SMArgumentNewWithBuffer(parts, 1));

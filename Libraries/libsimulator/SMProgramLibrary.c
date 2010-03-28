@@ -46,11 +46,11 @@ SMProgramLibrary * SMProgramLibraryNew(SMContext * sim)
     lib = (SMProgramLibrary *)calloc(1, sizeof(SMProgramLibrary));
 
     lib->context = sim;
-    lib->programs = (SMProgram **)calloc(SMPhysicsLastType,
+    lib->programs = (SMProgram **)calloc(PAPhysicsLastType,
                                          sizeof(SMProgram *));
 
-    SMProgramLibraryLoadProgram(lib, SMPhysicsGravityType, "gravity.cl");
-    SMProgramLibraryLoadProgram(lib, SMPhysicsIntegrationType, "verlet.cl");
+    SMProgramLibraryLoadProgram(lib, PAPhysicsGravityType, "gravity.cl");
+    SMProgramLibraryLoadProgram(lib, PAPhysicsIntegrationType, "verlet.cl");
 
     return lib;
 }
@@ -62,7 +62,7 @@ SMProgramLibrary * SMProgramLibraryNew(SMContext * sim)
  */
 void SMProgramLibraryFree(SMProgramLibrary * lib)
 {
-    for(int i = 0; i < SMPhysicsLastType; i++)
+    for(int i = 0; i < PAPhysicsLastType; i++)
         if(lib->programs[i])
             SMProgramFree(lib->programs[i]);
 
@@ -75,7 +75,7 @@ void SMProgramLibraryFree(SMProgramLibrary * lib)
  * @param type The simulation type to load a kernel for.
  * @param filename The filename of the kernel to load.
  */
-void SMProgramLibraryLoadProgram(SMProgramLibrary * lib, SMPhysicsType type,
+void SMProgramLibraryLoadProgram(SMProgramLibrary * lib, PAPhysicsType type,
                                  char * filename)
 {
     char * kernelPath;
@@ -96,7 +96,7 @@ void SMProgramLibraryLoadProgram(SMProgramLibrary * lib, SMPhysicsType type,
  */
 void SMProgramLibrarySetGlobalCount(SMProgramLibrary * lib, size_t globalCount)
 {
-    for(int i = 0; i < SMPhysicsLastType; i++)
+    for(int i = 0; i < PAPhysicsLastType; i++)
         if(lib->programs[i])
             SMProgramSetGlobalCount(lib->programs[i], globalCount);
 }
@@ -108,7 +108,7 @@ void SMProgramLibrarySetGlobalCount(SMProgramLibrary * lib, size_t globalCount)
  * @param type The simulation type to return an SMProgram for.
  */
 SMProgram * SMProgramLibraryGetProgram(SMProgramLibrary * lib,
-                                       SMPhysicsType type)
+                                       PAPhysicsType type)
 {
     /// \todo Error checking, docs.
     return lib->programs[type];

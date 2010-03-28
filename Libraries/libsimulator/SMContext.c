@@ -85,7 +85,7 @@ SMContext * SMContextNew()
     sim->ctx = clCreateContext(0, 1, &sim->devs, &raiseOpenCLError, NULL, NULL);
     sim->cmds = clCreateCommandQueue(sim->ctx, sim->devs, 0, NULL);
 
-    sim->buildOptions = cwdSprintf("-I %s/libsimulator");
+    sim->buildOptions = cwdSprintf("-I %s/../Libraries/libparticles");
 
     if(sim->buildOptions && sim->ctx && sim->cmds)
         printf("Created simulator on '%s %s'\n", vendorName, deviceName);

@@ -24,12 +24,12 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "SMPhysics.h"
+#include "libparticles.h"
 
-__kernel void verlet(__global SMPhysicsParticle * input,
-                     __global SMPhysicsParticle * output,
-                     __global SMPhysicsNewtonian * newtonIn,
-                     __global SMPhysicsNewtonian * newtonOut,
+__kernel void verlet(__global PAPhysicsParticle * input,
+                     __global PAPhysicsParticle * output,
+                     __global PAPhysicsNewtonian * newtonIn,
+                     __global PAPhysicsNewtonian * newtonOut,
                      const unsigned int count)
 {
     int id = get_global_id(0);
