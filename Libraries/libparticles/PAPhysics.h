@@ -1,4 +1,4 @@
-/* particles - libsimulator - SMPhysics.h
+/* particles - libparticles - PAPhysics.h
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,16 +24,10 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _SM_PHYSICS_H_
-#define _SM_PHYSICS_H_
+#ifndef _PA_PHYSICS_H_
+#define _PA_PHYSICS_H_
 
-#ifndef cl_float
-typedef float SMFloat;
-typedef int SMInt;
-#else
-typedef cl_float SMFloat;
-typedef cl_int SMInt;
-#endif
+#include "PATypes.h"
 
 // Types of different supported forces
 typedef enum _SMPhysicsType
@@ -133,12 +127,5 @@ typedef struct _SMPhysicsNewtonian
     SMFloat ax, ay, az;
     SMFloat ox, oy, oz;
 } SMPhysicsNewtonian;
-
-// Basic particle data; all you need to do the most simplistic rendering
-typedef struct _SMPhysicsParticle
-{
-    SMFloat enabled;
-    SMFloat x, y, z;
-} SMPhysicsParticle;
 
 #endif

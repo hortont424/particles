@@ -1,4 +1,4 @@
-/* particles - libsimulator - SMError.c
+/* particles - libparticles - PAParticle.h
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,26 +24,16 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdio.h>
+#ifndef _PA_PARTICLE_H_
+#define _PA_PARTICLE_H_
 
-#include "libsimulator.h"
+#include "PATypes.h"
 
-/// \todo This file is a joke. Should be cleaned up at some point.
-
-void raiseOpenCLError(const char * errinfo, const void * private_info,
-                      size_t cb, void * user_data)
+// Basic particle data; all you need to do the most simplistic rendering
+typedef struct _SMPhysicsParticle
 {
-    throwError("%s", errinfo);
-}
+    SMFloat enabled;
+    SMFloat x, y, z;
+} SMPhysicsParticle;
 
-void showBuildLog(SMContext * sim, SMProgram * prog)
-{
-    size_t len;
-    char buf[2048];
-
-    clGetProgramBuildInfo(prog->program, sim->devs, CL_PROGRAM_BUILD_LOG,
-                          sizeof(buf), buf, &len);
-
-    if(buf[0] != 0)
-        printf("%s\n", buf);
-}
+#endif

@@ -33,7 +33,7 @@
 #include <sys/stat.h>
 #include <errno.h>
 
-#include "Simulator.h"
+#include "libsimulator.h"
 
 /**
  * Create an SMBuffer backed by an OpenCL memory object. Depending on whether

@@ -30,7 +30,7 @@
 #include <unistd.h>
 #include <stdarg.h>
 
-#include "Simulator.h"
+#include "libsimulator.h"
 
 char * cwdSprintf(const char * fmt)
 {

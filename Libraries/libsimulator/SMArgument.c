@@ -27,7 +27,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "Simulator.h"
+#include "libsimulator.h"
 
 /**
  * Allocate the space required for an empty SMArgument.

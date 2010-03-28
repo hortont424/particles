@@ -29,7 +29,7 @@
 #include <unistd.h>
 #include <stdbool.h>
 
-#include "Simulator.h"
+#include "libsimulator.h"
 
 int simulatorUsesCPU = false;
 

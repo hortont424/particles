@@ -1,4 +1,4 @@
-/* particles - libsimulator - Simulator.h
+/* particles - libparticles - PATypes.h
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,20 +24,15 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _SM_SIMULATOR_H_
-#define _SM_SIMULATOR_H_
+#ifndef _PA_TYPES_H_
+#define _PA_TYPES_H_
 
-#include <OpenCL/opencl.h>
-
-#include "SMError.h"
-#include "SMOptions.h"
-
-#include "SMContext.h"
-#include "SMProgram.h"
-#include "SMBuffer.h"
-#include "SMArgument.h"
-#include "SMProgramLibrary.h"
-
-#include "SMPhysics.h"
+#ifndef cl_float
+typedef float SMFloat;
+typedef int SMInt;
+#else
+typedef cl_float SMFloat;
+typedef cl_int SMInt;
+#endif
 
 #endif

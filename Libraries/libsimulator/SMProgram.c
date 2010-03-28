@@ -34,7 +34,7 @@
 #include <string.h>
 #include <math.h>
 
-#include "Simulator.h"
+#include "libsimulator.h"
 
 SMProgram * compileProgram(SMContext * sim, char * name,
                            const char * source)

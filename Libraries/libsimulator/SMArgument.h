@@ -31,8 +31,9 @@
 #include <sys/types.h>
 #include <OpenCL/opencl.h>
 
+#include <libparticles/libparticles.h>
+
 #include "SMBuffer.h"
-#include "SMPhysics.h"
 
 /**
  * @defgroup SMArgument SMArgument

@@ -29,9 +29,10 @@
 
 #include <OpenCL/opencl.h>
 
+#include <libparticles/libparticles.h>
+
 #include "SMContext.h"
 #include "SMProgram.h"
-#include "SMPhysics.h"
 
 /**
  * @defgroup SMProgramLibrary SMProgramLibrary

@@ -28,7 +28,7 @@
 #include "string.h"
 #include "stdlib.h"
 
-#include "Simulator.h"
+#include "libsimulator.h"
 
 #define LIBRARY_PATH "./kernels/"
 
