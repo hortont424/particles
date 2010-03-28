@@ -29,7 +29,7 @@
 #include <sys/time.h>
 #include <math.h>
 
-#include "libsimulator/Simulator.h"
+#include <libsimulator/Simulator.h>
 
 #define ELEMENT_COUNT   4096
 #define FRAME_SIZE      (ELEMENT_COUNT * sizeof(SMPhysicsParticle))

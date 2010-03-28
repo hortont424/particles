@@ -27,7 +27,7 @@
 #import <Cocoa/Cocoa.h>
 
 #import "NSPointFunctions_CocoaDevUsersAdditions.h"
-#import "libcurve/Curve.h"
+#import <libcurve/Curve.h>
 
 @interface IPControlPoint : NSObject <NSCoding>
 {

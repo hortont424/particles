@@ -4,6 +4,7 @@ all:
 	scons -Q
 
 clean:
+	rm -rf ./Libraries/build
 	rm -rf ./Interpolator/build
 	rm -rf ./Simulator/build
 	rm -rf ./Previewer/build
