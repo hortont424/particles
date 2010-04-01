@@ -9,8 +9,10 @@ VariantDir('Interpolator/build', 'Interpolator', duplicate = 0)
 VariantDir('Previewer/build', 'Previewer', duplicate = 0)
 VariantDir('External/json-c/build', 'External/json-c', duplicate = 0)
 
-releaseFlags = ["--std=c99", "-O4", "-Wall", "-Werror", "-fobjc-gc", "-ILibraries"]
-debugFlags = ["--std=c99", "-g", "-Wall", "-Werror", "-fobjc-gc", "-ILibraries"]
+flags = ["--std=c99", "-Wall", "-Werror", "-fobjc-gc", "-ILibraries"]
+
+releaseFlags = flags + ["-O4"]
+debugFlags = flags + ["-g"]
 
 buildMode = ARGUMENTS.get("mode", "release")
 
