@@ -32,7 +32,7 @@
 #include <stdint.h>
 #include <fcntl.h>
 
-#include "Curve.h"
+#include "libcurve.h"
 
 CUPoint CUPointMake(float x, float y)
 {

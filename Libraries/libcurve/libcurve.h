@@ -1,4 +1,4 @@
-/* particles - libcurve - Curve.h
+/* particles - libcurve - libcurve.h
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
