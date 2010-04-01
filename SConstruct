@@ -28,7 +28,9 @@ outerEnv = Environment(
     ENV = { "PATH": os.environ['PATH'] },
     CC = "clang",
     CCFLAGS = useFlags,
-    LIBPATH = Glob("Libraries/build/*"))
+    LIBPATH = ["#Libraries/build/libcurve",
+               "#Libraries/build/libparticles",
+               "#Libraries/build/libsimulator"])
 
 Build.InstallTools(outerEnv)
 Export("outerEnv")
