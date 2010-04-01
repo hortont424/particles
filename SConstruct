@@ -45,7 +45,9 @@ libparticles = SConscript('Libraries/build/libparticles/SConscript')
 libcurve = SConscript('Libraries/build/libcurve/SConscript')
 libsimulator = SConscript('Libraries/build/libsimulator/SConscript')
 
+libraries = ['libsimulator', 'libparticles', 'libcurve', 'libjsonc']
+
 # Tools
-simulator = SConscript('Simulator/build/SConscript', ['libsimulator', 'libparticles'])
-interpolator = SConscript('Interpolator/build/SConscript')
-previewer = SConscript('Previewer/build/SConscript')
+simulator = SConscript('Simulator/build/SConscript', libraries)
+interpolator = SConscript('Interpolator/build/SConscript', libraries)
+previewer = SConscript('Previewer/build/SConscript', libraries)
