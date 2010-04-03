@@ -1,4 +1,4 @@
-/* particles - libsimulator - SMProgram.c
+/* particles - libcomputer - COProgram.c
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -34,20 +34,20 @@
 #include <string.h>
 #include <math.h>
 
-#include "libsimulator.h"
+#include "libcomputer.h"
 
-SMProgram * compileProgram(SMContext * sim, char * name,
+COProgram * compileProgram(COContext * ctx, char * name,
                            const char * source)
 {
-    SMProgram * prog = calloc(1, sizeof(SMProgram));
+    COProgram * prog = calloc(1, sizeof(COProgram));
 
-    prog->program = clCreateProgramWithSource(sim->ctx, 1, &source, NULL, NULL);
+    prog->program = clCreateProgramWithSource(ctx->ctx, 1, &source, NULL, NULL);
     prog->name = name;
 
-    if(clBuildProgram(prog->program, 0, NULL, SMContextGetBuildOptions(sim),
+    if(clBuildProgram(prog->program, 0, NULL, COContextGetBuildOptions(ctx),
                       NULL, NULL) != CL_SUCCESS)
     {
-        showBuildLog(sim, prog);
+        showBuildLog(ctx, prog);
         exit(EXIT_FAILURE);
     }
 
@@ -71,23 +71,23 @@ char * kernelNameFromFilename(const char * filename)
 }
 
 /**
- * Allocate the space required for an SMProgram, load an OpenCL kernel from the
+ * Allocate the space required for an COProgram, load an OpenCL kernel from the
  * given file, compile it, and allocate space for its list of arguments.
  *
  * Since we use fstat to determine the size of the file to be loaded, it can't
  * be a symlink (the size of the symlink would be reported instead!).
  *
- * @param sim The simulation context to compile the kernel within.
+ * @param ctx The simulation context to compile the kernel within.
  * @param filename The filename of the OpenCL kernel to load and compile.
  * @return The newly allocated program.
  */
-SMProgram * SMProgramNew(SMContext * sim, const char * filename)
+COProgram * COProgramNew(COContext * ctx, const char * filename)
 {
     struct stat fileInfo;
     int fileHandle;
     char * fileContent;
     char * kernelName;
-    SMProgram * prog;
+    COProgram * prog;
 
     if(!strstr(filename, ".cl"))
     {
@@ -116,30 +116,30 @@ SMProgram * SMProgramNew(SMContext * sim, const char * filename)
     read(fileHandle, fileContent, fileInfo.st_size + 1);
     close(fileHandle);
 
-    prog = compileProgram(sim, kernelName, fileContent);
-    prog->context = sim;
+    prog = compileProgram(ctx, kernelName, fileContent);
+    prog->context = ctx;
 
     free(fileContent);
 
     if(prog)
         printf("Successfully loaded kernel '%s'\n", kernelName);
 
-    prog->arguments = (SMArgument **)calloc(SMProgramGetArgumentCount(prog),
-                                            sizeof(SMArgument *));
+    prog->arguments = (COArgument **)calloc(COProgramGetArgumentCount(prog),
+                                            sizeof(COArgument *));
 
     return prog;
 }
 
 /**
- * Free the memory used by the given SMProgram and its contents.
+ * Free the memory used by the given COProgram and its contents.
  *
  * @param prog The program to be freed.
  */
-void SMProgramFree(SMProgram * prog)
+void COProgramFree(COProgram * prog)
 {
-    for(int i = 0; i < SMProgramGetArgumentCount(prog); i++)
+    for(int i = 0; i < COProgramGetArgumentCount(prog); i++)
     {
-        SMArgumentFree(prog->arguments[i]);
+        COArgumentFree(prog->arguments[i]);
     }
 
     clReleaseKernel(prog->kernel);
@@ -150,16 +150,16 @@ void SMProgramFree(SMProgram * prog)
 }
 
 /**
- * Execute the given SMProgram in its context, after setting all of the
- * arguments on the kernel from the SMProgram's list of arguments.
+ * Execute the given COProgram in its context, after setting all of the
+ * arguments on the kernel from the COProgram's list of arguments.
  *
  * @param prog The program to execute.
  */
-void SMProgramExecute(SMProgram * prog)
+void COProgramExecute(COProgram * prog)
 {
-    for(int i = 0; i < SMProgramGetArgumentCount(prog); i++)
+    for(int i = 0; i < COProgramGetArgumentCount(prog); i++)
     {
-        SMArgument * arg = prog->arguments[i];
+        COArgument * arg = prog->arguments[i];
 
         if(!arg)
         {
@@ -167,8 +167,8 @@ void SMProgramExecute(SMProgram * prog)
             return;
         }
 
-        clSetKernelArg(prog->kernel, i, SMArgumentGetSize(arg),
-                       SMArgumentGetPointer(arg));
+        clSetKernelArg(prog->kernel, i, COArgumentGetSize(arg),
+                       COArgumentGetPointer(arg));
     }
 
     clEnqueueNDRangeKernel(prog->context->cmds, prog->kernel, 1, NULL,
@@ -177,10 +177,10 @@ void SMProgramExecute(SMProgram * prog)
 }
 
 /**
- * @param prog The SMProgram to modify.
+ * @param prog The COProgram to modify.
  * @param globalCount The total number of kernel instances to be spawned.
  */
-void SMProgramSetGlobalCount(SMProgram * prog, size_t globalCount)
+void COProgramSetGlobalCount(COProgram * prog, size_t globalCount)
 {
     int multiplier;
 
@@ -213,35 +213,35 @@ void SMProgramSetGlobalCount(SMProgram * prog, size_t globalCount)
  *
  * @todo We could reference-count arguments... and everything, really!
  *
- * @param prog The SMProgram to modify.
+ * @param prog The COProgram to modify.
  * @param i The index of the argument to set.
- * @param arg A pointer to the SMArgument object representing the value of
+ * @param arg A pointer to the COArgument object representing the value of
  * the kernel argument.
  */
-void SMProgramSetArgument(SMProgram * prog, unsigned int i, SMArgument * arg)
+void COProgramSetArgument(COProgram * prog, unsigned int i, COArgument * arg)
 {
-    SMArgument * oldArg;
+    COArgument * oldArg;
 
-    if(i > SMProgramGetArgumentCount(prog))
+    if(i > COProgramGetArgumentCount(prog))
     {
         throwError("trying to set nonexistent argument #%d", i);
         return;
     }
 
-    oldArg = SMProgramGetArgument(prog, i);
+    oldArg = COProgramGetArgument(prog, i);
     if(oldArg)
-        SMArgumentFree(oldArg);
+        COArgumentFree(oldArg);
 
     prog->arguments[i] = arg;
 }
 
 /**
- * @param prog The SMProgram to inspect.
+ * @param prog The COProgram to inspect.
  * @param i The index of the argument to return.
  */
-SMArgument * SMProgramGetArgument(SMProgram * prog, unsigned int i)
+COArgument * COProgramGetArgument(COProgram * prog, unsigned int i)
 {
-    if(i > SMProgramGetArgumentCount(prog))
+    if(i > COProgramGetArgumentCount(prog))
     {
         throwError("trying to access nonexistent argument #%d", i);
         return NULL;
@@ -251,10 +251,10 @@ SMArgument * SMProgramGetArgument(SMProgram * prog, unsigned int i)
 }
 
 /**
- * @param prog The SMProgram to inspect.
+ * @param prog The COProgram to inspect.
  * @return The number of arguments that the compiled kernel expects to receive.
  */
-unsigned int SMProgramGetArgumentCount(SMProgram * prog)
+unsigned int COProgramGetArgumentCount(COProgram * prog)
 {
     unsigned int argc;
 

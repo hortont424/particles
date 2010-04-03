@@ -1,4 +1,4 @@
-/* particles - libsimulator - SMContext.h
+/* particles - libcomputer - COProgram.h
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,34 +24,42 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _SM_CONTEXT_H_
-#define _SM_CONTEXT_H_
+#ifndef _CO_PROGRAM_H_
+#define _CO_PROGRAM_H_
 
 #include <OpenCL/opencl.h>
 
-#include "SMOptions.h"
+#include "COContext.h"
+#include "COArgument.h"
 
 /**
- * @defgroup SMContext SMContext
+ * @defgroup COProgram COProgram
  * @{
  */
 
-typedef struct _SMContext
+typedef struct _SMProgram
 {
-    cl_device_id devs;          /**< OpenCL device ID context was created on */
-    cl_context ctx;             /**< OpenCL context */
-    cl_command_queue cmds;      /**< OpenCL command queue */
+    size_t globalCount;         /**< Total number of kernel instances */
+    size_t localCount;          /**< Number of parallel kernel instances */
 
-    char * buildOptions;        /**< Options to pass to OpenCL compiler */
-} SMContext;
+    char * name;                /**< Name of represented OpenCL kernel */
+    COArgument ** arguments;    /**< List of kernel arguments */
 
-SMContext * SMContextNew();
-void SMContextFree(SMContext * sim);
+    cl_program program;         /**< OpenCL program */
+    cl_kernel kernel;           /**< Compiled OpenCL kernel */
 
-void SMContextSetBuildOptions(SMContext * sim, char * buildOptions);
-const char * SMContextGetBuildOptions(SMContext * sim);
+    COContext * context;        /**< The context that owns the program */
+} COProgram;
 
-void SMContextWait(SMContext * sim);
+COProgram * COProgramNew(COContext * ctx, const char * filename);
+void COProgramFree(COProgram * prog);
+
+void COProgramExecute(COProgram * prog);
+
+void COProgramSetGlobalCount(COProgram * prog, size_t globalCount);
+void COProgramSetArgument(COProgram * prog, unsigned int i, COArgument * arg);
+COArgument * COProgramGetArgument(COProgram * prog, unsigned int i);
+unsigned int COProgramGetArgumentCount(COProgram * prog);
 
 /** @} */
 

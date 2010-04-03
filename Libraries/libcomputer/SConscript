@@ -3,6 +3,6 @@ Import("outerEnv")
 env = outerEnv.Clone()
 env.AppendUnique(FRAMEWORKS = ["OpenCL"])
 
-libsimulator = env.SharedLibrary("simulator", Glob("*.c"))
+libcomputer = env.SharedLibrary("computer", Glob("*.c"))
 
-Return("libsimulator")
+Return("libcomputer")

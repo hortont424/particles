@@ -1,4 +1,4 @@
-/* particles - libsimulator - SMOptions.h
+/* particles - libcomputer - COOptions.h
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,17 +24,17 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _SM_OPTIONS_H_
-#define _SM_OPTIONS_H_
+#ifndef _CO_OPTIONS_H_
+#define _CO_OPTIONS_H_
 
 /**
- * @defgroup SMOptions Command-line Options
+ * @defgroup COOptions Command-line Options
  * @{
  */
 
-extern int simulatorUsesCPU; /**< Whether to restrict simulation to the CPU */
+extern int computerUsesCPU; /**< Whether to restrict computation to the CPU */
 
-void SMOptionsParse(int argc, char * const * argv);
+void COOptionsParse(int argc, char * const * argv);
 
 /** @} */
 

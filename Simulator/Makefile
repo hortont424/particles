@@ -4,7 +4,7 @@ all:
 	cd .. ; scons -Q
 
 docs:
-	doxygen libsimulator/libsimulator.doxyfile
+	doxygen libcomputer/libcomputer.doxyfile
 	open build/doc/html/modules.html
 
 clean:
@@ -12,11 +12,11 @@ clean:
 
 run:
 	rm -f test.out
-	DYLD_LIBRARY_PATH=../Libraries/build/libsimulator/:../Libraries/build/libparticles/ ./build/simulator
+	DYLD_LIBRARY_PATH=../Libraries/build/libcomputer/:../Libraries/build/libparticles/ ./build/simulator
 
 run-cpu:
 	rm -f test.out
-	DYLD_LIBRARY_PATH=../Libraries/build/libsimulator/:../Libraries/build/libparticles/ ./build/simulator -c
+	DYLD_LIBRARY_PATH=../Libraries/build/libcomputer/:../Libraries/build/libparticles/ ./build/simulator -c
 
 edit:
 	mate .

@@ -1,4 +1,4 @@
-/* particles - libsimulator - libsimulator.h
+/* particles - libcomputer - COArgument.h
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,20 +24,50 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _LIBSIMULATOR_H_
-#define _LIBSIMULATOR_H_
+#ifndef _CO_ARGUMENT_H_
+#define _CO_ARGUMENT_H_
 
+#include <stdbool.h>
+#include <sys/types.h>
 #include <OpenCL/opencl.h>
 
 #include <libparticles/libparticles.h>
 
-#include "SMError.h"
-#include "SMOptions.h"
+#include "COBuffer.h"
 
-#include "SMContext.h"
-#include "SMProgram.h"
-#include "SMBuffer.h"
-#include "SMArgument.h"
-#include "SMProgramLibrary.h"
+/**
+ * @defgroup COArgument COArgument
+ * @{
+ */
+
+typedef enum _SMArgumentType
+{
+    CO_BUFFER_ARGUMENT,         /**< argument points to an COBuffer */
+    CO_POINTER_ARGUMENT         /**< argument points to an arbitrary pointer */
+} COArgumentType;
+
+typedef struct _SMArgument
+{
+    COArgumentType type;    /**< Type of argument */
+    void * pointer;         /**< Pointer to arbitrary argument object */
+    size_t size;            /**< Size of arbitrary argument object */
+
+    bool owned;             /**< Whether we own (and should free) the pointer */
+    bool backBuffer;        /**< If true (and this is a buffer argument), use
+                                 the back buffer when accessing the buffer */
+
+    cl_mem * bufferCache;   /**< For buffer args, a cached native pointer */
+} COArgument;
+
+COArgument * COArgumentNew();
+COArgument * COArgumentNewWithBuffer(COBuffer * buf, bool backBuffer);
+COArgument * COArgumentNewWithFloat(PAFloat f);
+COArgument * COArgumentNewWithInt(PAInt i);
+void COArgumentFree(COArgument * arg);
+
+size_t COArgumentGetSize(COArgument * arg);
+void * COArgumentGetPointer(COArgument * arg);
+
+/** @} */
 
 #endif

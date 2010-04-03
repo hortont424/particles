@@ -1,4 +1,4 @@
-/* particles - libsimulator - SMError.c
+/* particles - libcomputer - COProgramLibrary.h
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,26 +24,38 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdio.h>
+#ifndef _CO_PROGRAM_LIBRARY_H_
+#define _CO_PROGRAM_LIBRARY_H_
 
-#include "libsimulator.h"
+#include <OpenCL/opencl.h>
 
-/// \todo This file is a joke. Should be cleaned up at some point.
+#include <libparticles/libparticles.h>
 
-void raiseOpenCLError(const char * errinfo, const void * private_info,
-                      size_t cb, void * user_data)
+#include "COContext.h"
+#include "COProgram.h"
+
+/**
+ * @defgroup COProgramLibrary COProgramLibrary
+ * @{
+ */
+
+typedef struct _SMProgramLibrary
 {
-    throwError("%s", errinfo);
-}
+    COProgram ** programs;      /**< The array of loaded programs, indexed by
+                                     COPhysicsType identifier */
 
-void showBuildLog(SMContext * sim, SMProgram * prog)
-{
-    size_t len;
-    char buf[2048];
+    COContext * context;        /**< The context that owns the programs */
+} COProgramLibrary;
 
-    clGetProgramBuildInfo(prog->program, sim->devs, CL_PROGRAM_BUILD_LOG,
-                          sizeof(buf), buf, &len);
+COProgramLibrary * COProgramLibraryNew(COContext * ctx);
+void COProgramLibraryFree(COProgramLibrary * lib);
 
-    if(buf[0] != 0)
-        printf("%s\n", buf);
-}
+void COProgramLibraryLoadProgram(COProgramLibrary * lib, PAPhysicsType type,
+                                 char * filename);
+void COProgramLibrarySetGlobalCount(COProgramLibrary * lib, size_t globalCount);
+COProgram * COProgramLibraryGetProgram(COProgramLibrary * lib,
+                                       PAPhysicsType type);
+
+/** @} */
+
+#endif

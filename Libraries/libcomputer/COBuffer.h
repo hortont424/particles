@@ -1,4 +1,4 @@
-/* particles - libsimulator - SMBuffer.h
+/* particles - libcomputer - COBuffer.h
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,58 +24,58 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _SM_BUFFER_H_
-#define _SM_BUFFER_H_
+#ifndef _CO_BUFFER_H_
+#define _CO_BUFFER_H_
 
 #include <sys/types.h>
 #include <OpenCL/opencl.h>
 
-#include "SMContext.h"
+#include "COContext.h"
 
 /**
- * @defgroup SMBuffer SMBuffer
+ * @defgroup COBuffer COBuffer
  * @{
  */
 
 typedef enum _SMBufferType
 {
-    SM_FILE_BUFFER,         /**< mmapped-file-backed buffer */
-    SM_OPENCL_BUFFER        /**< OpenCL-memory-object-backed buffer */
-} SMBufferType;
+    CO_FILE_BUFFER,         /**< mmapped-file-backed buffer */
+    CO_OPENCL_BUFFER        /**< OpenCL-memory-object-backed buffer */
+} COBufferType;
 
 typedef struct _SMBuffer
 {
-    SMBufferType type;      /**< Type of buffer */
+    COBufferType type;      /**< Type of buffer */
     bool doubleBuffered;    /**< If buffer is double-buffered */
 
-    cl_mem gpuBuffer;       /**< OpenCL buffer (for SM_OPENCL_BUFFER) */
+    cl_mem gpuBuffer;       /**< OpenCL buffer (for CO_OPENCL_BUFFER) */
     cl_mem gpuBackBuffer;   /**< OpenCL back buffer (for double-buffered
-                                 SM_OPENCL_BUFFER) */
-    void * fileBuffer;      /**< Native buffer (for SM_FILE_BUFFER) */
-    int file;               /**< File descriptor (for SM_FILE_BUFFER) */
+                                 CO_OPENCL_BUFFER) */
+    void * fileBuffer;      /**< Native buffer (for CO_FILE_BUFFER) */
+    int file;               /**< File descriptor (for CO_FILE_BUFFER) */
 
     size_t elementSize;     /**< Size of each element in the buffer */
     long elementCount;      /**< Number of elements in the buffer */
 
-    SMContext * context;    /**< The context that owns the buffer */
-} SMBuffer;
+    COContext * context;    /**< The context that owns the buffer */
+} COBuffer;
 
-SMBuffer * SMBufferNew(SMContext * sim, long elementCount,
+COBuffer * COBufferNew(COContext * ctx, long elementCount,
                        size_t elementSize, bool doubleBuffered);
-SMBuffer * SMBufferNewWithFile(SMContext * sim, long elementCount,
+COBuffer * COBufferNewWithFile(COContext * ctx, long elementCount,
                                size_t elementSize, const char * filename);
-void SMBufferFree(SMBuffer * buf);
+void COBufferFree(COBuffer * buf);
 
-size_t SMBufferGetSize(SMBuffer * buf);
-long SMBufferGetElementCount(SMBuffer * buf);
-size_t SMBufferGetElementSize(SMBuffer * buf);
-cl_mem SMBufferGetCLBuffer(SMBuffer * buf, bool backBuffer);
-void * SMBufferGetNativeBuffer(SMBuffer * buf);
+size_t COBufferGetSize(COBuffer * buf);
+long COBufferGetElementCount(COBuffer * buf);
+size_t COBufferGetElementSize(COBuffer * buf);
+cl_mem COBufferGetCLBuffer(COBuffer * buf, bool backBuffer);
+void * COBufferGetNativeBuffer(COBuffer * buf);
 
-void SMBufferGet(SMBuffer * buf, void ** data);
-void SMBufferSet(SMBuffer * buf, void * data);
+void COBufferGet(COBuffer * buf, void ** data);
+void COBufferSet(COBuffer * buf, void * data);
 
-void SMBufferSwap(SMBuffer * buf);
+void COBufferSwap(COBuffer * buf);
 
 /** @} */
 

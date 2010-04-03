@@ -1,4 +1,4 @@
-/* particles - libsimulator - SMError.h
+/* particles - libcomputer - libcomputer.h
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,24 +24,20 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _SM_ERROR_H_
-#define _SM_ERROR_H_
+#ifndef _LIBCOMPUTER_H_
+#define _LIBCOMPUTER_H_
 
-#include "SMContext.h"
-#include "SMProgram.h"
+#include <OpenCL/opencl.h>
 
-/**
- * @defgroup SMError SMError
- * @{
- */
+#include <libparticles/libparticles.h>
 
-#define throwError(f, ...) printf("Error (%s, line %d): " f "\n", \
-                                  __FILE__, __LINE__, ##__VA_ARGS__)
+#include "COError.h"
+#include "COOptions.h"
 
-void raiseOpenCLError(const char * errinfo, const void * private_info,
-                      size_t cb, void * user_data);
-void showBuildLog(SMContext * sim, SMProgram * prog);
-
-/** @} */
+#include "COContext.h"
+#include "COProgram.h"
+#include "COBuffer.h"
+#include "COArgument.h"
+#include "COProgramLibrary.h"
 
 #endif

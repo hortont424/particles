@@ -1,4 +1,4 @@
-/* particles - libsimulator - SMOptions.c
+/* particles - libcomputer - COError.c
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -25,35 +25,25 @@
  */
 
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdbool.h>
 
-#include "libsimulator.h"
+#include "libcomputer.h"
 
-int simulatorUsesCPU = false;
+/// \todo This file is a joke. Should be cleaned up at some point.
 
-/**
- * Parse the given command line options, setting flags relevant to our
- * interests.
- *
- * @todo This should be made much more robust; it should remove arguments from
- * the argc/argv; it should provide -h/--help, etc.
- *
- * @param argc The number of arguments in the argument array.
- * @param argv The command line argument array.
- */
-void SMOptionsParse(int argc, char * const * argv)
+void raiseOpenCLError(const char * errinfo, const void * private_info,
+                      size_t cb, void * user_data)
 {
-    char currentOption;
+    throwError("%s", errinfo);
+}
 
-    while((currentOption = getopt(argc, argv, "c")) != EOF)
-    {
-        switch(currentOption)
-        {
-            case 'c':
-                simulatorUsesCPU = true;
-                break;
-        }
-    }
+void showBuildLog(COContext * ctx, COProgram * prog)
+{
+    size_t len;
+    char buf[2048];
+
+    clGetProgramBuildInfo(prog->program, ctx->devs, CL_PROGRAM_BUILD_LOG,
+                          sizeof(buf), buf, &len);
+
+    if(buf[0] != 0)
+        printf("%s\n", buf);
 }

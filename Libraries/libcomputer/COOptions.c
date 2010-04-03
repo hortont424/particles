@@ -1,4 +1,4 @@
-/* particles - libsimulator - SMProgram.h
+/* particles - libcomputer - COOptions.c
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,43 +24,36 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _SM_PROGRAM_H_
-#define _SM_PROGRAM_H_
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdbool.h>
 
-#include <OpenCL/opencl.h>
+#include "libcomputer.h"
 
-#include "SMContext.h"
-#include "SMArgument.h"
+int computerUsesCPU = false;
 
 /**
- * @defgroup SMProgram SMProgram
- * @{
+ * Parse the given command line options, setting flags relevant to our
+ * interests.
+ *
+ * @todo This should be made much more robust; it should remove arguments from
+ * the argc/argv; it should provide -h/--help, etc.
+ *
+ * @param argc The number of arguments in the argument array.
+ * @param argv The command line argument array.
  */
-
-typedef struct _SMProgram
+void COOptionsParse(int argc, char * const * argv)
 {
-    size_t globalCount;         /**< Total number of kernel instances */
-    size_t localCount;          /**< Number of parallel kernel instances */
+    char currentOption;
 
-    char * name;                /**< Name of represented OpenCL kernel */
-    SMArgument ** arguments;    /**< List of kernel arguments */
-
-    cl_program program;         /**< OpenCL program */
-    cl_kernel kernel;           /**< Compiled OpenCL kernel */
-
-    SMContext * context;        /**< The context that owns the program */
-} SMProgram;
-
-SMProgram * SMProgramNew(SMContext * sim, const char * filename);
-void SMProgramFree(SMProgram * prog);
-
-void SMProgramExecute(SMProgram * prog);
-
-void SMProgramSetGlobalCount(SMProgram * prog, size_t globalCount);
-void SMProgramSetArgument(SMProgram * prog, unsigned int i, SMArgument * arg);
-SMArgument * SMProgramGetArgument(SMProgram * prog, unsigned int i);
-unsigned int SMProgramGetArgumentCount(SMProgram * prog);
-
-/** @} */
-
-#endif
+    while((currentOption = getopt(argc, argv, "c")) != EOF)
+    {
+        switch(currentOption)
+        {
+            case 'c':
+                computerUsesCPU = true;
+                break;
+        }
+    }
+}

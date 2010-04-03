@@ -1,4 +1,4 @@
-/* particles - libsimulator - SMContext.c
+/* particles - libcomputer - COContext.c
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -30,7 +30,7 @@
 #include <unistd.h>
 #include <stdarg.h>
 
-#include "libsimulator.h"
+#include "libcomputer.h"
 
 char * cwdSprintf(const char * fmt)
 {
@@ -58,84 +58,84 @@ char * cwdSprintf(const char * fmt)
 }
 
 /**
- * Allocate the space required for an SMContext, create an OpenCL context
+ * Allocate the space required for an COContext, create an OpenCL context
  * and command queue associated with it, parse command line options, print
  * the make and model of the OpenCL computation device, and return the newly
- * created SMContext.
+ * created COContext.
  *
  * Set the compile-time options to the default, which adds the "kernels"
  * subdirectory of the current directory to the include path.
  *
- * @return The newly allocated simulation context.
+ * @return The newly allocated computation context.
  */
-SMContext * SMContextNew()
+COContext * COContextNew()
 {
-    SMContext * sim;
+    COContext * ctx;
     int deviceType;
 
     char deviceName[2048], vendorName[2048];
 
-    sim = calloc(1, sizeof(SMContext));
-    deviceType = simulatorUsesCPU ? CL_DEVICE_TYPE_CPU : CL_DEVICE_TYPE_GPU;
+    ctx = calloc(1, sizeof(COContext));
+    deviceType = computerUsesCPU ? CL_DEVICE_TYPE_CPU : CL_DEVICE_TYPE_GPU;
 
-    clGetDeviceIDs(NULL, deviceType, 1, &sim->devs, NULL);
-    clGetDeviceInfo(sim->devs, CL_DEVICE_VENDOR, 2048, &vendorName, NULL);
-    clGetDeviceInfo(sim->devs, CL_DEVICE_NAME, 2048, &deviceName, NULL);
+    clGetDeviceIDs(NULL, deviceType, 1, &ctx->devs, NULL);
+    clGetDeviceInfo(ctx->devs, CL_DEVICE_VENDOR, 2048, &vendorName, NULL);
+    clGetDeviceInfo(ctx->devs, CL_DEVICE_NAME, 2048, &deviceName, NULL);
 
-    sim->ctx = clCreateContext(0, 1, &sim->devs, &raiseOpenCLError, NULL, NULL);
-    sim->cmds = clCreateCommandQueue(sim->ctx, sim->devs, 0, NULL);
+    ctx->ctx = clCreateContext(0, 1, &ctx->devs, &raiseOpenCLError, NULL, NULL);
+    ctx->cmds = clCreateCommandQueue(ctx->ctx, ctx->devs, 0, NULL);
 
-    sim->buildOptions = cwdSprintf("-I %s/../Libraries/libparticles");
+    ctx->buildOptions = cwdSprintf("-I %s/../Libraries/libparticles");
 
-    if(sim->buildOptions && sim->ctx && sim->cmds)
+    if(ctx->buildOptions && ctx->ctx && ctx->cmds)
         printf("Created simulator on '%s %s'\n", vendorName, deviceName);
     else
         throwError("failed to create simulator");
 
-    return sim;
+    return ctx;
 }
 
 /**
- * Free the memory used by an SMContext, destroying the OpenCL context and
+ * Free the memory used by an COContext, destroying the OpenCL context and
  * command queue in the process.
  *
- * @param sim The simulation context to free.
+ * @param ctx The simulation context to free.
  */
-void SMContextFree(SMContext * sim)
+void COContextFree(COContext * ctx)
 {
-    clReleaseCommandQueue(sim->cmds);
-    clReleaseContext(sim->ctx);
-    free(sim->buildOptions);
-    free(sim);
+    clReleaseCommandQueue(ctx->cmds);
+    clReleaseContext(ctx->ctx);
+    free(ctx->buildOptions);
+    free(ctx);
 }
 
 /**
- * @param sim Context for which to modify compile-time options.
+ * @param ctx Context for which to modify compile-time options.
  * @param buildOptions New compile-time option string.
  */
-void SMContextSetBuildOptions(SMContext * sim, char * buildOptions)
+void COContextSetBuildOptions(COContext * ctx, char * buildOptions)
 {
-    free((void *)sim->buildOptions);
+    free((void *)ctx->buildOptions);
 
-    sim->buildOptions = buildOptions;
+    ctx->buildOptions = buildOptions;
 }
 
 /**
- * @param sim Context to inspect.
+ * @param ctx Context to inspect.
  * @return The current compile-time option string for the given context.
  */
-const char * SMContextGetBuildOptions(SMContext * sim)
+const char * COContextGetBuildOptions(COContext * ctx)
 {
-    return sim->buildOptions;
+    return ctx->buildOptions;
 }
 
 /**
  * Wait for all commands in the given context's command queue to complete, then
  * return.
  *
- * @param sim The simulation context to wait for.
+ * @param ctx The simulation context to wait for.
  */
-void SMContextWait(SMContext * sim)
+void COContextWait(COContext * ctx)
 {
-    clFinish(sim->cmds);
+    clFinish(ctx->cmds);
 }

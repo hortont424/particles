@@ -32,7 +32,7 @@ outerEnv = Environment(
     CCFLAGS = useFlags,
     LIBPATH = ["#Libraries/build/libcurve",
                "#Libraries/build/libparticles",
-               "#Libraries/build/libsimulator"])
+               "#Libraries/build/libcomputer"])
 
 Build.InstallTools(outerEnv)
 Export("outerEnv")
@@ -43,9 +43,9 @@ libjsonc = SConscript('External/json-c/build/SConscript')
 # Libraries
 libparticles = SConscript('Libraries/build/libparticles/SConscript')
 libcurve = SConscript('Libraries/build/libcurve/SConscript')
-libsimulator = SConscript('Libraries/build/libsimulator/SConscript')
+libcomputer = SConscript('Libraries/build/libcomputer/SConscript')
 
-libraries = ['libsimulator', 'libparticles', 'libcurve', 'libjsonc']
+libraries = ['libcomputer', 'libparticles', 'libcurve', 'libjsonc']
 
 # Tools
 simulator = SConscript('Simulator/build/SConscript', libraries)

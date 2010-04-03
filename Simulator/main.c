@@ -30,7 +30,7 @@
 #include <math.h>
 
 #include <libparticles/libparticles.h>
-#include <libsimulator/libsimulator.h>
+#include <libcomputer/libcomputer.h>
 
 #define ELEMENT_COUNT   4096
 #define FRAME_SIZE      (ELEMENT_COUNT * sizeof(PAPhysicsParticle))
@@ -51,23 +51,23 @@ void drawProgressBar(int width, double progress)
 
 int main(int argc, char ** argv)
 {
-    SMContext * sim;
-    SMProgram * gravProg, * intProg;
-    SMProgramLibrary * library;
+    COContext * sim;
+    COProgram * gravProg, * intProg;
+    COProgramLibrary * library;
     PAPhysicsParticle * data, * partialResults;
     PAPhysicsNewtonian * newton;
-    SMBuffer * parts, * newts, * fileBuf;
+    COBuffer * parts, * newts, * fileBuf;
     int step;
     struct timeval startTime, currentTime;
 
     srand((int)time(NULL));
 
-    SMOptionsParse(argc, argv);
+    COOptionsParse(argc, argv);
 
-    sim = SMContextNew();
+    sim = COContextNew();
 
-    library = SMProgramLibraryNew(sim);
-    SMProgramLibrarySetGlobalCount(library, ELEMENT_COUNT);
+    library = COProgramLibraryNew(sim);
+    COProgramLibrarySetGlobalCount(library, ELEMENT_COUNT);
 
     data = (PAPhysicsParticle *)calloc(ELEMENT_COUNT,
                                        sizeof(PAPhysicsParticle));
@@ -112,38 +112,38 @@ int main(int argc, char ** argv)
         }
     }
 
-    parts = SMBufferNew(sim, ELEMENT_COUNT, sizeof(PAPhysicsParticle), true);
-    newts = SMBufferNew(sim, ELEMENT_COUNT, sizeof(PAPhysicsNewtonian), true);
+    parts = COBufferNew(sim, ELEMENT_COUNT, sizeof(PAPhysicsParticle), true);
+    newts = COBufferNew(sim, ELEMENT_COUNT, sizeof(PAPhysicsNewtonian), true);
 
     printf("Allocated video memory (%ld KB)\n",
            ((2 * ELEMENT_COUNT * sizeof(PAPhysicsParticle)) +
            (2 * ELEMENT_COUNT * sizeof(PAPhysicsNewtonian))) / 1024);
 
-    SMBufferSet(parts, data);
-    SMBufferSet(newts, newton);
+    COBufferSet(parts, data);
+    COBufferSet(newts, newton);
     free(data);
     free(newton);
 
-    fileBuf = SMBufferNewWithFile(sim, ELEMENT_COUNT * FRAME_COUNT,
+    fileBuf = COBufferNewWithFile(sim, ELEMENT_COUNT * FRAME_COUNT,
                                   sizeof(PAPhysicsParticle), "test.out");
     printf("Created output file (%ld KB)\n", TOTAL_SIZE / 1024);
 
-    partialResults = (PAPhysicsParticle *)SMBufferGetNativeBuffer(fileBuf);
+    partialResults = (PAPhysicsParticle *)COBufferGetNativeBuffer(fileBuf);
 
-    gravProg = SMProgramLibraryGetProgram(library, PAPhysicsGravityType);
-    intProg = SMProgramLibraryGetProgram(library, PAPhysicsIntegrationType);
+    gravProg = COProgramLibraryGetProgram(library, PAPhysicsGravityType);
+    intProg = COProgramLibraryGetProgram(library, PAPhysicsIntegrationType);
 
-    SMProgramSetArgument(gravProg, 0, SMArgumentNewWithBuffer(parts, 0));
-    SMProgramSetArgument(gravProg, 1, SMArgumentNewWithBuffer(parts, 1));
-    SMProgramSetArgument(gravProg, 2, SMArgumentNewWithBuffer(newts, 0));
-    SMProgramSetArgument(gravProg, 3, SMArgumentNewWithBuffer(newts, 1));
-    SMProgramSetArgument(gravProg, 4, SMArgumentNewWithInt(ELEMENT_COUNT));
+    COProgramSetArgument(gravProg, 0, COArgumentNewWithBuffer(parts, 0));
+    COProgramSetArgument(gravProg, 1, COArgumentNewWithBuffer(parts, 1));
+    COProgramSetArgument(gravProg, 2, COArgumentNewWithBuffer(newts, 0));
+    COProgramSetArgument(gravProg, 3, COArgumentNewWithBuffer(newts, 1));
+    COProgramSetArgument(gravProg, 4, COArgumentNewWithInt(ELEMENT_COUNT));
 
-    SMProgramSetArgument(intProg, 0, SMArgumentNewWithBuffer(parts, 0));
-    SMProgramSetArgument(intProg, 1, SMArgumentNewWithBuffer(parts, 1));
-    SMProgramSetArgument(intProg, 2, SMArgumentNewWithBuffer(newts, 0));
-    SMProgramSetArgument(intProg, 3, SMArgumentNewWithBuffer(newts, 1));
-    SMProgramSetArgument(intProg, 4, SMArgumentNewWithInt(ELEMENT_COUNT));
+    COProgramSetArgument(intProg, 0, COArgumentNewWithBuffer(parts, 0));
+    COProgramSetArgument(intProg, 1, COArgumentNewWithBuffer(parts, 1));
+    COProgramSetArgument(intProg, 2, COArgumentNewWithBuffer(newts, 0));
+    COProgramSetArgument(intProg, 3, COArgumentNewWithBuffer(newts, 1));
+    COProgramSetArgument(intProg, 4, COArgumentNewWithInt(ELEMENT_COUNT));
 
     printf("\n");
     gettimeofday(&startTime, NULL);
@@ -170,24 +170,24 @@ int main(int argc, char ** argv)
         printf("\r");
         fflush(stdout);
 
-        SMProgramExecute(gravProg);
-        SMContextWait(sim);
-        SMProgramExecute(intProg);
-        SMContextWait(sim);
+        COProgramExecute(gravProg);
+        COContextWait(sim);
+        COProgramExecute(intProg);
+        COContextWait(sim);
 
-        SMBufferSwap(parts);
-        SMBufferSwap(newts);
+        COBufferSwap(parts);
+        COBufferSwap(newts);
 
-        SMBufferGet(parts, (void**)&partialResults);
+        COBufferGet(parts, (void**)&partialResults);
     }
 
     printf("\n\n");
 
-    SMBufferFree(parts);
-    SMBufferFree(newts);
-    SMBufferFree(fileBuf);
-    SMProgramLibraryFree(library);
-    SMContextFree(sim);
+    COBufferFree(parts);
+    COBufferFree(newts);
+    COBufferFree(fileBuf);
+    COProgramLibraryFree(library);
+    COContextFree(sim);
 
     return EXIT_SUCCESS;
 }

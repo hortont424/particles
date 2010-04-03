@@ -1,4 +1,4 @@
-/* particles - libsimulator - SMBuffer.c
+/* particles - libcomputer - COBuffer.c
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -33,60 +33,60 @@
 #include <sys/stat.h>
 #include <errno.h>
 
-#include "libsimulator.h"
+#include "libcomputer.h"
 
 /**
- * Create an SMBuffer backed by an OpenCL memory object. Depending on whether
+ * Create an COBuffer backed by an OpenCL memory object. Depending on whether
  * the context it's created in is on the CPU or GPU, reads and writes to this
  * buffer may involve transferring data between main and video memory, which is
  * much slower than working solely within either.
  *
- * @param sim The context in which to create the new buffer.
+ * @param ctx The context in which to create the new buffer.
  * @param elementCount The number of elements in the buffer.
  * @param elementSize The size of an element in the buffer.
  * @param doubleBuffered If we should double-buffer or not.
  * @return The newly allocated buffer.
  */
-SMBuffer * SMBufferNew(SMContext * sim, long elementCount,
+COBuffer * COBufferNew(COContext * ctx, long elementCount,
                        size_t elementSize, bool doubleBuffered)
 {
-    SMBuffer * buf = (SMBuffer *)calloc(1, sizeof(SMBuffer));
+    COBuffer * buf = (COBuffer *)calloc(1, sizeof(COBuffer));
 
-    buf->context = sim;
-    buf->type = SM_OPENCL_BUFFER;
+    buf->context = ctx;
+    buf->type = CO_OPENCL_BUFFER;
     buf->doubleBuffered = doubleBuffered;
 
     buf->elementCount = elementCount;
     buf->elementSize = elementSize;
 
     /// \todo Use host pointers? (OpenCL page 49)
-    buf->gpuBuffer = clCreateBuffer(sim->ctx, CL_MEM_READ_WRITE,
-                                    SMBufferGetSize(buf), NULL, NULL);
+    buf->gpuBuffer = clCreateBuffer(ctx->ctx, CL_MEM_READ_WRITE,
+                                    COBufferGetSize(buf), NULL, NULL);
 
     if(buf->doubleBuffered)
-        buf->gpuBackBuffer = clCreateBuffer(sim->ctx, CL_MEM_READ_WRITE,
-                                            SMBufferGetSize(buf), NULL, NULL);
+        buf->gpuBackBuffer = clCreateBuffer(ctx->ctx, CL_MEM_READ_WRITE,
+                                            COBufferGetSize(buf), NULL, NULL);
 
     return buf;
 }
 
 /**
- * Create an SMBuffer backed by an mmapped file. If the file exists, it is
+ * Create an COBuffer backed by an mmapped file. If the file exists, it is
  * overwritten; if it doesn't, it is created.
  *
- * @param sim The context in which to create the new buffer.
+ * @param ctx The context in which to create the new buffer.
  * @param elementCount The number of elements in the buffer.
  * @param elementSize The size of an element in the buffer.
  * @param filename The filename to map into the buffer's memory.
  * @return The newly allocated buffer.
  */
-SMBuffer * SMBufferNewWithFile(SMContext * sim, long elementCount,
+COBuffer * COBufferNewWithFile(COContext * ctx, long elementCount,
                                size_t elementSize, const char * filename)
 {
-    SMBuffer * buf = (SMBuffer *)calloc(1, sizeof(SMBuffer));
+    COBuffer * buf = (COBuffer *)calloc(1, sizeof(COBuffer));
 
-    buf->context = sim;
-    buf->type = SM_FILE_BUFFER;
+    buf->context = ctx;
+    buf->type = CO_FILE_BUFFER;
 
     buf->elementCount = elementCount;
     buf->elementSize = elementSize;
@@ -99,10 +99,10 @@ SMBuffer * SMBufferNewWithFile(SMContext * sim, long elementCount,
         return NULL;
     }
 
-    lseek(buf->file, SMBufferGetSize(buf), SEEK_SET);
+    lseek(buf->file, COBufferGetSize(buf), SEEK_SET);
     write(buf->file, "", 1);
 
-    buf->fileBuffer = (void *)mmap(NULL, SMBufferGetSize(buf),
+    buf->fileBuffer = (void *)mmap(NULL, COBufferGetSize(buf),
                                    PROT_READ | PROT_WRITE, MAP_SHARED,
                                    buf->file, 0);
 
@@ -110,24 +110,24 @@ SMBuffer * SMBufferNewWithFile(SMContext * sim, long elementCount,
 }
 
 /**
- * Free the memory used by the given SMBuffer. This will also unmap and close
+ * Free the memory used by the given COBuffer. This will also unmap and close
  * the associated file if it's a file-backed buffer.
  *
  * @param buf The buffer to free.
  */
-void SMBufferFree(SMBuffer * buf)
+void COBufferFree(COBuffer * buf)
 {
     switch(buf->type)
     {
-        case SM_OPENCL_BUFFER:
+        case CO_OPENCL_BUFFER:
             clReleaseMemObject(buf->gpuBuffer);
 
             if(buf->doubleBuffered)
                 clReleaseMemObject(buf->gpuBackBuffer);
 
             break;
-        case SM_FILE_BUFFER:
-            munmap(buf->fileBuffer, SMBufferGetSize(buf));
+        case CO_FILE_BUFFER:
+            munmap(buf->fileBuffer, COBufferGetSize(buf));
             close(buf->file);
 
             break;
@@ -139,30 +139,30 @@ void SMBufferFree(SMBuffer * buf)
 }
 
 /**
- * @param buf The SMBuffer to inspect.
+ * @param buf The COBuffer to inspect.
  * @return The number of elements in the buffer.
  */
-long SMBufferGetElementCount(SMBuffer * buf)
+long COBufferGetElementCount(COBuffer * buf)
 {
     return buf->elementCount;
 }
 
 /**
- * @param buf The SMBuffer to inspect.
+ * @param buf The COBuffer to inspect.
  * @return The size of each element in the buffer.
  */
-size_t SMBufferGetElementSize(SMBuffer * buf)
+size_t COBufferGetElementSize(COBuffer * buf)
 {
     return buf->elementSize;
 }
 
 /**
- * @param buf The SMBuffer to inspect.
+ * @param buf The COBuffer to inspect.
  * @return The total size of the buffer.
  */
-size_t SMBufferGetSize(SMBuffer * buf)
+size_t COBufferGetSize(COBuffer * buf)
 {
-    return SMBufferGetElementSize(buf) * SMBufferGetElementCount(buf);
+    return COBufferGetElementSize(buf) * COBufferGetElementCount(buf);
 }
 
 /**
@@ -170,13 +170,13 @@ size_t SMBufferGetSize(SMBuffer * buf)
  * buffer is requested and the buffer isn't double-buffered, return the sole
  * front buffer.
  *
- * @param buf The SMBuffer to inspect.
+ * @param buf The COBuffer to inspect.
  * @param backBuffer If true and we're double-buffered, return secondary buffer.
  * @return The cl_mem object which backs OpenCL buffers.
  */
-cl_mem SMBufferGetCLBuffer(SMBuffer * buf, bool backBuffer)
+cl_mem COBufferGetCLBuffer(COBuffer * buf, bool backBuffer)
 {
-    if(buf->type != SM_OPENCL_BUFFER)
+    if(buf->type != CO_OPENCL_BUFFER)
         throwError("tried to get cl_mem from non-OpenCL buffer");
 
     return ((backBuffer && buf->doubleBuffered) ?
@@ -184,43 +184,43 @@ cl_mem SMBufferGetCLBuffer(SMBuffer * buf, bool backBuffer)
 }
 
 /**
- * @param buf The SMBuffer to inspect.
+ * @param buf The COBuffer to inspect.
  * @return A pointer to the native buffer in memory, for file-backed buffers.
  */
-void * SMBufferGetNativeBuffer(SMBuffer * buf)
+void * COBufferGetNativeBuffer(COBuffer * buf)
 {
-    if(buf->type != SM_FILE_BUFFER)
+    if(buf->type != CO_FILE_BUFFER)
         throwError("tried to get native buffer from non-file buffer");
 
     return buf->fileBuffer;
 }
 
 /**
- * Copy the contents of the given SMBuffer into the given native buffer. If
+ * Copy the contents of the given COBuffer into the given native buffer. If
  * space hasn't been allocated for the native buffer, allocate just enough
- * space to fit the SMBuffer.
+ * space to fit the COBuffer.
  *
- * Keep in mind that if the SMBuffer is OpenCL-backed, this is an expensive
+ * Keep in mind that if the COBuffer is OpenCL-backed, this is an expensive
  * operation, as it involves copying a chunk of data from video to main memory.
  *
- * @param buf The source SMBuffer.
+ * @param buf The source COBuffer.
  * @param data A pointer to the destination native buffer.
  */
-void SMBufferGet(SMBuffer * buf, void ** data)
+void COBufferGet(COBuffer * buf, void ** data)
 {
     /// \todo I'm not totally sure this makes sense.
     if(*data == NULL)
     {
-        (*data) = (void *)calloc(1, SMBufferGetSize(buf));
+        (*data) = (void *)calloc(1, COBufferGetSize(buf));
     }
 
     switch(buf->type)
     {
-        case SM_OPENCL_BUFFER:
+        case CO_OPENCL_BUFFER:
             clEnqueueReadBuffer(buf->context->cmds, buf->gpuBuffer, CL_TRUE,
-                                0, SMBufferGetSize(buf), *data, 0, NULL, NULL);
+                                0, COBufferGetSize(buf), *data, 0, NULL, NULL);
             break;
-        case SM_FILE_BUFFER:
+        case CO_FILE_BUFFER:
             break;
         default:
             throwError("tried to copy from unknown buffer type");
@@ -228,23 +228,23 @@ void SMBufferGet(SMBuffer * buf, void ** data)
 }
 
 /**
- * Copy the contents of the given native buffer into the given SMBuffer.
+ * Copy the contents of the given native buffer into the given COBuffer.
  *
- * Keep in mind that if the SMBuffer is OpenCL-backed, this is an expensive
+ * Keep in mind that if the COBuffer is OpenCL-backed, this is an expensive
  * operation, as it involves copying a chunk of data from main to video memory.
  *
- * @param buf The destination SMBuffer.
+ * @param buf The destination COBuffer.
  * @param data The source native buffer.
  */
-void SMBufferSet(SMBuffer * buf, void * data)
+void COBufferSet(COBuffer * buf, void * data)
 {
     switch(buf->type)
     {
-        case SM_OPENCL_BUFFER:
+        case CO_OPENCL_BUFFER:
             clEnqueueWriteBuffer(buf->context->cmds, buf->gpuBuffer, CL_TRUE,
-                                 0, SMBufferGetSize(buf), data, 0, NULL, NULL);
+                                 0, COBufferGetSize(buf), data, 0, NULL, NULL);
             break;
-        case SM_FILE_BUFFER:
+        case CO_FILE_BUFFER:
             break;
         default:
             throwError("tried to copy to unknown buffer type");
@@ -256,7 +256,7 @@ void SMBufferSet(SMBuffer * buf, void * data)
  *
  * @param buf The buffer to swap.
  */
-void SMBufferSwap(SMBuffer * buf)
+void COBufferSwap(COBuffer * buf)
 {
     cl_mem temp;
     temp = buf->gpuBuffer;

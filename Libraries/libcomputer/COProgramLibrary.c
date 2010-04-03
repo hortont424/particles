@@ -1,4 +1,4 @@
-/* particles - libsimulator - SMProgramLibrary.c
+/* particles - libcomputer - COProgramLibrary.c
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -28,43 +28,43 @@
 #include "string.h"
 #include "stdlib.h"
 
-#include "libsimulator.h"
+#include "libcomputer.h"
 
 #define LIBRARY_PATH "./kernels/"
 
 /**
- * Allocate the space required for an SMProgramLibrary, construct a mapping of
- * SMPhysicsTypes to SMPrograms, where the programs are loaded based on the
+ * Allocate the space required for an COProgramLibrary, construct a mapping of
+ * COPhysicsTypes to COPrograms, where the programs are loaded based on the
  * given kernel filenames below.
  *
- * @param sim The simulation context to compile the programs within.
+ * @param ctx The simulation context to compile the programs within.
  * @return The newly allocated program library.
  */
-SMProgramLibrary * SMProgramLibraryNew(SMContext * sim)
+COProgramLibrary * COProgramLibraryNew(COContext * ctx)
 {
-    SMProgramLibrary * lib;
-    lib = (SMProgramLibrary *)calloc(1, sizeof(SMProgramLibrary));
+    COProgramLibrary * lib;
+    lib = (COProgramLibrary *)calloc(1, sizeof(COProgramLibrary));
 
-    lib->context = sim;
-    lib->programs = (SMProgram **)calloc(PAPhysicsLastType,
-                                         sizeof(SMProgram *));
+    lib->context = ctx;
+    lib->programs = (COProgram **)calloc(PAPhysicsLastType,
+                                         sizeof(COProgram *));
 
-    SMProgramLibraryLoadProgram(lib, PAPhysicsGravityType, "gravity.cl");
-    SMProgramLibraryLoadProgram(lib, PAPhysicsIntegrationType, "verlet.cl");
+    COProgramLibraryLoadProgram(lib, PAPhysicsGravityType, "gravity.cl");
+    COProgramLibraryLoadProgram(lib, PAPhysicsIntegrationType, "verlet.cl");
 
     return lib;
 }
 
 /**
- * Free the memory used by the given SMProgramLibrary and its contents.
+ * Free the memory used by the given COProgramLibrary and its contents.
  *
  * @param lib The program library to be freed.
  */
-void SMProgramLibraryFree(SMProgramLibrary * lib)
+void COProgramLibraryFree(COProgramLibrary * lib)
 {
     for(int i = 0; i < PAPhysicsLastType; i++)
         if(lib->programs[i])
-            SMProgramFree(lib->programs[i]);
+            COProgramFree(lib->programs[i]);
 
     free(lib->programs);
     free(lib);
@@ -75,7 +75,7 @@ void SMProgramLibraryFree(SMProgramLibrary * lib)
  * @param type The simulation type to load a kernel for.
  * @param filename The filename of the kernel to load.
  */
-void SMProgramLibraryLoadProgram(SMProgramLibrary * lib, PAPhysicsType type,
+void COProgramLibraryLoadProgram(COProgramLibrary * lib, PAPhysicsType type,
                                  char * filename)
 {
     char * kernelPath;
@@ -84,7 +84,7 @@ void SMProgramLibraryLoadProgram(SMProgramLibrary * lib, PAPhysicsType type,
     kernelPath = (char *)calloc(kernelPathLength, sizeof(char));
     snprintf(kernelPath, kernelPathLength, "%s%s", LIBRARY_PATH, filename);
 
-    lib->programs[type] = SMProgramNew(lib->context, kernelPath);
+    lib->programs[type] = COProgramNew(lib->context, kernelPath);
     showBuildLog(lib->context, lib->programs[type]);
 }
 
@@ -94,20 +94,20 @@ void SMProgramLibraryLoadProgram(SMProgramLibrary * lib, PAPhysicsType type,
  * @param lib The program library to modify.
  * @param globalCount The new global element count.
  */
-void SMProgramLibrarySetGlobalCount(SMProgramLibrary * lib, size_t globalCount)
+void COProgramLibrarySetGlobalCount(COProgramLibrary * lib, size_t globalCount)
 {
     for(int i = 0; i < PAPhysicsLastType; i++)
         if(lib->programs[i])
-            SMProgramSetGlobalCount(lib->programs[i], globalCount);
+            COProgramSetGlobalCount(lib->programs[i], globalCount);
 }
 
 /**
  * Look up and return the loaded program for the given simulation type.
  *
  * @param lib The program library to inspect.
- * @param type The simulation type to return an SMProgram for.
+ * @param type The simulation type to return an COProgram for.
  */
-SMProgram * SMProgramLibraryGetProgram(SMProgramLibrary * lib,
+COProgram * COProgramLibraryGetProgram(COProgramLibrary * lib,
                                        PAPhysicsType type)
 {
     /// \todo Error checking, docs.

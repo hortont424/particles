@@ -1,4 +1,4 @@
-/* particles - libsimulator - SMProgramLibrary.h
+/* particles - libcomputer - COContext.h
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,37 +24,34 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _SM_PROGRAM_LIBRARY_H_
-#define _SM_PROGRAM_LIBRARY_H_
+#ifndef _CO_CONTEXT_H_
+#define _CO_CONTEXT_H_
 
 #include <OpenCL/opencl.h>
 
-#include <libparticles/libparticles.h>
-
-#include "SMContext.h"
-#include "SMProgram.h"
+#include "COOptions.h"
 
 /**
- * @defgroup SMProgramLibrary SMProgramLibrary
+ * @defgroup COContext COContext
  * @{
  */
 
-typedef struct _SMProgramLibrary
+typedef struct _SMContext
 {
-    SMProgram ** programs;      /**< The array of loaded programs, indexed by
-                                     SMPhysicsType identifier */
+    cl_device_id devs;          /**< OpenCL device ID context was created on */
+    cl_context ctx;             /**< OpenCL context */
+    cl_command_queue cmds;      /**< OpenCL command queue */
 
-    SMContext * context;        /**< The context that owns the programs */
-} SMProgramLibrary;
+    char * buildOptions;        /**< Options to pass to OpenCL compiler */
+} COContext;
 
-SMProgramLibrary * SMProgramLibraryNew(SMContext * sim);
-void SMProgramLibraryFree(SMProgramLibrary * lib);
+COContext * COContextNew();
+void COContextFree(COContext * ctx);
 
-void SMProgramLibraryLoadProgram(SMProgramLibrary * lib, PAPhysicsType type,
-                                 char * filename);
-void SMProgramLibrarySetGlobalCount(SMProgramLibrary * lib, size_t globalCount);
-SMProgram * SMProgramLibraryGetProgram(SMProgramLibrary * lib,
-                                       PAPhysicsType type);
+void COContextSetBuildOptions(COContext * ctx, char * buildOptions);
+const char * COContextGetBuildOptions(COContext * ctx);
+
+void COContextWait(COContext * ctx);
 
 /** @} */
 

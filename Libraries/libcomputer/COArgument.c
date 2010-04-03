@@ -1,4 +1,4 @@
-/* particles - libsimulator - SMArgument.c
+/* particles - libcomputer - COArgument.c
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -27,37 +27,37 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "libsimulator.h"
+#include "libcomputer.h"
 
 /**
- * Allocate the space required for an empty SMArgument.
+ * Allocate the space required for an empty COArgument.
  *
  * @return The newly allocated empty argument.
  */
-SMArgument * SMArgumentNew()
+COArgument * COArgumentNew()
 {
-    return (SMArgument *)calloc(1, sizeof(SMArgument));
+    return (COArgument *)calloc(1, sizeof(COArgument));
 }
 
 /**
- * Allocate the space required for an SMArgument, and fill it with a pointer
- * to the given SMBuffer (this doesn't work with file buffers, because
+ * Allocate the space required for an COArgument, and fill it with a pointer
+ * to the given COBuffer (this doesn't work with file buffers, because
  * they aren't cl_mem objects and as such can't be passed into an OpenCL
  * kernel).
  *
  * The native pointer will be retrieved when requested with
- * SMArgumentGetPointer - that way, the correct front/back buffer will be
+ * COArgumentGetPointer - that way, the correct front/back buffer will be
  * returned without having to create a new argument each time.
  *
- * @param buf The OpenCL-backed SMBuffer the argument should point at.
- * @param backBuffer If true, use the SMBuffer's back buffer.
- * @return The newly allocated argument, pointing at an SMBuffer.
+ * @param buf The OpenCL-backed COBuffer the argument should point at.
+ * @param backBuffer If true, use the COBuffer's back buffer.
+ * @return The newly allocated argument, pointing at an COBuffer.
  */
-SMArgument * SMArgumentNewWithBuffer(SMBuffer * buf, bool backBuffer)
+COArgument * COArgumentNewWithBuffer(COBuffer * buf, bool backBuffer)
 {
-    SMArgument * arg = SMArgumentNew();
+    COArgument * arg = COArgumentNew();
 
-    arg->type = SM_BUFFER_ARGUMENT;
+    arg->type = CO_BUFFER_ARGUMENT;
     arg->size = sizeof(cl_mem);
     arg->pointer = (void *)buf;
     arg->owned = false;
@@ -67,17 +67,17 @@ SMArgument * SMArgumentNewWithBuffer(SMBuffer * buf, bool backBuffer)
 }
 
 /**
- * Allocate the space required for an SMArgument, and fill it with a pointer
+ * Allocate the space required for an COArgument, and fill it with a pointer
  * to a copy of the given float.
  *
  * @param f A float for the argument to point at.
  * @return The newly allocated argument, pointing at a copy of the given float.
  */
-SMArgument * SMArgumentNewWithFloat(PAFloat f)
+COArgument * COArgumentNewWithFloat(PAFloat f)
 {
-    SMArgument * arg = SMArgumentNew();
+    COArgument * arg = COArgumentNew();
 
-    arg->type = SM_POINTER_ARGUMENT;
+    arg->type = CO_POINTER_ARGUMENT;
     arg->size = sizeof(PAFloat);
     arg->pointer = (void *)calloc(1, sizeof(PAFloat));
     *((PAFloat *)arg->pointer) = f;
@@ -87,17 +87,17 @@ SMArgument * SMArgumentNewWithFloat(PAFloat f)
 }
 
 /**
- * Allocate the space required for an SMArgument, and fill it with a pointer
+ * Allocate the space required for an COArgument, and fill it with a pointer
  * to a copy of the given int.
  *
  * @param i A int for the argument to point at.
  * @return The newly allocated argument, pointing at a copy of the given int.
  */
-SMArgument * SMArgumentNewWithInt(PAInt i)
+COArgument * COArgumentNewWithInt(PAInt i)
 {
-    SMArgument * arg = SMArgumentNew();
+    COArgument * arg = COArgumentNew();
 
-    arg->type = SM_POINTER_ARGUMENT;
+    arg->type = CO_POINTER_ARGUMENT;
     arg->size = sizeof(PAInt);
     arg->pointer = (void *)calloc(1, sizeof(PAInt));
     *((PAInt *)arg->pointer) = i;
@@ -107,12 +107,12 @@ SMArgument * SMArgumentNewWithInt(PAInt i)
 }
 
 /**
- * Free the memory used by the given SMArgument, also freeing the object it
+ * Free the memory used by the given COArgument, also freeing the object it
  * points at, if we own it.
  *
- * @param arg The SMArgument to free.
+ * @param arg The COArgument to free.
  */
-void SMArgumentFree(SMArgument * arg)
+void COArgumentFree(COArgument * arg)
 {
     if(arg->owned)
         free(arg->pointer);
@@ -124,31 +124,31 @@ void SMArgumentFree(SMArgument * arg)
 }
 
 /**
- * @param arg The SMArgument to inspect.
+ * @param arg The COArgument to inspect.
  * @return The size of the object the argument points at.
  */
-size_t SMArgumentGetSize(SMArgument * arg)
+size_t COArgumentGetSize(COArgument * arg)
 {
     return arg->size;
 }
 
 /**
- * @param arg The SMArgument to inspect.
+ * @param arg The COArgument to inspect.
  * @return A pointer to the object the argument points at.
  */
-void * SMArgumentGetPointer(SMArgument * arg)
+void * COArgumentGetPointer(COArgument * arg)
 {
     switch(arg->type)
     {
-        case SM_POINTER_ARGUMENT:
+        case CO_POINTER_ARGUMENT:
             return arg->pointer;
             break;
-        case SM_BUFFER_ARGUMENT:
+        case CO_BUFFER_ARGUMENT:
             if(arg->bufferCache)
                 free(arg->bufferCache);
 
             arg->bufferCache = (cl_mem *)calloc(1, sizeof(cl_mem));
-            (*arg->bufferCache) = SMBufferGetCLBuffer((SMBuffer *)arg->pointer,
+            (*arg->bufferCache) = COBufferGetCLBuffer((COBuffer *)arg->pointer,
                                                       arg->backBuffer);
             return arg->bufferCache;
             break;
