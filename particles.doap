@@ -1,0 +1,25 @@
+<Project xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+         xmlns:rdfs="http://www.w3.org/2000/01/rdf-schema#"
+         xmlns:foaf="http://xmlns.com/foaf/0.1/"
+         xmlns="http://usefulinc.com/ns/doap#">
+
+    <name xml:lang="en">Particles</name>
+    <shortdesc xml:lang="en">Cinematic OpenCL Particle Systems</shortdesc>
+    <homepage rdf:resource="http://github.com/hortont424/particles" />
+    <created>2010-01-01</created>
+
+    <maintainer>
+        <foaf:Person>
+            <foaf:name>Tim Horton</foaf:name>
+            <foaf:mbox rdf:resource="mailto:tim@hortont.com" />
+            <foaf:homepage rdf:resource="http://www.hortont.com" />
+        </foaf:Person>
+    </maintainer>
+
+    <repository>
+        <GitRepository>
+            <location rdf:resource="git://github.com/hortont424/particles.git" />
+            <browse rdf:resource="http://github.com/hortont424/particles" />
+        </GitRepository>
+    </repository>
+</Project>
