@@ -1,11 +1,7 @@
-.PHONY: all clean run run-cpu edit docs
+.PHONY: all clean run run-cpu edit
 
 all:
 	cd .. ; scons -Q
-
-docs:
-	doxygen libcomputer/libcomputer.doxyfile
-	open build/doc/html/modules.html
 
 clean:
 	rm -rf ./build

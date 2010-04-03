@@ -4,7 +4,9 @@
          xmlns="http://usefulinc.com/ns/doap#">
 
     <name xml:lang="en">Particles</name>
-    <shortdesc xml:lang="en">Cinematic OpenCL Particle Systems</shortdesc>
+    <shortdesc xml:lang="en">
+        Creation, Simulation, and Rendering of Particle Systems with OpenCL
+    </shortdesc>
     <homepage rdf:resource="http://github.com/hortont424/particles" />
     <created>2010-01-01</created>
 
@@ -15,6 +17,8 @@
             <foaf:homepage rdf:resource="http://www.hortont.com" />
         </foaf:Person>
     </maintainer>
+
+    <license rdf:resource="http://usefulinc.com/doap/licenses/bsd" />
 
     <repository>
         <GitRepository>

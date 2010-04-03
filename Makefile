@@ -1,7 +1,11 @@
-.PHONY: all clean edit
+.PHONY: all clean edit docs
 
 all:
 	scons -Q
+
+docs:
+	doxygen particles.doxyfile
+	open Libraries/build/doc/html/index.html
 
 clean:
 	rm -rf ./Libraries/build
