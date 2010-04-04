@@ -1,0 +1,16 @@
+{
+    "forces": [
+        {
+            "type": "gravity",
+            "strength": 1.0,
+            "noise": 0.0,
+            "particle": {
+                "enabled": true,
+                "fixed": true,
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        }
+    ]
+}
