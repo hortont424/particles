@@ -27,7 +27,10 @@
 #ifndef _PA_PHYSICS_H_
 #define _PA_PHYSICS_H_
 
+#include <json.h>
+
 #include "PATypes.h"
+#include "PAParticle.h"
 
 // Types of different supported forces
 typedef enum _PAPhysicsType
@@ -103,9 +106,10 @@ typedef struct _PAPhysicsBoidsData
 // with, and move just like other particles)
 typedef struct _PAPhysicsForce
 {
-    PAFloat particleIndex;   // These need to not be PAFloats, but I'm afraid
-    PAFloat forceType;       // of what will happen if they're not the same size
-                             // as everything else when being passed in...
+    PAPhysicsParticle particle;
+    PAFloat type;   // This needs to not be a PAFloat, but I'm afraid
+                    // of what will happen if they're not the same size
+                    // as everything else when being passed in...
     union
     {
         PAPhysicsNormalData normal;
@@ -123,9 +127,12 @@ typedef struct _PAPhysicsForce
 // holds universal properties like mass, velocity, and acceleration.
 typedef struct _PAPhysicsNewtonian
 {
-    PAFloat fixed,mass;
+    PAFloat fixed, mass;
     PAFloat ax, ay, az;
     PAFloat ox, oy, oz;
 } PAPhysicsNewtonian;
+
+PAPhysicsForce * PAPhysicsForceNew();
+PAPhysicsForce * PAPhysicsForceNewFromJSON(json_object * js);
 
 #endif

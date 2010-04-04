@@ -66,6 +66,22 @@ int main(int argc, char ** argv)
 
     COOptionsParse(argc, argv);
 
+#if 0
+    json_object * sys;
+    array_list * forces;
+    sys = json_object_from_file("../Systems/sample.psys");
+    forces = json_object_get_array(json_object_object_get(sys, "forces"));
+
+    for(int i = 0; i < array_list_length(forces); i++)
+    {
+        json_object * forceo = (json_object *)array_list_get_idx(forces, i);
+        PAPhysicsForce * force = PAPhysicsForceNewFromJSON(forceo);
+        printf("%f\n", force->forceData.gravity.strength);
+    }
+
+    exit(EXIT_SUCCESS);
+#endif
+
     sim = COContextNew();
 
     library = COProgramLibraryNew(sim);

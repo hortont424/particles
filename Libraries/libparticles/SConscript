@@ -1,8 +1,10 @@
+Import("libjsonc")
 Import("outerEnv")
 
 env = outerEnv.Clone()
 env.AppendUnique(FRAMEWORKS = ["OpenCL"])
 
-libparticles = env.SharedLibrary("particles", Glob("*.c"))
+libparticles = env.SharedLibrary("particles", Glob("*.c"), LIBS = ["jsonc"])
+Depends(libparticles, libjsonc)
 
 Return("libparticles")

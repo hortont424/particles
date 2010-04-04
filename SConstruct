@@ -42,12 +42,14 @@ Export("outerEnv")
 # External libraries
 libjsonc = SConscript('External/json-c/build/SConscript')
 
-# Libraries
-libparticles = SConscript('Libraries/build/libparticles/SConscript')
-libcurve = SConscript('Libraries/build/libcurve/SConscript')
-libcomputer = SConscript('Libraries/build/libcomputer/SConscript')
+extern = ['libjsonc']
 
-libraries = ['libcomputer', 'libparticles', 'libcurve', 'libjsonc']
+# Libraries
+libparticles = SConscript('Libraries/build/libparticles/SConscript', extern)
+libcurve = SConscript('Libraries/build/libcurve/SConscript', extern)
+libcomputer = SConscript('Libraries/build/libcomputer/SConscript', extern)
+
+libraries = extern + ['libcomputer', 'libparticles', 'libcurve']
 
 # Tools
 simulator = SConscript('Simulator/build/SConscript', libraries)
