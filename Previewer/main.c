@@ -46,7 +46,7 @@
 #endif
 
 #define ELEMENT_COUNT 4096
-#define FRAME_COUNT 2000
+#define FRAME_COUNT 100
 
 float * points;
 int paint = 0;

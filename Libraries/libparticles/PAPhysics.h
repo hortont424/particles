@@ -123,7 +123,7 @@ typedef struct _PAPhysicsForce
 // holds universal properties like mass, velocity, and acceleration.
 typedef struct _PAPhysicsNewtonian
 {
-    PAFloat fixed, mass;
+    PAFloat fixed,mass;
     PAFloat ax, ay, az;
     PAFloat ox, oy, oz;
 } PAPhysicsNewtonian;

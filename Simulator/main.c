@@ -32,9 +32,11 @@
 #include <libparticles/libparticles.h>
 #include <libcomputer/libcomputer.h>
 
+#include <json.h>
+
 #define ELEMENT_COUNT   4096
 #define FRAME_SIZE      (ELEMENT_COUNT * sizeof(PAPhysicsParticle))
-#define FRAME_COUNT     2000
+#define FRAME_COUNT     100
 #define TOTAL_SIZE      (FRAME_SIZE * FRAME_COUNT)
 
 void drawProgressBar(int width, double progress)
@@ -82,34 +84,7 @@ int main(int argc, char ** argv)
         newton[i].oy = data[i].y = (PAFloat)rand()/(PAFloat)RAND_MAX;
         newton[i].oz = data[i].z = (PAFloat)rand()/(PAFloat)RAND_MAX/5.0;
 
-        newton[i].mass = 1000000.0 * (PAFloat)rand()/(PAFloat)RAND_MAX;
-
-        if(data[i].x >= 0.49 && data[i].x <= 0.50 &&
-           data[i].y >= 0.49 && data[i].y <= 0.50)
-            newton[i].mass = 10000000000.0;
-
-        float dist = sqrt(((data[i].x - 0.5) * (data[i].x - 0.5)) + ((data[i].y - 0.5) * (data[i].y - 0.5)));
-
-        if(data[i].x > 0.5 && data[i].y > 0.5)
-        {
-            newton[i].ox -= 0.01 * dist;
-            newton[i].oy += 0.01 * dist;
-        }
-        else if(data[i].x < 0.5 && data[i].y > 0.5)
-        {
-            newton[i].ox -= 0.01 * dist;
-            newton[i].oy -= 0.01 * dist;
-        }
-        else if(data[i].x < 0.5 && data[i].y < 0.5)
-        {
-            newton[i].ox += 0.01 * dist;
-            newton[i].oy -= 0.01 * dist;
-        }
-        else if(data[i].x > 0.5 && data[i].y < 0.5)
-        {
-            newton[i].ox += 0.01 * dist;
-            newton[i].oy += 0.01 * dist;
-        }
+        newton[i].mass = 50000000.0 * (PAFloat)rand()/(PAFloat)RAND_MAX;
     }
 
     parts = COBufferNew(sim, ELEMENT_COUNT, sizeof(PAPhysicsParticle), true);

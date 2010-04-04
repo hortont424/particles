@@ -1,12 +1,15 @@
 Import("libcomputer")
 Import("libparticles")
+Import("libjsonc")
 Import("outerEnv")
 
 env = outerEnv.Clone()
 env.AppendUnique(FRAMEWORKS = ["OpenCL"])
 
-simulator = env.Program("simulator", Glob("*.c"), LIBS = ["computer", "particles"])
+simulator = env.Program("simulator", Glob("*.c"),
+                        LIBS = ["computer", "particles", "jsonc"])
 Depends(simulator, libcomputer)
 Depends(simulator, libparticles)
+Depends(simulator, libjsonc)
 
 Return("simulator")

@@ -7,14 +7,14 @@ docs:
 	doxygen particles.doxyfile
 	open Libraries/build/doc/html/index.html
 
-simulate: all
+simulate:
 	rm -f ./Simulator/test.out
-	cd Simulator ; DYLD_LIBRARY_PATH=../Libraries/build/libcomputer/:../Libraries/build/libparticles/ ./build/simulator
+	cd Simulator ; DYLD_LIBRARY_PATH=../Libraries/build/libcomputer/:../Libraries/build/libparticles/:../External/json-c/build/ ./build/simulator
 
-interpolate: all
+interpolate:
 	./Interpolator/build/Interpolator.app/Contents/MacOS/Interpolator
 
-preview: all
+preview:
 	cd Previewer ; ./build/previewer
 
 clean:

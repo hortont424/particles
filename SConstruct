@@ -9,7 +9,8 @@ VariantDir('Interpolator/build', 'Interpolator', duplicate = 0)
 VariantDir('Previewer/build', 'Previewer', duplicate = 0)
 VariantDir('External/json-c/build', 'External/json-c', duplicate = 0)
 
-flags = ["--std=c99", "-Wall", "-Werror", "-fobjc-gc", "-ILibraries"]
+includes = ["-ILibraries", "-IExternal/json-c"]
+flags = includes + ["--std=c99", "-Wall", "-Werror", "-fobjc-gc"]
 
 releaseFlags = flags + ["-O4"]
 debugFlags = flags + ["-g"]
@@ -32,7 +33,8 @@ outerEnv = Environment(
     CCFLAGS = useFlags,
     LIBPATH = ["#Libraries/build/libcurve",
                "#Libraries/build/libparticles",
-               "#Libraries/build/libcomputer"])
+               "#Libraries/build/libcomputer",
+               "#External/json-c/build"])
 
 Build.InstallTools(outerEnv)
 Export("outerEnv")
