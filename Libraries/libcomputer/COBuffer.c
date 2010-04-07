@@ -33,6 +33,8 @@
 #include <sys/stat.h>
 #include <errno.h>
 
+#include <liblog/liblog.h>
+
 #include "libcomputer.h"
 
 /**
@@ -95,7 +97,7 @@ COBuffer * COBufferNewWithFile(COContext * ctx, long elementCount,
 
     if(buf->file == -1)
     {
-        throwError("couldn't create buffer file '%s'", filename);
+        LOError("couldn't create buffer file '%s'", filename);
         return NULL;
     }
 
@@ -132,7 +134,7 @@ void COBufferFree(COBuffer * buf)
 
             break;
         default:
-            throwError("tried to free unknown buffer type");
+            LOError("tried to free unknown buffer type");
     }
 
     free(buf);
@@ -177,7 +179,7 @@ size_t COBufferGetSize(COBuffer * buf)
 cl_mem COBufferGetCLBuffer(COBuffer * buf, bool backBuffer)
 {
     if(buf->type != CO_OPENCL_BUFFER)
-        throwError("tried to get cl_mem from non-OpenCL buffer");
+        LOError("tried to get cl_mem from non-OpenCL buffer");
 
     return ((backBuffer && buf->doubleBuffered) ?
         buf->gpuBackBuffer : buf->gpuBuffer);
@@ -190,7 +192,7 @@ cl_mem COBufferGetCLBuffer(COBuffer * buf, bool backBuffer)
 void * COBufferGetNativeBuffer(COBuffer * buf)
 {
     if(buf->type != CO_FILE_BUFFER)
-        throwError("tried to get native buffer from non-file buffer");
+        LOError("tried to get native buffer from non-file buffer");
 
     return buf->fileBuffer;
 }
@@ -223,7 +225,7 @@ void COBufferGet(COBuffer * buf, void ** data)
         case CO_FILE_BUFFER:
             break;
         default:
-            throwError("tried to copy from unknown buffer type");
+            LOError("tried to copy from unknown buffer type");
     }
 }
 
@@ -247,7 +249,7 @@ void COBufferSet(COBuffer * buf, void * data)
         case CO_FILE_BUFFER:
             break;
         default:
-            throwError("tried to copy to unknown buffer type");
+            LOError("tried to copy to unknown buffer type");
     }
 }
 

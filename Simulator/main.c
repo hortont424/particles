@@ -29,6 +29,7 @@
 #include <sys/time.h>
 #include <math.h>
 
+#include <liblog/liblog.h>
 #include <libparticles/libparticles.h>
 #include <libcomputer/libcomputer.h>
 
@@ -66,18 +67,8 @@ int main(int argc, char ** argv)
 
     COOptionsParse(argc, argv);
 
-    json_object * sys;
-    array_list * forces;
-    sys = json_object_from_file("../Systems/sample.psys");
-    forces = json_object_get_array(json_object_object_get(sys, "forces"));
-
-    for(int i = 0; i < array_list_length(forces); i++)
-    {
-        json_object * forceo = (json_object *)array_list_get_idx(forces, i);
-        PAPhysicsForce * force = PAPhysicsForceNewFromJSON(forceo);
-        printf("%f\n", force->forceData.gravity.strength);
-    }
-
+    //"../Systems/sample.psys"
+    LOError("arst!");
     exit(EXIT_SUCCESS);
 
     sim = COContextNew();

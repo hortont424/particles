@@ -28,11 +28,13 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <liblog/liblog.h>
+
 #include "PAPhysics.h"
 
 #define malformedFileError(part) \
 { \
-    printf("Error: malformed psys file in '" part "' element!\n");\
+    printf("Error: malformed psys file in '" part "' element!\n"); \
 }
 
 #define readJSONProperty(src, dest, prop, def) \
@@ -93,6 +95,7 @@ PAPhysicsForce * PAPhysicsForceNewFromJSON(json_object * jsForce)
     else
     {
         printf("Error: unknown kernel %s in psys file!\n", typestr);
+        return NULL;
     }
 
     readJSONProperty(jsParticle, force->particle, enabled, 1.0);

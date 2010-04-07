@@ -1,4 +1,4 @@
-/* particles - libcomputer - COOptions.c
+/* particles - libparticles - PASystem.c
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,38 +24,41 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdio.h>
+#include <string.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <stdbool.h>
+#include <stdio.h>
 
 #include <liblog/liblog.h>
 
-#include "libcomputer.h"
+#include "PASystem.h"
 
-int computerUsesCPU = false;
-
-/**
- * Parse the given command line options, setting flags relevant to our
- * interests.
- *
- * @todo This should be made much more robust; it should remove arguments from
- * the argc/argv; it should provide -h/--help, etc.
- *
- * @param argc The number of arguments in the argument array.
- * @param argv The command line argument array.
- */
-void COOptionsParse(int argc, char * const * argv)
+PASystem * PASystemNew()
 {
-    char currentOption;
+    PASystem * sys;
 
-    while((currentOption = getopt(argc, argv, "c")) != EOF)
+    sys = (PASystem *)calloc(1, sizeof(PASystem));
+
+    return sys;
+}
+
+PASystem * PASystemNewFromJSON(json_object * jsSystem)
+{
+    array_list * forces;
+    forces = json_object_get_array(json_object_object_get(jsSystem, "forces"));
+
+    for(int i = 0; i < array_list_length(forces); i++)
     {
-        switch(currentOption)
-        {
-            case 'c':
-                computerUsesCPU = true;
-                break;
-        }
+        json_object * forceo = (json_object *)array_list_get_idx(forces, i);
+        PAPhysicsForce * force = PAPhysicsForceNewFromJSON(forceo);
+        printf("%f\n", force->forceData.gravity.strength);
     }
+}
+
+PASystem * PASystemNewFromFile(const char * filename)
+{
+    json_object * jsSystem;
+
+    jsSystem = json_object_from_file((char *)filename); // why not const
+
+    return PASystemNewFromJSON(jsSystem);
 }

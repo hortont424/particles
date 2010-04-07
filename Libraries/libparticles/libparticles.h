@@ -30,5 +30,6 @@
 #include "PATypes.h"
 #include "PAParticle.h"
 #include "PAPhysics.h"
+#include "PASystem.h"
 
 #endif

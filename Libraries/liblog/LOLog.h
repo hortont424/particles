@@ -1,4 +1,4 @@
-/* particles - libcomputer - COOptions.c
+/* particles - liblog - LOLog.h
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,38 +24,20 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+#ifndef _LO_LOG_H_
+#define _LO_LOG_H_
+
 #include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdbool.h>
 
-#include <liblog/liblog.h>
-
-#include "libcomputer.h"
-
-int computerUsesCPU = false;
-
-/**
- * Parse the given command line options, setting flags relevant to our
- * interests.
- *
- * @todo This should be made much more robust; it should remove arguments from
- * the argc/argv; it should provide -h/--help, etc.
- *
- * @param argc The number of arguments in the argument array.
- * @param argv The command line argument array.
- */
-void COOptionsParse(int argc, char * const * argv)
-{
-    char currentOption;
-
-    while((currentOption = getopt(argc, argv, "c")) != EOF)
-    {
-        switch(currentOption)
-        {
-            case 'c':
-                computerUsesCPU = true;
-                break;
-        }
-    }
+#define LOLog(f, ...) \
+{ \
+    printf(f, ##__VA_ARGS__); \
 }
+
+#define LOError(f, ...) \
+{ \
+    fprintf(stderr, "\033[91mError (%s, line %d):\033[0m " f "\n", \
+            __FILE__, __LINE__, ##__VA_ARGS__); \
+}
+
+#endif

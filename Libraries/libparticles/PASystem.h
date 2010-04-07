@@ -1,4 +1,4 @@
-/* particles - libcomputer - COOptions.c
+/* particles - libparticles - PASystem.h
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,38 +24,20 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
-#include <stdbool.h>
+#ifndef _PA_SYSTEM_H_
+#define _PA_SYSTEM_H_
 
-#include <liblog/liblog.h>
+#include <json.h>
 
-#include "libcomputer.h"
+#include "PAPhysics.h"
 
-int computerUsesCPU = false;
-
-/**
- * Parse the given command line options, setting flags relevant to our
- * interests.
- *
- * @todo This should be made much more robust; it should remove arguments from
- * the argc/argv; it should provide -h/--help, etc.
- *
- * @param argc The number of arguments in the argument array.
- * @param argv The command line argument array.
- */
-void COOptionsParse(int argc, char * const * argv)
+typedef struct _PASystem
 {
-    char currentOption;
+    PAPhysicsForce ** forces;
+} PASystem;
 
-    while((currentOption = getopt(argc, argv, "c")) != EOF)
-    {
-        switch(currentOption)
-        {
-            case 'c':
-                computerUsesCPU = true;
-                break;
-        }
-    }
-}
+PASystem * PASystemNew();
+PASystem * PASystemNewFromJSON(json_object * jsSystem);
+PASystem * PASystemNewFromFile(const char * filename);
+
+#endif

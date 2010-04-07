@@ -30,6 +30,8 @@
 #include <unistd.h>
 #include <stdarg.h>
 
+#include <liblog/liblog.h>
+
 #include "libcomputer.h"
 
 char * cwdSprintf(const char * fmt)
@@ -90,7 +92,7 @@ COContext * COContextNew()
     if(ctx->buildOptions && ctx->ctx && ctx->cmds)
         printf("Created simulator on '%s %s'\n", vendorName, deviceName);
     else
-        throwError("failed to create simulator");
+        LOError("failed to create simulator");
 
     return ctx;
 }

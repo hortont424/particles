@@ -34,6 +34,8 @@
 #include <string.h>
 #include <math.h>
 
+#include <liblog/liblog.h>
+
 #include "libcomputer.h"
 
 COProgram * compileProgram(COContext * ctx, char * name,
@@ -91,7 +93,7 @@ COProgram * COProgramNew(COContext * ctx, const char * filename)
 
     if(!strstr(filename, ".cl"))
     {
-        throwError("'%s' is not an OpenCL kernel file", filename);
+        LOError("'%s' is not an OpenCL kernel file", filename);
         return NULL;
     }
 
@@ -99,14 +101,14 @@ COProgram * COProgramNew(COContext * ctx, const char * filename)
 
     if(fileHandle == -1 || fstat(fileHandle, &fileInfo) == -1)
     {
-        throwError("kernel file '%s' not found", filename);
+        LOError("kernel file '%s' not found", filename);
         return NULL;
     }
 
     // Since we use stat's size, we can't allow symlinks here
     if(!S_ISREG(fileInfo.st_mode))
     {
-        throwError("'%s' is non-regular; symbolic link?", filename);
+        LOError("'%s' is non-regular; symbolic link?", filename);
         return NULL;
     }
 
@@ -163,7 +165,7 @@ void COProgramExecute(COProgram * prog)
 
         if(!arg)
         {
-            throwError("kernel argument #%d not set", i + 1);
+            LOError("kernel argument #%d not set", i + 1);
             return;
         }
 
@@ -224,7 +226,7 @@ void COProgramSetArgument(COProgram * prog, unsigned int i, COArgument * arg)
 
     if(i > COProgramGetArgumentCount(prog))
     {
-        throwError("trying to set nonexistent argument #%d", i);
+        LOError("trying to set nonexistent argument #%d", i);
         return;
     }
 
@@ -243,7 +245,7 @@ COArgument * COProgramGetArgument(COProgram * prog, unsigned int i)
 {
     if(i > COProgramGetArgumentCount(prog))
     {
-        throwError("trying to access nonexistent argument #%d", i);
+        LOError("trying to access nonexistent argument #%d", i);
         return NULL;
     }
 

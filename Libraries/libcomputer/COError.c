@@ -26,6 +26,8 @@
 
 #include <stdio.h>
 
+#include <liblog/liblog.h>
+
 #include "libcomputer.h"
 
 /// \todo This file is a joke. Should be cleaned up at some point.
@@ -33,7 +35,7 @@
 void raiseOpenCLError(const char * errinfo, const void * private_info,
                       size_t cb, void * user_data)
 {
-    throwError("%s", errinfo);
+    LOError("%s", errinfo);
 }
 
 void showBuildLog(COContext * ctx, COProgram * prog)

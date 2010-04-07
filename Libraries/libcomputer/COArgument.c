@@ -27,6 +27,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include <liblog/liblog.h>
+
 #include "libcomputer.h"
 
 /**
@@ -153,7 +155,7 @@ void * COArgumentGetPointer(COArgument * arg)
             return arg->bufferCache;
             break;
         default:
-            throwError("tried to get pointer from uninitialized argument");
+            LOError("tried to get pointer from uninitialized argument");
             break;
     }
 
