@@ -9,3 +9,6 @@ Simulator/doc
 *.pyc
 libsimulator.xml
 libsimulator.py
+proposal.aux
+proposal.log
+proposal.pdf
