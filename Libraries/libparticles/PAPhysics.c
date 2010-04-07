@@ -31,11 +31,7 @@
 #include <liblog/liblog.h>
 
 #include "PAPhysics.h"
-
-#define malformedFileError(part) \
-{ \
-    printf("Error: malformed psys file in '" part "' element!\n"); \
-}
+#include "PAError.h"
 
 #define readJSONProperty(src, dest, prop, def) \
 { \

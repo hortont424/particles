@@ -1,4 +1,4 @@
-/* particles - libparticles - PASystem.c
+/* particles - libparticles - PAError.h
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,42 +24,12 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <string.h>
-#include <stdlib.h>
-#include <stdio.h>
+#ifndef _PA_ERROR_H_
+#define _PA_ERROR_H_
 
-#include <liblog/liblog.h>
-
-#include "PASystem.h"
-#include "PAError.h"
-
-PASystem * PASystemNew()
-{
-    PASystem * sys;
-
-    sys = (PASystem *)calloc(1, sizeof(PASystem));
-
-    return sys;
+#define malformedFileError(part) \
+{ \
+    printf("Error: malformed psys file in '" part "' element!\n"); \
 }
 
-PASystem * PASystemNewFromJSON(json_object * jsSystem)
-{
-    array_list * forces;
-    forces = json_object_get_array(json_object_object_get(jsSystem, "forces"));
-
-    for(int i = 0; i < array_list_length(forces); i++)
-    {
-        json_object * forceo = (json_object *)array_list_get_idx(forces, i);
-        PAPhysicsForce * force = PAPhysicsForceNewFromJSON(forceo);
-        printf("%f\n", force->forceData.gravity.strength);
-    }
-}
-
-PASystem * PASystemNewFromFile(const char * filename)
-{
-    json_object * jsSystem;
-
-    jsSystem = json_object_from_file((char *)filename); // why not const
-
-    return PASystemNewFromJSON(jsSystem);
-}
+#endif
