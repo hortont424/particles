@@ -66,7 +66,6 @@ int main(int argc, char ** argv)
 
     COOptionsParse(argc, argv);
 
-#if 0
     json_object * sys;
     array_list * forces;
     sys = json_object_from_file("../Systems/sample.psys");
@@ -80,7 +79,6 @@ int main(int argc, char ** argv)
     }
 
     exit(EXIT_SUCCESS);
-#endif
 
     sim = COContextNew();
 

@@ -107,9 +107,8 @@ typedef struct _PAPhysicsBoidsData
 typedef struct _PAPhysicsForce
 {
     PAPhysicsParticle particle;
-    PAFloat type;   // This needs to not be a PAFloat, but I'm afraid
-                    // of what will happen if they're not the same size
-                    // as everything else when being passed in...
+    PAPhysicsType type;
+
     union
     {
         PAPhysicsNormalData normal;

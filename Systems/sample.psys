@@ -1,7 +1,7 @@
 {
     "forces": [
         {
-            "type": "gravity",
+            "kernel": "gravity",
             "strength": 1.0,
             "noise": 0.0,
             "particle": {
@@ -12,5 +12,9 @@
                 "z": 0.0
             }
         }
-    ]
+    ],
+    "integration": {
+        "kernel": "verlet",
+        "timestep": 0.005
+    }
 }

@@ -30,11 +30,22 @@
 
 #include "PAPhysics.h"
 
+#define malformedFileError(part) \
+{ \
+    printf("Error: malformed psys file in '" part "' element!\n");\
+}
+
 #define readJSONProperty(src, dest, prop, def) \
 { \
     json_object * tmp; \
-    tmp = json_object_object_get(src, #prop); \
-    dest.prop = (tmp != NULL ? json_object_get_double(tmp) : def); \
+    if(!(tmp = json_object_object_get(src, #prop))) \
+    { \
+        malformedFileError(#src "->" #prop); \
+    } \
+    else \
+    { \
+        dest.prop = (tmp != NULL ? json_object_get_double(tmp) : def); \
+    } \
 }
 
 PAPhysicsForce * PAPhysicsForceNew(PAPhysicsType type)
@@ -47,28 +58,47 @@ PAPhysicsForce * PAPhysicsForceNew(PAPhysicsType type)
     return force;
 }
 
-PAPhysicsForce * PAPhysicsForceNewFromJSON(json_object * js)
+PAPhysicsForce * PAPhysicsForceNewFromJSON(json_object * jsForce)
 {
-    const char * typestr;
-    PAPhysicsForce * force;
-    json_object * particle;
+    const char * typestr = NULL;
+    PAPhysicsForce * force = NULL;
+    json_object * jsParticle = NULL, * jsKernel = NULL;
 
-    particle = json_object_object_get(js, "particle");
-    typestr = json_object_get_string(json_object_object_get(js, "type"));
+    if(!(jsParticle = json_object_object_get(jsForce, "particle")))
+    {
+        malformedFileError("force->particle");
+        return NULL;
+    }
+
+    if(!(jsKernel = json_object_object_get(jsForce, "kernel")))
+    {
+        malformedFileError("force->kernel");
+        return NULL;
+    }
+
+    if(!(typestr = json_object_get_string(jsKernel)))
+    {
+        malformedFileError("force->kernel");
+        return NULL;
+    }
 
     /// \todo Implement the rest of the PAPhysicsTypes here
     if(strcmp(typestr, "gravity") == 0)
     {
         force = PAPhysicsForceNew(PAPhysicsGravityType);
 
-        readJSONProperty(js, force->forceData.gravity, strength, 1.0);
-        readJSONProperty(js, force->forceData.gravity, noise, 1.0);
+        readJSONProperty(jsForce, force->forceData.gravity, strength, 1.0);
+        readJSONProperty(jsForce, force->forceData.gravity, noise, 1.0);
+    }
+    else
+    {
+        printf("Error: unknown kernel %s in psys file!\n", typestr);
     }
 
-    readJSONProperty(particle, force->particle, enabled, 1.0);
-    readJSONProperty(particle, force->particle, x, 0.0);
-    readJSONProperty(particle, force->particle, y, 0.0);
-    readJSONProperty(particle, force->particle, z, 0.0);
+    readJSONProperty(jsParticle, force->particle, enabled, 1.0);
+    readJSONProperty(jsParticle, force->particle, x, 0.0);
+    readJSONProperty(jsParticle, force->particle, y, 0.0);
+    readJSONProperty(jsParticle, force->particle, z, 0.0);
 
     return force;
 }
