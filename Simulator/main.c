@@ -69,6 +69,8 @@ int main(int argc, char ** argv)
     COOptionsParse(argc, argv);
 
     system = PASystemNewFromFile("../Systems/sample.psys");
+
+    printf("%d", system->forces[0]->type);
     exit(EXIT_SUCCESS);
 
     sim = COContextNew();

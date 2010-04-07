@@ -4,4 +4,4 @@ all:
 	pdflatex proposal.tex
 
 clean:
-	rm *.aux *.log *.pdf *.synctex.gz
+	rm -f *.aux *.log *.pdf *.synctex.gz
