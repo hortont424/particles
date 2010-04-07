@@ -34,33 +34,15 @@ ipsum dolor sit amet.
 
 \section{Examples}
 
-Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam
-nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat,
-sed diam voluptua. At vero eos et accusam et justo duo dolores et ea
-rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-ipsum dolor sit amet. Lorem ipsum dolor sit amet, consetetur
-sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et
-dolore magna aliquyam erat, sed diam voluptua. At vero eos et accusam
-et justo duo dolores et ea rebum. Stet clita kasd gubergren, no sea
-takimata sanctus est Lorem ipsum dolor sit amet. Lorem ipsum dolor sit
-amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor
-invidunt ut labore et dolore magna aliquyam erat, sed diam
-voluptua. At vero eos et accusam et justo duo dolores et ea
-rebum. Stet clita kasd gubergren, no sea takimata sanctus est Lorem
-ipsum dolor sit amet.
+During initial development, I've been using an n-body particle simulation as my primary test case. While it's extremely simple to generate and compute, it's incredibly computationally intensive (each particle acts on each other particle), so it's a prime test of the speedup gained by using OpenCL.
 
+Later on, I plan to use various yet-to-be-designed arrangements of other forces and emitters, double-checking my work against Blender's particle simulation engine.
 
 \section{Components}
 
 \subsection{Interpolator}
 
-Duis autem vel eum iriure dolor in hendrerit in vulputate velit esse
-molestie consequat, vel illum dolore eu feugiat nulla facilisis at
-vero eros et accumsan et iusto odio dignissim qui blandit praesent
-luptatum zzril delenit augue duis dolore te feugait nulla
-facilisi. Lorem ipsum dolor sit amet, consectetuer adipiscing elit,
-sed diam nonummy nibh euismod tincidunt ut laoreet dolore magna
-aliquam erat volutpat.
+Interpolator is the primary GUI component of this project. Written in Objective-C against Cocoa, it provides a b-spline editor and a simple way to map curves to arbitrary properties on emitters or forces.
 
 \subsection{Previewer}
 
@@ -111,6 +93,10 @@ ipsum dolor sit amet.
 
 \section{Background}
 
-stuff!
+http://portal.acm.org/citation.cfm?id=1281670
+
+http://wwwcg.in.tum.de/Research/data/Publications/eghw04.bib
+
+http://portal.acm.org/citation.cfm?id=357320
 
 \end{document}
