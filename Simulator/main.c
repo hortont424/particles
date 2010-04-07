@@ -59,6 +59,7 @@ int main(int argc, char ** argv)
     COProgramLibrary * library;
     PAPhysicsParticle * data, * partialResults;
     PAPhysicsNewtonian * newton;
+    PASystem * system;
     COBuffer * parts, * newts, * fileBuf;
     int step;
     struct timeval startTime, currentTime;
@@ -67,8 +68,7 @@ int main(int argc, char ** argv)
 
     COOptionsParse(argc, argv);
 
-    //"../Systems/sample.psys"
-    LOError("arst!");
+    system = PASystemNewFromFile("../Systems/sample.psys");
     exit(EXIT_SUCCESS);
 
     sim = COContextNew();

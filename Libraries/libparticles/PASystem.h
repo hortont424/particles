@@ -34,10 +34,12 @@
 typedef struct _PASystem
 {
     PAPhysicsForce ** forces;
+    unsigned int forceCount;
 } PASystem;
 
 PASystem * PASystemNew();
 PASystem * PASystemNewFromJSON(json_object * jsSystem);
 PASystem * PASystemNewFromFile(const char * filename);
+void PASystemFree(PASystem * sys);
 
 #endif

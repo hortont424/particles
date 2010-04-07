@@ -27,9 +27,11 @@
 #ifndef _PA_ERROR_H_
 #define _PA_ERROR_H_
 
+#include <liblog/liblog.h>
+
 #define malformedFileError(part) \
 { \
-    printf("Error: malformed psys file in '" part "' element!\n"); \
+    LOError("malformed psys file in '%s' element!\n", part); \
 }
 
 #endif

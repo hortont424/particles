@@ -44,22 +44,75 @@ PASystem * PASystemNew()
 
 PASystem * PASystemNewFromJSON(json_object * jsSystem)
 {
+    PASystem * sys;
+    json_object * jsForces;
     array_list * forces;
-    forces = json_object_get_array(json_object_object_get(jsSystem, "forces"));
 
-    for(int i = 0; i < array_list_length(forces); i++)
+    sys = PASystemNew();
+
+    if(!(jsForces = json_object_object_get(jsSystem, "forces")))
     {
-        json_object * forceo = (json_object *)array_list_get_idx(forces, i);
-        PAPhysicsForce * force = PAPhysicsForceNewFromJSON(forceo);
-        printf("%f\n", force->forceData.gravity.strength);
+        malformedFileError("forces");
+        PASystemFree(sys);
+        return NULL;
     }
+
+    if(!(forces = json_object_get_array(jsForces)))
+    {
+        malformedFileError("forces");
+        PASystemFree(sys);
+        return NULL;
+    }
+
+    sys->forceCount = array_list_length(forces);
+    sys->forces = (PAPhysicsForce **)calloc(sys->forceCount,
+                                            sizeof(PAPhysicsForce *));
+
+    for(int i = 0; i < sys->forceCount; i++)
+    {
+        json_object * jsForce;
+
+        if(!(jsForce = (json_object *)array_list_get_idx(forces, i)))
+        {
+            malformedFileError("force");
+            PASystemFree(sys);
+            return NULL;
+        }
+
+        sys->forces[i] = PAPhysicsForceNewFromJSON(jsForce);
+    }
+
+    return sys;
 }
 
 PASystem * PASystemNewFromFile(const char * filename)
 {
     json_object * jsSystem;
 
-    jsSystem = json_object_from_file((char *)filename); // why not const
+     // why not const
+
+    if(!(jsSystem = json_object_from_file((char *)filename)))
+    {
+        LOError("psys file '%s' not found", filename);
+        return NULL;
+    }
 
     return PASystemNewFromJSON(jsSystem);
+}
+
+void PASystemFree(PASystem * sys)
+{
+    if(!sys)
+        return;
+
+    if(sys->forces)
+    {
+        for(unsigned int i = 0; i < sys->forceCount; i++)
+            if(sys->forces[i])
+                free(sys->forces[i]);
+
+        free(sys->forces);
+    }
+
+    free(sys);
 }

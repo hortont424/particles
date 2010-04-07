@@ -36,7 +36,7 @@
 
 #define LOError(f, ...) \
 { \
-    fprintf(stderr, "\033[91mError (%s, line %d):\033[0m " f "\n", \
+    fprintf(stderr, "\033[91mError (%s, line %d):\033[0m\n\t" f "\n", \
             __FILE__, __LINE__, ##__VA_ARGS__); \
 }
 
