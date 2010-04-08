@@ -8,6 +8,7 @@ VariantDir('Simulator/build', 'Simulator', duplicate = 0)
 VariantDir('Interpolator/build', 'Interpolator', duplicate = 0)
 VariantDir('Previewer/build', 'Previewer', duplicate = 0)
 VariantDir('External/json-c/build', 'External/json-c', duplicate = 0)
+VariantDir('Papers/build', 'Papers', duplicate = 0)
 
 includes = ["-ILibraries", "-IExternal/json-c"]
 flags = includes + ["--std=c99", "-Wall", "-Werror", "-fobjc-gc"]
@@ -38,6 +39,9 @@ outerEnv = Environment(
 
 Build.InstallTools(outerEnv)
 Export("outerEnv")
+
+# Papers
+papers = SConscript('Papers/build/SConscript')
 
 # External libraries
 libjsonc = SConscript('External/json-c/build/SConscript')

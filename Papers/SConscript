@@ -1,0 +1,7 @@
+Import("outerEnv")
+
+env = outerEnv.Clone()
+
+proposal = env.PDF("proposal.pdf", "proposal.tex")
+
+Return("proposal")

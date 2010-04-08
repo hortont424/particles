@@ -23,6 +23,7 @@ clean:
 	rm -rf ./Simulator/build
 	rm -rf ./Previewer/build
 	rm -rf ./External/json-c/build
+	rm -rf ./Papers/build
 
 edit:
 	mate .
