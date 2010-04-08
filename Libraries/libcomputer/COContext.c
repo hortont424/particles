@@ -87,7 +87,7 @@ COContext * COContextNew()
     ctx->ctx = clCreateContext(0, 1, &ctx->devs, &raiseOpenCLError, NULL, NULL);
     ctx->cmds = clCreateCommandQueue(ctx->ctx, ctx->devs, 0, NULL);
 
-    ctx->buildOptions = cwdSprintf("-I %s/../Libraries/libparticles");
+    ctx->buildOptions = cwdSprintf("-I %s/../Libraries");
 
     if(ctx->buildOptions && ctx->ctx && ctx->cmds)
         printf("Created simulator on '%s %s'\n", vendorName, deviceName);

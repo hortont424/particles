@@ -55,7 +55,7 @@ void drawProgressBar(int width, double progress)
 int main(int argc, char ** argv)
 {
     COContext * sim;
-    COProgram * gravProg, * intProg;
+    COProgram ** kernels, * intProg;
     COProgramLibrary * library;
     PAPhysicsParticle * data, * partialResults;
     PAPhysicsNewtonian * newton;
@@ -69,10 +69,6 @@ int main(int argc, char ** argv)
     COOptionsParse(argc, argv);
 
     system = PASystemNewFromFile("../Systems/sample.psys");
-
-    printf("%d", system->forces[0]->type);
-    exit(EXIT_SUCCESS);
-
     sim = COContextNew();
 
     library = COProgramLibraryNew(sim);
@@ -112,14 +108,24 @@ int main(int argc, char ** argv)
 
     partialResults = (PAPhysicsParticle *)COBufferGetNativeBuffer(fileBuf);
 
-    gravProg = COProgramLibraryGetProgram(library, PAPhysicsGravityType);
+    kernels = (COProgram **)calloc(system->forceCount, sizeof(COProgram *));
     intProg = COProgramLibraryGetProgram(library, PAPhysicsIntegrationType);
 
-    COProgramSetArgument(gravProg, 0, COArgumentNewWithBuffer(parts, 0));
-    COProgramSetArgument(gravProg, 1, COArgumentNewWithBuffer(parts, 1));
-    COProgramSetArgument(gravProg, 2, COArgumentNewWithBuffer(newts, 0));
-    COProgramSetArgument(gravProg, 3, COArgumentNewWithBuffer(newts, 1));
-    COProgramSetArgument(gravProg, 4, COArgumentNewWithInt(ELEMENT_COUNT));
+    for(unsigned int i = 0; i < system->forceCount; i++)
+    {
+        PAPhysicsForce * force;
+        COProgram * k;
+
+        force = system->forces[i];
+
+        k = kernels[i] = COProgramLibraryGetProgram(library, force->type);
+
+        COProgramSetArgument(k, 0, COArgumentNewWithBuffer(parts, 0));
+        COProgramSetArgument(k, 1, COArgumentNewWithBuffer(parts, 1));
+        COProgramSetArgument(k, 2, COArgumentNewWithBuffer(newts, 0));
+        COProgramSetArgument(k, 3, COArgumentNewWithBuffer(newts, 1));
+        COProgramSetArgument(k, 4, COArgumentNewWithInt(ELEMENT_COUNT));
+    }
 
     COProgramSetArgument(intProg, 0, COArgumentNewWithBuffer(parts, 0));
     COProgramSetArgument(intProg, 1, COArgumentNewWithBuffer(parts, 1));
@@ -152,8 +158,11 @@ int main(int argc, char ** argv)
         printf("\r");
         fflush(stdout);
 
-        COProgramExecute(gravProg);
-        COContextWait(sim);
+        for(unsigned int i = 0; i < system->forceCount; i++)
+        {
+            COProgramExecute(kernels[i]);
+            COContextWait(sim);
+        }
         COProgramExecute(intProg);
         COContextWait(sim);
 

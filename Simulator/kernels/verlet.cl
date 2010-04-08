@@ -24,7 +24,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "libparticles.h"
+#include "libparticles/PATypes.h"
 
 __kernel void verlet(__global PAPhysicsParticle * input,
                      __global PAPhysicsParticle * output,

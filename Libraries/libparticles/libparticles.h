@@ -27,7 +27,6 @@
 #ifndef _LIBPARTICLES_H_
 #define _LIBPARTICLES_H_
 
-#include "PAError.h"
 #include "PATypes.h"
 #include "PAParticle.h"
 #include "PAPhysics.h"

@@ -24,7 +24,7 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include "libparticles.h"
+#include "libparticles/PATypes.h"
 
 #define GRAV_CONSTANT 0.0000000000667300f
 
