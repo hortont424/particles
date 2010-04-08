@@ -5,13 +5,13 @@ import os
 from SCons.Action import *
 from SCons.Builder import *
 
-def TOOL_COMPILE_XIB(env):
-    if 'COMPILE_XIB' in env['TOOLS']:
+def TOOL_NIB(env):
+    if 'NIB' in env['TOOLS']:
         return
     else:
-        env.Append(TOOLS = 'COMPILE_XIB')
+        env.Append(TOOLS = 'NIB')
 
-    def compile_xib(target, source, env):
+    def nib(target, source, env):
         args = "--errors --output-format human-readable-text"
 
         for plugin in env["IBPLUGINSPATH"]:
@@ -19,7 +19,7 @@ def TOOL_COMPILE_XIB(env):
 
         os.system("ibtool %s --compile %s %s" % (args, target[0], source[0]))
 
-    env['BUILDERS']['CompileXIB'] = Builder(
-        action = Action(compile_xib, "$IBTOOLCOMSTR"),
+    env['BUILDERS']['NIB'] = Builder(
+        action = Action(nib, "$IBTOOLCOMSTR"),
         suffix = ".nib",
         src_suffix = ".xib")

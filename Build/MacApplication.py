@@ -46,7 +46,7 @@ def TOOL_MAC_APPLICATION(env):
         for r in resources:
             # Compile XIBs, copy the resultant NIB instead
             if r.endswith(".xib"):
-                r = env.CompileXIB(r)[0]
+                r = env.NIB(r)[0]
             env.Install(resourcesdir, r)
 
         # Install included frameworks to .app/Contents/Frameworks
