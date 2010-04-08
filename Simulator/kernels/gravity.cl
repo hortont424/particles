@@ -61,9 +61,7 @@ __kernel void gravity(__global PAPhysicsParticle * input,
         accel += dir * ((GRAV_CONSTANT * newtonIn[i].mass) / pow(dist, 2));
     }
 
-    /// \todo this overwrites acceleration; we need to increment (and clear
-    /// in the proper place)
-    newtonOut[id].ax = accel.x * force->data.gravity.strength;
-    newtonOut[id].ay = accel.y * force->data.gravity.strength;
-    newtonOut[id].az = accel.z * force->data.gravity.strength;
+    newtonOut[id].ax += accel.x * force->data.gravity.strength;
+    newtonOut[id].ay += accel.y * force->data.gravity.strength;
+    newtonOut[id].az += accel.z * force->data.gravity.strength;
 }
