@@ -110,8 +110,8 @@ void SMProgramLibrarySetGlobalCount(SMProgramLibrary * lib, size_t globalCount)
  * @param lib The program library to inspect.
  * @param type The simulation type to return an COProgram for.
  */
-COProgram * SMProgramLibraryGetProgram(SMProgramLibrary * lib,
-                                       PAPhysicsType type)
+COProgram * SMProgramLibraryInstantiateProgram(SMProgramLibrary * lib,
+                                               PAPhysicsType type)
 {
     COProgram * prog;
 
@@ -123,5 +123,5 @@ COProgram * SMProgramLibraryGetProgram(SMProgramLibrary * lib,
         return NULL;
     }
 
-    return prog;
+    return COProgramCopy(prog);
 }

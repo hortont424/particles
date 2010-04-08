@@ -111,7 +111,8 @@ int main(int argc, char ** argv)
     partialResults = (PAPhysicsParticle *)COBufferGetNativeBuffer(fileBuf);
 
     kernels = (COProgram **)calloc(system->forceCount, sizeof(COProgram *));
-    intProg = SMProgramLibraryGetProgram(library, PAPhysicsIntegrationType);
+    intProg = SMProgramLibraryInstantiateProgram(library,
+                                                 PAPhysicsIntegrationType);
 
     for(unsigned int i = 0; i < system->forceCount; i++)
     {
@@ -120,7 +121,8 @@ int main(int argc, char ** argv)
         COBuffer * forceBuf;
 
         force = system->forces[i];
-        k = kernels[i] = SMProgramLibraryGetProgram(library, force->type);
+        k = kernels[i] = SMProgramLibraryInstantiateProgram(library,
+                                                            force->type);
 
         forceBuf = COBufferNew(sim, 1, sizeof(PAPhysicsForce), false);
         COBufferSet(forceBuf, force);

@@ -151,6 +151,31 @@ void COProgramFree(COProgram * prog)
 }
 
 /**
+ * Copy the given program. This shares the OpenCL kernel, but not the
+ * argument list.
+ *
+ * @param prog The program to copy.
+ * @return The newly-allocated copy of the program.
+ */
+COProgram * COProgramCopy(COProgram * prog)
+{
+    COProgram * progCopy;
+
+    progCopy = calloc(1, sizeof(COProgram));
+    progCopy->globalCount = prog->globalCount;
+    progCopy->localCount = prog->localCount;
+    progCopy->name = strdup(prog->name);
+    progCopy->program = prog->program;
+    progCopy->kernel = prog->kernel;
+    progCopy->context = prog->context;
+
+    progCopy->arguments = (COArgument **)calloc(COProgramGetArgumentCount(prog),
+                                                sizeof(COArgument *));
+
+    return progCopy;
+}
+
+/**
  * Execute the given COProgram in its context, after setting all of the
  * arguments on the kernel from the COProgram's list of arguments.
  *

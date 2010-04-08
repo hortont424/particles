@@ -45,8 +45,8 @@
 #include <GL/glut.h>
 #endif
 
-#define ELEMENT_COUNT 8192
-#define FRAME_COUNT 200
+#define ELEMENT_COUNT   8192
+#define FRAME_COUNT     200
 
 float * points;
 int paint = 0;

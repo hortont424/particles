@@ -53,6 +53,7 @@ typedef struct _COProgram
 
 COProgram * COProgramNew(COContext * ctx, const char * filename);
 void COProgramFree(COProgram * prog);
+COProgram * COProgramCopy(COProgram * prog);
 
 void COProgramExecute(COProgram * prog);
 

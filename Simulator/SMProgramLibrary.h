@@ -51,8 +51,8 @@ void SMProgramLibraryFree(SMProgramLibrary * lib);
 void SMProgramLibraryLoadProgram(SMProgramLibrary * lib, PAPhysicsType type,
                                  char * filename);
 void SMProgramLibrarySetGlobalCount(SMProgramLibrary * lib, size_t globalCount);
-COProgram * SMProgramLibraryGetProgram(SMProgramLibrary * lib,
-                                       PAPhysicsType type);
+COProgram * SMProgramLibraryInstantiateProgram(SMProgramLibrary * lib,
+                                               PAPhysicsType type);
 
 /** @} */
 
