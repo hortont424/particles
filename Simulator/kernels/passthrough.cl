@@ -30,6 +30,7 @@ __kernel void passthrough(__global PAPhysicsParticle * input,
                           __global PAPhysicsParticle * output,
                           __global PAPhysicsNewtonian * newtonIn,
                           __global PAPhysicsNewtonian * newtonOut,
+                          __global PAPhysicsForce * force,
                           const unsigned int count)
 {
     int id = get_global_id(0);
