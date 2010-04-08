@@ -1,4 +1,4 @@
-/* particles - libcomputer - COProgramLibrary.h
+/* particles - simulator - SMProgramLibrary.h
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,36 +24,34 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _CO_PROGRAM_LIBRARY_H_
-#define _CO_PROGRAM_LIBRARY_H_
+#ifndef _SM_PROGRAM_LIBRARY_H_
+#define _SM_PROGRAM_LIBRARY_H_
 
 #include <OpenCL/opencl.h>
 
 #include <libparticles/libparticles.h>
-
-#include "COContext.h"
-#include "COProgram.h"
+#include <libcomputer/libcomputer.h>
 
 /**
- * @defgroup COProgramLibrary COProgramLibrary
+ * @defgroup SMProgramLibrary SMProgramLibrary
  * @{
  */
 
 typedef struct _SMProgramLibrary
 {
     COProgram ** programs;      /**< The array of loaded programs, indexed by
-                                     COPhysicsType identifier */
+                                     PAPhysicsType identifier */
 
     COContext * context;        /**< The context that owns the programs */
-} COProgramLibrary;
+} SMProgramLibrary;
 
-COProgramLibrary * COProgramLibraryNew(COContext * ctx);
-void COProgramLibraryFree(COProgramLibrary * lib);
+SMProgramLibrary * SMProgramLibraryNew(COContext * ctx);
+void SMProgramLibraryFree(SMProgramLibrary * lib);
 
-void COProgramLibraryLoadProgram(COProgramLibrary * lib, PAPhysicsType type,
+void SMProgramLibraryLoadProgram(SMProgramLibrary * lib, PAPhysicsType type,
                                  char * filename);
-void COProgramLibrarySetGlobalCount(COProgramLibrary * lib, size_t globalCount);
-COProgram * COProgramLibraryGetProgram(COProgramLibrary * lib,
+void SMProgramLibrarySetGlobalCount(SMProgramLibrary * lib, size_t globalCount);
+COProgram * SMProgramLibraryGetProgram(SMProgramLibrary * lib,
                                        PAPhysicsType type);
 
 /** @} */

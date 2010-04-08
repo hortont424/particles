@@ -37,7 +37,7 @@
  * @{
  */
 
-typedef struct _SMProgram
+typedef struct _COProgram
 {
     size_t globalCount;         /**< Total number of kernel instances */
     size_t localCount;          /**< Number of parallel kernel instances */

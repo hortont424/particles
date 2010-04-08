@@ -1,4 +1,4 @@
-/* particles - libcomputer - COProgramLibrary.c
+/* particles - simulator - SMProgramLibrary.c
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -30,39 +30,40 @@
 
 #include <liblog/liblog.h>
 
-#include "libcomputer.h"
+#include "SMProgramLibrary.h"
 
 #define LIBRARY_PATH "./kernels/"
 
 /**
- * Allocate the space required for an COProgramLibrary, construct a mapping of
+ * Allocate the space required for an SMProgramLibrary, construct a mapping of
  * COPhysicsTypes to COPrograms, where the programs are loaded based on the
  * given kernel filenames below.
  *
  * @param ctx The simulation context to compile the programs within.
  * @return The newly allocated program library.
  */
-COProgramLibrary * COProgramLibraryNew(COContext * ctx)
+SMProgramLibrary * SMProgramLibraryNew(COContext * ctx)
 {
-    COProgramLibrary * lib;
-    lib = (COProgramLibrary *)calloc(1, sizeof(COProgramLibrary));
+    SMProgramLibrary * lib;
+    lib = (SMProgramLibrary *)calloc(1, sizeof(SMProgramLibrary));
 
     lib->context = ctx;
     lib->programs = (COProgram **)calloc(PAPhysicsLastType,
                                          sizeof(COProgram *));
 
-    COProgramLibraryLoadProgram(lib, PAPhysicsGravityType, "gravity.cl");
-    COProgramLibraryLoadProgram(lib, PAPhysicsIntegrationType, "verlet.cl");
+    SMProgramLibraryLoadProgram(lib, PAPhysicsNormalType, "normal.cl");
+    SMProgramLibraryLoadProgram(lib, PAPhysicsGravityType, "gravity.cl");
+    SMProgramLibraryLoadProgram(lib, PAPhysicsIntegrationType, "verlet.cl");
 
     return lib;
 }
 
 /**
- * Free the memory used by the given COProgramLibrary and its contents.
+ * Free the memory used by the given SMProgramLibrary and its contents.
  *
  * @param lib The program library to be freed.
  */
-void COProgramLibraryFree(COProgramLibrary * lib)
+void SMProgramLibraryFree(SMProgramLibrary * lib)
 {
     for(int i = 0; i < PAPhysicsLastType; i++)
         if(lib->programs[i])
@@ -77,7 +78,7 @@ void COProgramLibraryFree(COProgramLibrary * lib)
  * @param type The simulation type to load a kernel for.
  * @param filename The filename of the kernel to load.
  */
-void COProgramLibraryLoadProgram(COProgramLibrary * lib, PAPhysicsType type,
+void SMProgramLibraryLoadProgram(SMProgramLibrary * lib, PAPhysicsType type,
                                  char * filename)
 {
     char * kernelPath;
@@ -96,7 +97,7 @@ void COProgramLibraryLoadProgram(COProgramLibrary * lib, PAPhysicsType type,
  * @param lib The program library to modify.
  * @param globalCount The new global element count.
  */
-void COProgramLibrarySetGlobalCount(COProgramLibrary * lib, size_t globalCount)
+void SMProgramLibrarySetGlobalCount(SMProgramLibrary * lib, size_t globalCount)
 {
     for(int i = 0; i < PAPhysicsLastType; i++)
         if(lib->programs[i])
@@ -109,9 +110,18 @@ void COProgramLibrarySetGlobalCount(COProgramLibrary * lib, size_t globalCount)
  * @param lib The program library to inspect.
  * @param type The simulation type to return an COProgram for.
  */
-COProgram * COProgramLibraryGetProgram(COProgramLibrary * lib,
+COProgram * SMProgramLibraryGetProgram(SMProgramLibrary * lib,
                                        PAPhysicsType type)
 {
-    /// \todo Error checking, docs.
-    return lib->programs[type];
+    COProgram * prog;
+
+    prog = lib->programs[type];
+
+    if(!prog)
+    {
+        LOError("no kernel loaded for type %d", type);
+        return NULL;
+    }
+
+    return prog;
 }

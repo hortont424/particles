@@ -36,14 +36,15 @@
 #define readJSONProperty(src, dest, prop, def) \
 { \
     json_object * tmp; \
-    if(!(tmp = json_object_object_get(src, #prop))) \
-    { \
-        malformedFileError(#src "->" #prop); \
-    } \
-    else \
-    { \
-        dest.prop = (tmp != NULL ? json_object_get_double(tmp) : def); \
-    } \
+    tmp = json_object_object_get(src, #prop); \
+    dest.prop = (tmp != NULL ? json_object_get_double(tmp) : def); \
+}
+
+#define readFalloff(src, dest) \
+{ \
+    readJSONProperty(src, dest, strength, 0.0); \
+    readJSONProperty(src, dest, min, 0.0); \
+    readJSONProperty(src, dest, max, 10000.0); \
 }
 
 PAPhysicsForce * PAPhysicsForceNew(PAPhysicsType type)
@@ -60,7 +61,7 @@ PAPhysicsForce * PAPhysicsForceNewFromJSON(json_object * jsForce)
 {
     const char * typestr = NULL;
     PAPhysicsForce * force = NULL;
-    json_object * jsParticle = NULL, * jsKernel = NULL;
+    json_object * jsParticle = NULL, * jsKernel = NULL, * jsFalloff = NULL;
 
     if(!(jsParticle = json_object_object_get(jsForce, "particle")))
     {
@@ -81,7 +82,17 @@ PAPhysicsForce * PAPhysicsForceNewFromJSON(json_object * jsForce)
     }
 
     /// \todo Implement the rest of the PAPhysicsTypes here
-    if(strcmp(typestr, "gravity") == 0)
+    if(strcmp(typestr, "normal") == 0)
+    {
+        force = PAPhysicsForceNew(PAPhysicsNormalType);
+
+        readJSONProperty(jsForce, force->data.normal, strength, 1.0);
+        readJSONProperty(jsForce, force->data.normal, noise, 1.0);
+
+        if(jsFalloff = json_object_object_get(jsForce, "falloff"))
+            readFalloff(jsFalloff, force->data.normal.falloff);
+    }
+    else if(strcmp(typestr, "gravity") == 0)
     {
         force = PAPhysicsForceNew(PAPhysicsGravityType);
 

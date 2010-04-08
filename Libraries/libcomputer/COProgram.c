@@ -140,9 +140,8 @@ COProgram * COProgramNew(COContext * ctx, const char * filename)
 void COProgramFree(COProgram * prog)
 {
     for(int i = 0; i < COProgramGetArgumentCount(prog); i++)
-    {
-        COArgumentFree(prog->arguments[i]);
-    }
+        if(prog->arguments[i])
+            COArgumentFree(prog->arguments[i]);
 
     clReleaseKernel(prog->kernel);
     clReleaseProgram(prog->program);

@@ -35,6 +35,8 @@
 
 #include <json.h>
 
+#include "SMProgramLibrary.h"
+
 #define ELEMENT_COUNT   4096
 #define FRAME_SIZE      (ELEMENT_COUNT * sizeof(PAPhysicsParticle))
 #define FRAME_COUNT     100
@@ -56,7 +58,7 @@ int main(int argc, char ** argv)
 {
     COContext * sim;
     COProgram ** kernels, * intProg;
-    COProgramLibrary * library;
+    SMProgramLibrary * library;
     PAPhysicsParticle * data, * partialResults;
     PAPhysicsNewtonian * newton;
     PASystem * system;
@@ -71,8 +73,8 @@ int main(int argc, char ** argv)
     system = PASystemNewFromFile("../Systems/sample.psys");
     sim = COContextNew();
 
-    library = COProgramLibraryNew(sim);
-    COProgramLibrarySetGlobalCount(library, ELEMENT_COUNT);
+    library = SMProgramLibraryNew(sim);
+    SMProgramLibrarySetGlobalCount(library, ELEMENT_COUNT);
 
     data = (PAPhysicsParticle *)calloc(ELEMENT_COUNT,
                                        sizeof(PAPhysicsParticle));
@@ -109,7 +111,7 @@ int main(int argc, char ** argv)
     partialResults = (PAPhysicsParticle *)COBufferGetNativeBuffer(fileBuf);
 
     kernels = (COProgram **)calloc(system->forceCount, sizeof(COProgram *));
-    intProg = COProgramLibraryGetProgram(library, PAPhysicsIntegrationType);
+    intProg = SMProgramLibraryGetProgram(library, PAPhysicsIntegrationType);
 
     for(unsigned int i = 0; i < system->forceCount; i++)
     {
@@ -118,7 +120,7 @@ int main(int argc, char ** argv)
         COBuffer * forceBuf;
 
         force = system->forces[i];
-        k = kernels[i] = COProgramLibraryGetProgram(library, force->type);
+        k = kernels[i] = SMProgramLibraryGetProgram(library, force->type);
 
         forceBuf = COBufferNew(sim, 1, sizeof(PAPhysicsForce), false);
         COBufferSet(forceBuf, force);
@@ -181,7 +183,7 @@ int main(int argc, char ** argv)
     COBufferFree(parts);
     COBufferFree(newts);
     COBufferFree(fileBuf);
-    COProgramLibraryFree(library);
+    SMProgramLibraryFree(library);
     COContextFree(sim);
 
     return EXIT_SUCCESS;

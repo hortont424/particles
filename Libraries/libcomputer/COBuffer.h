@@ -37,13 +37,13 @@
  * @{
  */
 
-typedef enum _SMBufferType
+typedef enum _COBufferType
 {
     CO_FILE_BUFFER,         /**< mmapped-file-backed buffer */
     CO_OPENCL_BUFFER        /**< OpenCL-memory-object-backed buffer */
 } COBufferType;
 
-typedef struct _SMBuffer
+typedef struct _COBuffer
 {
     COBufferType type;      /**< Type of buffer */
     bool doubleBuffered;    /**< If buffer is double-buffered */

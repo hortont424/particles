@@ -36,7 +36,7 @@
  * @{
  */
 
-typedef struct _SMContext
+typedef struct _COContext
 {
     cl_device_id devs;          /**< OpenCL device ID context was created on */
     cl_context ctx;             /**< OpenCL context */

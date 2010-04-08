@@ -40,13 +40,13 @@
  * @{
  */
 
-typedef enum _SMArgumentType
+typedef enum _COArgumentType
 {
     CO_BUFFER_ARGUMENT,         /**< argument points to an COBuffer */
     CO_POINTER_ARGUMENT         /**< argument points to an arbitrary pointer */
 } COArgumentType;
 
-typedef struct _SMArgument
+typedef struct _COArgument
 {
     COArgumentType type;    /**< Type of argument */
     void * pointer;         /**< Pointer to arbitrary argument object */

@@ -1,18 +1,15 @@
 {
     "forces": [
         {
-            "kernel": "normal",
+            "kernel": "gravity",
             "strength": 1.0,
             "noise": 0.0,
-            "falloff" : {
-                "strength": 2.0
-            },
             "particle": {
                 "enabled": true,
                 "fixed": true,
-                "x": 0.5,
-                "y": 0.5,
-                "z": 0.5
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
             }
         }
     ],

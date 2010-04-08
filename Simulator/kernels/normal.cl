@@ -1,4 +1,4 @@
-/* particles - libcomputer - libcomputer.h
+/* particles - simulator - normal.cl
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,19 +24,30 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _LIBCOMPUTER_H_
-#define _LIBCOMPUTER_H_
+#include "libparticles/PATypes.h"
 
-#include <OpenCL/opencl.h>
+__kernel void normal(__global PAPhysicsParticle * input,
+                     __global PAPhysicsParticle * output,
+                     __global PAPhysicsNewtonian * newtonIn,
+                     __global PAPhysicsNewtonian * newtonOut,
+                     __global PAPhysicsForce * force,
+                     const unsigned int count)
+{
+    int id = get_global_id(0);
+    float4 fpoint, loc, accel;
+    fpoint = loc = accel = (float4)(0.0f);
 
-#include <libparticles/libparticles.h>
+    if(id > count || input[id].enabled == 0.0)
+        return;
 
-#include "COError.h"
-#include "COOptions.h"
+    loc = (float4)(input[id].x, input[id].y, input[id].z, 0.0f);
+    fpoint = (float4)(force->particle.x, force->particle.y,
+                      force->particle.z, 0.0f);
+    accel = force->data.normal.strength * (loc - fpoint);
+    accel = accel * (1.0f / powr(distance(loc, fpoint),
+        force->data.normal.falloff.strength));
 
-#include "COContext.h"
-#include "COProgram.h"
-#include "COBuffer.h"
-#include "COArgument.h"
-
-#endif
+    newtonOut[id].ax += accel.x;
+    newtonOut[id].ay += accel.y;
+    newtonOut[id].az += accel.z;
+}
