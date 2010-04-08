@@ -2,6 +2,6 @@ Import("outerEnv")
 
 env = outerEnv.Clone()
 
-proposal = env.PDF("proposal.pdf", "proposal.tex")
+proposal = env.LaTeX("proposal.pdf", "proposal.latex")
 
 Return("proposal")

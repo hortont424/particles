@@ -28,6 +28,7 @@ def TOOL_PRETTY_PRINT(env):
         LINKCOMSTR = message("Linking program", False),
         INSTALLSTR = message("Copying"),
         IBTOOLCOMSTR = message("Compiling XIB"),
-        WRITEVALCOMSTR = message("Writing value to file", False))
+        WRITEVALCOMSTR = message("Writing value to file", False),
+        LATEXCOMSTR = message("Rendering LaTeX file"))
 
     return env
