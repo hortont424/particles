@@ -14,9 +14,15 @@ def TOOL_LATEX(env):
 
     def LaTeX(target, source, env):
         flags = "-interaction=nonstopmode"
+        output = os.path.dirname(str(target[0]))
 
-        if os.system("pdflatex %s %s > /tmp/latexoutput" % (flags, source[0])):
-            os.system("cat /tmp/latexoutput")
+        def callLaTeX():
+            os.system("pdflatex --output-directory %s %s %s > /tmp/ltxout" %
+                (output, flags, source[0]))
+
+        callLaTeX()
+        if(callLaTeX()):
+            os.system("cat /tmp/ltxout")
 
     env['BUILDERS']['LaTeX'] = Builder(
         action = Action(LaTeX, "$LATEXCOMSTR"),
