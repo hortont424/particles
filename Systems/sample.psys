@@ -2,7 +2,7 @@
     "forces": [
         {
             "kernel": "normal",
-            "strength": 1.0,
+            "strength": 0.5,
             "noise": 0.0,
             "falloff" : {
                 "strength": 2.0
@@ -10,9 +10,39 @@
             "particle": {
                 "enabled": true,
                 "fixed": true,
-                "x": 0.5,
-                "y": 0.5,
-                "z": 0.5
+                "x": 0.3,
+                "y": 0.3,
+                "z": 0.0
+            }
+        },
+        {
+            "kernel": "normal",
+            "strength": 0.5,
+            "noise": 0.0,
+            "falloff" : {
+                "strength": 2.0
+            },
+            "particle": {
+                "enabled": true,
+                "fixed": true,
+                "x": 0.7,
+                "y": 0.7,
+                "z": 0.0
+            }
+        },
+        {
+            "kernel": "normal",
+            "strength": 0.5,
+            "noise": 0.0,
+            "falloff" : {
+                "strength": 2.0
+            },
+            "particle": {
+                "enabled": true,
+                "fixed": true,
+                "x": 0.0,
+                "y": 0.0,
+                "z": 0.0
             }
         }
     ],

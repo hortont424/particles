@@ -37,9 +37,9 @@
 
 #include "SMProgramLibrary.h"
 
-#define ELEMENT_COUNT   4096
+#define ELEMENT_COUNT   8192
 #define FRAME_SIZE      (ELEMENT_COUNT * sizeof(PAPhysicsParticle))
-#define FRAME_COUNT     100
+#define FRAME_COUNT     200
 #define TOTAL_SIZE      (FRAME_SIZE * FRAME_COUNT)
 
 void drawProgressBar(int width, double progress)

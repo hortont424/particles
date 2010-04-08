@@ -63,5 +63,5 @@ __kernel void verlet(__global PAPhysicsParticle * input,
     output[id].enabled = input[id].enabled;
 
     // Clear acceleration for next simulation step
-    newtonIn[id].ax = newtonIn[id].ay = newtonIn[id].az = 0.0;
+    newtonOut[id].ax = newtonOut[id].ay = newtonOut[id].az = 0.0f;
 }

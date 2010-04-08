@@ -45,7 +45,7 @@ __kernel void normal(__global PAPhysicsParticle * input,
                       force->particle.z, 0.0f);
     accel = force->data.normal.strength * (loc - fpoint);
     accel = accel * (1.0f / powr(distance(loc, fpoint),
-        force->data.normal.falloff.strength));
+                                 force->data.normal.falloff.strength));
 
     newtonOut[id].ax += accel.x;
     newtonOut[id].ay += accel.y;
