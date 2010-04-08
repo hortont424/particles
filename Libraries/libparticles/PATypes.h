@@ -116,8 +116,8 @@ typedef struct _PAPhysicsBoidsData
 // with, and move just like other particles)
 typedef struct _PAPhysicsForce
 {
-    PAPhysicsParticle particle;
     PAPhysicsType type;
+    PAPhysicsParticle particle;
 
     union
     {
@@ -129,7 +129,7 @@ typedef struct _PAPhysicsForce
         PAPhysicsDragData drag;
         PAPhysicsTurbulenceData turbulence;
         PAPhysicsBoidsData boids;
-    } forceData;
+    } data;
 } PAPhysicsForce;
 
 // There should be one PAPhysicsNewtonian for each particle in the system; this

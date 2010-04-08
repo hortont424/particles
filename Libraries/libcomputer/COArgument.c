@@ -69,6 +69,26 @@ COArgument * COArgumentNewWithBuffer(COBuffer * buf, bool backBuffer)
 }
 
 /**
+ * Allocate the space required for an COArgument, and fill it with the given
+ * pointer.
+ *
+ * @param ptr A pointer for the argument to point at.
+ * @param size The size of the block of memory pointed at by ptr.
+ * @return The newly allocated argument, pointing at ptr.
+ */
+COArgument * COArgumentNewWithPointer(void * ptr, size_t size)
+{
+    COArgument * arg = COArgumentNew();
+
+    arg->type = CO_POINTER_ARGUMENT;
+    arg->size = size;
+    arg->pointer = ptr;
+    arg->owned = false;
+
+    return arg;
+}
+
+/**
  * Allocate the space required for an COArgument, and fill it with a pointer
  * to a copy of the given float.
  *

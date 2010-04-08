@@ -61,6 +61,7 @@ typedef struct _SMArgument
 
 COArgument * COArgumentNew();
 COArgument * COArgumentNewWithBuffer(COBuffer * buf, bool backBuffer);
+COArgument * COArgumentNewWithPointer(void * ptr, size_t size);
 COArgument * COArgumentNewWithFloat(PAFloat f);
 COArgument * COArgumentNewWithInt(PAInt i);
 void COArgumentFree(COArgument * arg);

@@ -85,8 +85,8 @@ PAPhysicsForce * PAPhysicsForceNewFromJSON(json_object * jsForce)
     {
         force = PAPhysicsForceNew(PAPhysicsGravityType);
 
-        readJSONProperty(jsForce, force->forceData.gravity, strength, 1.0);
-        readJSONProperty(jsForce, force->forceData.gravity, noise, 1.0);
+        readJSONProperty(jsForce, force->data.gravity, strength, 1.0);
+        readJSONProperty(jsForce, force->data.gravity, noise, 1.0);
     }
     else
     {

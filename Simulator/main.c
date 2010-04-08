@@ -115,16 +115,20 @@ int main(int argc, char ** argv)
     {
         PAPhysicsForce * force;
         COProgram * k;
+        COBuffer * forceBuf;
 
         force = system->forces[i];
-
         k = kernels[i] = COProgramLibraryGetProgram(library, force->type);
+
+        forceBuf = COBufferNew(sim, 1, sizeof(PAPhysicsForce), false);
+        COBufferSet(forceBuf, force);
 
         COProgramSetArgument(k, 0, COArgumentNewWithBuffer(parts, 0));
         COProgramSetArgument(k, 1, COArgumentNewWithBuffer(parts, 1));
         COProgramSetArgument(k, 2, COArgumentNewWithBuffer(newts, 0));
         COProgramSetArgument(k, 3, COArgumentNewWithBuffer(newts, 1));
-        COProgramSetArgument(k, 4, COArgumentNewWithInt(ELEMENT_COUNT));
+        COProgramSetArgument(k, 4, COArgumentNewWithBuffer(forceBuf, 0));
+        COProgramSetArgument(k, 5, COArgumentNewWithInt(ELEMENT_COUNT));
     }
 
     COProgramSetArgument(intProg, 0, COArgumentNewWithBuffer(parts, 0));
