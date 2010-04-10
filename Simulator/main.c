@@ -55,95 +55,19 @@ void drawProgressBar(int width, double progress)
 
 int main(int argc, char ** argv)
 {
-    COContext * sim;
-    COProgram ** kernels, * intProg;
-    SMProgramLibrary * library;
-    PAPhysicsParticle * data, * partialResults;
-    PAPhysicsNewtonian * newton;
-    PASystem * system;
-    COBuffer * parts, * newts, * fileBuf;
-    int step;
     struct timeval startTime, currentTime;
-
-    srand((int)time(NULL));
+    SMSimulator * simulator;
 
     COOptionsParse(argc, argv);
 
-    system = PASystemNewFromFile("../Systems/sample.psys");
-    sim = COContextNew();
-
-    library = SMProgramLibraryNew(sim);
-    SMProgramLibrarySetGlobalCount(library, ELEMENT_COUNT);
-
-    data = (PAPhysicsParticle *)calloc(ELEMENT_COUNT,
-                                       sizeof(PAPhysicsParticle));
-
-    newton = (PAPhysicsNewtonian *)calloc(ELEMENT_COUNT,
-                                          sizeof(PAPhysicsNewtonian));
-
-    for(unsigned int i = 0; i < ELEMENT_COUNT; i++)
-    {
-        data[i].enabled = 1.0;
-        newton[i].ox = data[i].x = (PAFloat)rand()/(PAFloat)RAND_MAX;
-        newton[i].oy = data[i].y = (PAFloat)rand()/(PAFloat)RAND_MAX;
-        newton[i].oz = data[i].z = (PAFloat)rand()/(PAFloat)RAND_MAX/5.0;
-
-        newton[i].mass = 50000000.0 * (PAFloat)rand()/(PAFloat)RAND_MAX;
-    }
-
-    parts = COBufferNew(sim, ELEMENT_COUNT, sizeof(PAPhysicsParticle), true);
-    newts = COBufferNew(sim, ELEMENT_COUNT, sizeof(PAPhysicsNewtonian), true);
-
-    printf("Allocated video memory (%ld KB)\n",
-           ((2 * ELEMENT_COUNT * sizeof(PAPhysicsParticle)) +
-           (2 * ELEMENT_COUNT * sizeof(PAPhysicsNewtonian))) / 1024);
-
-    COBufferSet(parts, data);
-    COBufferSet(newts, newton);
-    free(data);
-    free(newton);
-
-    fileBuf = COBufferNewWithFile(sim, ELEMENT_COUNT * FRAME_COUNT,
-                                  sizeof(PAPhysicsParticle), "test.out");
-    printf("Created output file (%ld KB)\n", TOTAL_SIZE / 1024);
-
-    partialResults = (PAPhysicsParticle *)COBufferGetNativeBuffer(fileBuf);
-
-    kernels = (COProgram **)calloc(system->forceCount, sizeof(COProgram *));
-    intProg = SMProgramLibraryInstantiateProgram(library,
-                                                 PAPhysicsIntegrationType);
-
-    for(unsigned int i = 0; i < system->forceCount; i++)
-    {
-        PAPhysicsForce * force;
-        COProgram * k;
-        COBuffer * forceBuf;
-
-        force = system->forces[i];
-        k = kernels[i] = SMProgramLibraryInstantiateProgram(library,
-                                                            force->type);
-
-        forceBuf = COBufferNew(sim, 1, sizeof(PAPhysicsForce), false);
-        COBufferSet(forceBuf, force);
-
-        COProgramSetArgument(k, 0, COArgumentNewWithBuffer(parts, 0));
-        COProgramSetArgument(k, 1, COArgumentNewWithBuffer(parts, 1));
-        COProgramSetArgument(k, 2, COArgumentNewWithBuffer(newts, 0));
-        COProgramSetArgument(k, 3, COArgumentNewWithBuffer(newts, 1));
-        COProgramSetArgument(k, 4, COArgumentNewWithBuffer(forceBuf, 0));
-        COProgramSetArgument(k, 5, COArgumentNewWithInt(ELEMENT_COUNT));
-    }
-
-    COProgramSetArgument(intProg, 0, COArgumentNewWithBuffer(parts, 0));
-    COProgramSetArgument(intProg, 1, COArgumentNewWithBuffer(parts, 1));
-    COProgramSetArgument(intProg, 2, COArgumentNewWithBuffer(newts, 0));
-    COProgramSetArgument(intProg, 3, COArgumentNewWithBuffer(newts, 1));
-    COProgramSetArgument(intProg, 4, COArgumentNewWithInt(ELEMENT_COUNT));
+    simulator = SMSimulatorNewFromFile("../Systems/sample.psys", ELEMENT_COUNT);
+    SMSimulatorRandomize(simulator);
+    SMSimulatorPushData(simulator);
 
     printf("\n");
     gettimeofday(&startTime, NULL);
 
-    for(step = 0; step < FRAME_COUNT; step++, partialResults += ELEMENT_COUNT)
+    for(int step = 0; step < FRAME_COUNT; step++)
     {
         // Clear the line
         printf("\033[K");
@@ -165,27 +89,10 @@ int main(int argc, char ** argv)
         printf("\r");
         fflush(stdout);
 
-        for(unsigned int i = 0; i < system->forceCount; i++)
-        {
-            COProgramExecute(kernels[i]);
-            COContextWait(sim);
-        }
-        COProgramExecute(intProg);
-        COContextWait(sim);
-
-        COBufferSwap(parts);
-        COBufferSwap(newts);
-
-        COBufferGet(parts, (void**)&partialResults);
+        SMSimulatorSimulate(simulator);
     }
 
     printf("\n\n");
-
-    COBufferFree(parts);
-    COBufferFree(newts);
-    COBufferFree(fileBuf);
-    SMProgramLibraryFree(library);
-    COContextFree(sim);
 
     return EXIT_SUCCESS;
 }

@@ -27,14 +27,35 @@
 #ifndef _SM_SIMULATOR_H_
 #define _SM_SIMULATOR_H_
 
+#include <libsimulator/libsimulator.h>
+#include <libcomputer/libcomputer.h>
+
 #include <OpenCL/opencl.h>
+
+#include "SMProgramLibrary.h"
 
 typedef struct _SMSimulator
 {
     PASystem * system;
+    COContext * computer;
+    SMProgramLibrary * library;
+
+    COProgram ** forcePrograms, * integrationProgram;
+
+    unsigned int elementCount;
+
+    COBuffer * clParticles, * clNewtonian;
+    PAPhysicsParticle * particles;
+    PAPhysicsNewtonian * newtonian;
 } SMSimulator;
 
-SMSimulator * SMSimulatorNew();
-SMSimulator * SMSimulatorNewFromFile(const char * filename);
+SMSimulator * SMSimulatorNew(unsigned long elementCount);
+SMSimulator * SMSimulatorNewFromFile(const char * filename,
+                                     unsigned long elementCount);
+
+void SMSimulatorPushData(SMSimulator * sim);
+void SMSimulatorRandomize(SMSimulator * sim);
+
+void SMSimulatorSimulate(SMSimulator * sim);
 
 #endif

@@ -33,26 +33,130 @@
 #include <sys/stat.h>
 #include <string.h>
 #include <math.h>
+#include <time.h>
 
 #include <liblog/liblog.h>
 
 #include "libsimulator.h"
 
-SMSimulator * SMSimulatorNew()
+SMSimulator * SMSimulatorNew(unsigned long elementCount)
 {
     SMSimulator * sim;
 
     sim = (SMSimulator *)calloc(1, sizeof(SMSimulator));
+    sim->elementCount = elementCount;
+    sim->computer = COContextNew();
+    sim->library = SMProgramLibraryNew(sim->computer);
+
+    SMProgramLibrarySetGlobalCount(sim->library, elementCount);
+
+    sim->particles = (PAPhysicsParticle *)
+        calloc(elementCount, sizeof(PAPhysicsParticle));
+
+    sim->newtonian = (PAPhysicsNewtonian *)
+        calloc(elementCount, sizeof(PAPhysicsNewtonian));
+
+    sim->clParticles = COBufferNew(sim->computer, elementCount,
+                                   sizeof(PAPhysicsParticle), true);
+    sim->clNewtonian = COBufferNew(sim->computer, elementCount,
+                                   sizeof(PAPhysicsNewtonian), true);
+
+    printf("Allocated video memory (%ld KB)\n",
+           ((2 * elementCount * sizeof(PAPhysicsParticle)) +
+           (2 * elementCount * sizeof(PAPhysicsNewtonian))) / 1024);
 
     return sim;
 }
 
-SMSimulator * SMSimulatorNewFromFile(const char * filename)
+SMSimulator * SMSimulatorNewFromFile(const char * filename,
+                                     unsigned long elementCount)
 {
     SMSimulator * sim;
 
-    sim = SMSimulatorNew();
+    sim = SMSimulatorNew(elementCount);
     sim->system = PASystemNewFromFile(filename);
 
+    sim->forcePrograms = (COProgram **)calloc(sim->system->forceCount,
+                                              sizeof(COProgram *));
+    sim->integrationProgram =
+        SMProgramLibraryMakeProgram(sim->library, PAPhysicsIntegrationType);
+
+    for(unsigned int i = 0; i < sim->system->forceCount; i++)
+    {
+        PAPhysicsForce * force;
+        COProgram * k;
+        COBuffer * forceBuf;
+
+        force = sim->system->forces[i];
+        k = sim->forcePrograms[i] = SMProgramLibraryMakeProgram(sim->library,
+                                                                force->type);
+
+        forceBuf = COBufferNew(sim->computer, 1, sizeof(PAPhysicsForce), false);
+        COBufferSet(forceBuf, force);
+
+        COProgramSetArgument(k, 0,
+                             COArgumentNewWithBuffer(sim->clParticles, 0));
+        COProgramSetArgument(k, 1,
+                             COArgumentNewWithBuffer(sim->clParticles, 1));
+        COProgramSetArgument(k, 2,
+                             COArgumentNewWithBuffer(sim->clNewtonian, 0));
+        COProgramSetArgument(k, 3,
+                             COArgumentNewWithBuffer(sim->clNewtonian, 1));
+        COProgramSetArgument(k, 4, COArgumentNewWithBuffer(forceBuf, 0));
+        COProgramSetArgument(k, 5, COArgumentNewWithInt(sim->elementCount));
+    }
+
+    COProgramSetArgument(sim->integrationProgram, 0,
+                         COArgumentNewWithBuffer(sim->clParticles, 0));
+    COProgramSetArgument(sim->integrationProgram, 1,
+                         COArgumentNewWithBuffer(sim->clParticles, 1));
+    COProgramSetArgument(sim->integrationProgram, 2,
+                         COArgumentNewWithBuffer(sim->clNewtonian, 0));
+    COProgramSetArgument(sim->integrationProgram, 3,
+                         COArgumentNewWithBuffer(sim->clNewtonian, 1));
+    COProgramSetArgument(sim->integrationProgram, 4,
+                         COArgumentNewWithInt(sim->elementCount));
+
     return sim;
+}
+
+// copy data from particles/newtonian to GPU
+void SMSimulatorPushData(SMSimulator * sim)
+{
+    COBufferSet(sim->clParticles, sim->particles);
+    COBufferSet(sim->clNewtonian, sim->newtonian);
+}
+
+// randomly choose particle positions, using all available particles
+void SMSimulatorRandomize(SMSimulator * sim)
+{
+    srand((int)time(NULL));
+
+    for(unsigned int i = 0; i < sim->elementCount; i++)
+    {
+        sim->particles[i].enabled = 1.0;
+        sim->newtonian[i].ox = sim->particles[i].x =
+            (PAFloat)rand()/(PAFloat)RAND_MAX;
+        sim->newtonian[i].oy = sim->particles[i].y =
+            (PAFloat)rand()/(PAFloat)RAND_MAX;
+        sim->newtonian[i].oz = sim->particles[i].z =
+            (PAFloat)rand()/(PAFloat)RAND_MAX;
+
+        sim->newtonian[i].mass = 50000000.0 * (PAFloat)rand()/(PAFloat)RAND_MAX;
+    }
+}
+
+void SMSimulatorSimulate(SMSimulator * sim)
+{
+    for(unsigned int i = 0; i < sim->system->forceCount; i++)
+    {
+        COProgramExecute(sim->forcePrograms[i]);
+        COContextWait(sim->computer);
+    }
+
+    COProgramExecute(sim->integrationProgram);
+    COContextWait(sim->computer);
+
+    COBufferSwap(sim->clParticles);
+    COBufferSwap(sim->clNewtonian);
 }
