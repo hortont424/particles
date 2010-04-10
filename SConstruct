@@ -52,8 +52,9 @@ extern = ['libjsonc']
 libparticles = SConscript('Libraries/build/libparticles/SConscript', extern)
 libcurve = SConscript('Libraries/build/libcurve/SConscript', extern)
 libcomputer = SConscript('Libraries/build/libcomputer/SConscript', extern)
+librenderer = SConscript('Libraries/build/librenderer/SConscript', extern)
 
-libraries = extern + ['libcomputer', 'libparticles', 'libcurve']
+libraries = extern + ['libcomputer', 'libparticles', 'libcurve', 'librenderer']
 
 # Tools
 simulator = SConscript('Simulator/build/SConscript', libraries)
