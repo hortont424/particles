@@ -54,6 +54,8 @@ SMSimulator * SMSimulatorNewFromFile(const char * filename,
                                      unsigned long elementCount);
 
 void SMSimulatorPushData(SMSimulator * sim);
+void SMSimulatorPullData(SMSimulator * sim);
+
 void SMSimulatorRandomize(SMSimulator * sim);
 
 void SMSimulatorSimulate(SMSimulator * sim);

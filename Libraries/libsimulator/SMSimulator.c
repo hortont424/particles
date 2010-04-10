@@ -120,11 +120,17 @@ SMSimulator * SMSimulatorNewFromFile(const char * filename,
     return sim;
 }
 
-// copy data from particles/newtonian to GPU
+// copy data from normal memory -> video memory
 void SMSimulatorPushData(SMSimulator * sim)
 {
     COBufferSet(sim->clParticles, sim->particles);
     COBufferSet(sim->clNewtonian, sim->newtonian);
+}
+
+// copy particle locations from video -> normal memory
+void SMSimulatorPullData(SMSimulator * sim)
+{
+    COBufferGet(sim->clParticles, (void**)&sim->particles);
 }
 
 // randomly choose particle positions, using all available particles
