@@ -9,7 +9,7 @@ docs:
 
 simulate:
 	rm -f ./Simulator/test.out
-	cd Simulator ; DYLD_LIBRARY_PATH=../Libraries/build/*/:../External/json-c/build/ ./build/simulator
+	cd Simulator ; DYLD_LIBRARY_PATH=../Libraries/build/libcomputer/:../Libraries/build/libparticles/:../External/json-c/build/:../Libraries/build/libsimulator/:../Libraries/build/librenderer/ ./build/simulator
 
 interpolate:
 	./Interpolator/build/Interpolator.app/Contents/MacOS/Interpolator
