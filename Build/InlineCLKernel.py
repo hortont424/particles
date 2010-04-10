@@ -17,7 +17,7 @@ def TOOL_INLINE_CL_KERNEL(env):
             kname = os.path.basename(str(clfile)).replace(".cl", "")
             kernelString = clfile.get_contents()
             kernelString = kernelString.replace('"', '\\"')
-            lines = ['"' + s + '" \\' for s in kernelString.split("\n")]
+            lines = ['"' + s + '\\n" \\' for s in kernelString.split("\n")]
             kernelString = "const char * SMKernelSource_" + kname + " = "
             kernelString += "\n".join(lines)
             f.write(kernelString + "\n\"\";\n\n")
