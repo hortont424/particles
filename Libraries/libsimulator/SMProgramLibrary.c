@@ -32,7 +32,9 @@
 
 #include "SMProgramLibrary.h"
 
-#define LIBRARY_PATH "./kernels/"
+extern const char * SMKernelSource_normal;
+extern const char * SMKernelSource_gravity;
+extern const char * SMKernelSource_verlet;
 
 /**
  * Allocate the space required for an SMProgramLibrary, construct a mapping of
@@ -51,9 +53,12 @@ SMProgramLibrary * SMProgramLibraryNew(COContext * ctx)
     lib->programs = (COProgram **)calloc(PAPhysicsLastType,
                                          sizeof(COProgram *));
 
-    SMProgramLibraryLoadProgram(lib, PAPhysicsNormalType, "normal.cl");
-    SMProgramLibraryLoadProgram(lib, PAPhysicsGravityType, "gravity.cl");
-    SMProgramLibraryLoadProgram(lib, PAPhysicsIntegrationType, "verlet.cl");
+    SMProgramLibraryLoadProgram(lib, PAPhysicsNormalType, "normal",
+                                SMKernelSource_normal);
+    SMProgramLibraryLoadProgram(lib, PAPhysicsGravityType, "gravity",
+                                SMKernelSource_gravity);
+    SMProgramLibraryLoadProgram(lib, PAPhysicsIntegrationType, "verlet",
+                                SMKernelSource_verlet);
 
     return lib;
 }
@@ -76,18 +81,13 @@ void SMProgramLibraryFree(SMProgramLibrary * lib)
 /**
  * @param lib The program library to modify.
  * @param type The simulation type to load a kernel for.
- * @param filename The filename of the kernel to load.
+ * @param kernelName The name of the given kernel.
+ * @param kernelSource The OpenCL source of the kernel to load.
  */
 void SMProgramLibraryLoadProgram(SMProgramLibrary * lib, PAPhysicsType type,
-                                 char * filename)
+                                 char * kernelName, const char * kernelSource)
 {
-    char * kernelPath;
-    size_t kernelPathLength = strlen(LIBRARY_PATH) + strlen(filename) + 1;
-
-    kernelPath = (char *)calloc(kernelPathLength, sizeof(char));
-    snprintf(kernelPath, kernelPathLength, "%s%s", LIBRARY_PATH, filename);
-
-    lib->programs[type] = COProgramNew(lib->context, kernelPath);
+    lib->programs[type] = COProgramNew(lib->context, kernelName, kernelSource);
     showBuildLog(lib->context, lib->programs[type]);
 }
 

@@ -49,7 +49,7 @@ SMProgramLibrary * SMProgramLibraryNew(COContext * ctx);
 void SMProgramLibraryFree(SMProgramLibrary * lib);
 
 void SMProgramLibraryLoadProgram(SMProgramLibrary * lib, PAPhysicsType type,
-                                 char * filename);
+                                 char * kernelName, const char * kernelSource);
 void SMProgramLibrarySetGlobalCount(SMProgramLibrary * lib, size_t globalCount);
 COProgram * SMProgramLibraryInstantiateProgram(SMProgramLibrary * lib,
                                                PAPhysicsType type);

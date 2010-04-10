@@ -15,5 +15,6 @@ def TOOL_WRITE_VAL(env):
         f = open(str(target[0]), 'wb')
         f.write(source[0].get_contents())
         f.close()
+
     env['BUILDERS']['WriteVal'] = Builder(
         action=Action(write_val, "$WRITEVALCOMSTR"))

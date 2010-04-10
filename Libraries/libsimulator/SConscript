@@ -5,9 +5,13 @@ Import("outerEnv")
 env = outerEnv.Clone()
 env.AppendUnique(FRAMEWORKS = ["OpenCL"])
 
+# It's a WebKit joke...
+inlineKernels = env.InlineCLKernel("AllInOneFile.c", Glob("kernels/*.cl"))
+
 libsimulator = env.SharedLibrary("simulator", Glob("*.c"),
                                  LIBS=["computer", "particles"])
 Depends(libsimulator, libcomputer)
 Depends(libsimulator, libparticles)
+Depends(libsimulator, inlineKernels)
 
 Return("libsimulator")

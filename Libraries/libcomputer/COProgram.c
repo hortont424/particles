@@ -73,6 +73,32 @@ char * kernelNameFromFilename(const char * filename)
 }
 
 /**
+ * Allocate the space required for an COProgram, compile the given OpenCL
+ * kernel, and allocate space for its list of arguments.
+ *
+ * @param ctx The simulation context to compile the kernel within.
+ * @param kernelName The name of the given OpenCL kernel.
+ * @param kernelSource The source of the OpenCL kernel to load and compile.
+ * @return The newly allocated program.
+ */
+COProgram * COProgramNew(COContext * ctx, char * kernelName,
+                         const char * kernelSource)
+{
+    COProgram * prog;
+
+    prog = compileProgram(ctx, kernelName, kernelSource);
+    prog->context = ctx;
+
+    if(prog)
+        printf("Successfully loaded kernel '%s'\n", kernelName);
+
+    prog->arguments = (COArgument **)calloc(COProgramGetArgumentCount(prog),
+                                            sizeof(COArgument *));
+
+    return prog;
+}
+
+/**
  * Allocate the space required for an COProgram, load an OpenCL kernel from the
  * given file, compile it, and allocate space for its list of arguments.
  *
@@ -83,7 +109,7 @@ char * kernelNameFromFilename(const char * filename)
  * @param filename The filename of the OpenCL kernel to load and compile.
  * @return The newly allocated program.
  */
-COProgram * COProgramNew(COContext * ctx, const char * filename)
+COProgram * COProgramNewFromFile(COContext * ctx, const char * filename)
 {
     struct stat fileInfo;
     int fileHandle;
@@ -118,16 +144,9 @@ COProgram * COProgramNew(COContext * ctx, const char * filename)
     read(fileHandle, fileContent, fileInfo.st_size + 1);
     close(fileHandle);
 
-    prog = compileProgram(ctx, kernelName, fileContent);
-    prog->context = ctx;
+    prog = COProgramNew(ctx, kernelName, fileContent);
 
     free(fileContent);
-
-    if(prog)
-        printf("Successfully loaded kernel '%s'\n", kernelName);
-
-    prog->arguments = (COArgument **)calloc(COProgramGetArgumentCount(prog),
-                                            sizeof(COArgument *));
 
     return prog;
 }

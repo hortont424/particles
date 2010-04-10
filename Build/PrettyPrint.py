@@ -29,6 +29,7 @@ def TOOL_PRETTY_PRINT(env):
         INSTALLSTR = message("Copying"),
         IBTOOLCOMSTR = message("Compiling XIB"),
         WRITEVALCOMSTR = message("Writing value to file", False),
-        LATEXCOMSTR = message("Rendering LaTeX file"))
+        LATEXCOMSTR = message("Rendering LaTeX file"),
+        INLINECLKERNELCOMSTR = message("Inlining CL kernels", False))
 
     return env

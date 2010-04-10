@@ -51,7 +51,9 @@ typedef struct _COProgram
     COContext * context;        /**< The context that owns the program */
 } COProgram;
 
-COProgram * COProgramNew(COContext * ctx, const char * filename);
+COProgram * COProgramNew(COContext * ctx, char * kernelName,
+                         const char * kernelSource);
+COProgram * COProgramNewFromFile(COContext * ctx, const char * filename);
 void COProgramFree(COProgram * prog);
 COProgram * COProgramCopy(COProgram * prog);
 
