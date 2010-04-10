@@ -41,7 +41,7 @@ Build.InstallTools(outerEnv)
 Export("outerEnv")
 
 # Papers
-papers = SConscript('Papers/build/SConscript')
+#papers = SConscript('Papers/build/SConscript')
 
 # External libraries
 libjsonc = SConscript('External/json-c/build/SConscript')
