@@ -133,7 +133,7 @@ void CUCurvePush(CUCurve * curve, CUPoint p, CUPoint cp1, CUPoint cp2)
 {
     if(curve->currentControlPoint >= curve->controlPoints + curve->pointCount)
     {
-        LOLog("Trying to push more than %d points.\n", curve->pointCount);
+        LOLog("Trying to push more than %d points.", curve->pointCount);
         return;
     }
 

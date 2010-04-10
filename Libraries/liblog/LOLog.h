@@ -28,6 +28,7 @@
 #define _LO_LOG_H_
 
 #include <stdio.h>
+#include <libgen.h>
 
 #define LO_BOLD     "\033[1m"
 #define LO_RED      "\033[91m"
@@ -35,13 +36,14 @@
 
 #define LOLog(f, ...) \
 { \
-    printf(LO_BOLD f LO_RESET, ##__VA_ARGS__); \
+    printf(LO_BOLD "(%s, line %d): " LO_RESET f "\n", \
+           basename(__FILE__), __LINE__, ##__VA_ARGS__); \
 }
 
 #define LOError(f, ...) \
 { \
-    fprintf(stderr, LO_RED "Error (%s, line %d):\n\t" LO_RESET f "\n", \
-            __FILE__, __LINE__, ##__VA_ARGS__); \
+    fprintf(stderr, LO_BOLD LO_RED "Error (%s, line %d): " LO_RESET f "\n", \
+            basename(__FILE__), __LINE__, ##__VA_ARGS__); \
 }
 
 #endif

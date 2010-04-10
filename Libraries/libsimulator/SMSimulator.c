@@ -61,7 +61,7 @@ SMSimulator * SMSimulatorNew(unsigned long elementCount)
     sim->clNewtonian = COBufferNew(sim->computer, elementCount,
                                    sizeof(PAPhysicsNewtonian), true);
 
-    LOLog("Allocated video memory (%ld KB)\n",
+    LOLog("Allocated video memory (%ld KB)",
           ((2 * elementCount * sizeof(PAPhysicsParticle)) +
           (2 * elementCount * sizeof(PAPhysicsNewtonian))) / 1024);
 

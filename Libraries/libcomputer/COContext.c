@@ -91,7 +91,7 @@ COContext * COContextNew()
 
     if(ctx->buildOptions && ctx->ctx && ctx->cmds)
     {
-        LOLog("Created simulator on '%s %s'\n", vendorName, deviceName);
+        LOLog("Created simulator on '%s %s'", vendorName, deviceName);
     }
     else
     {

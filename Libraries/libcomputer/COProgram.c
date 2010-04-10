@@ -91,7 +91,7 @@ COProgram * COProgramNew(COContext * ctx, char * kernelName,
 
     if(prog)
     {
-        LOLog("Successfully loaded kernel '%s'\n", kernelName);
+        LOLog("Successfully loaded kernel '%s'", kernelName);
     }
     else
     {
@@ -256,7 +256,7 @@ void COProgramSetGlobalCount(COProgram * prog, size_t globalCount)
     while(prog->globalCount % prog->localCount)
         prog->localCount = prog->globalCount / (multiplier++);
 
-    LOLog("Will run '%s' on %zd elements, %zd at a time\n",
+    LOLog("Will run '%s' on %zd elements, %zd at a time",
           prog->name, prog->globalCount, prog->localCount);
 }
 
