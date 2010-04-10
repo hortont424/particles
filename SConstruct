@@ -16,7 +16,7 @@ flags = includes + ["--std=c99", "-Wall", "-Werror", "-fobjc-gc"]
 releaseFlags = flags + ["-O4"]
 debugFlags = flags + ["-g"]
 
-buildMode = ARGUMENTS.get("mode", "release")
+buildMode = ARGUMENTS.get("mode", "debug")
 
 if buildMode == "debug":
     useFlags = debugFlags
