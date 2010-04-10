@@ -29,14 +29,18 @@
 
 #include <stdio.h>
 
+#define LO_BOLD     "\033[1m"
+#define LO_RED      "\033[91m"
+#define LO_RESET    "\033[0m"
+
 #define LOLog(f, ...) \
 { \
-    printf(f, ##__VA_ARGS__); \
+    printf(LO_BOLD f LO_RESET, ##__VA_ARGS__); \
 }
 
 #define LOError(f, ...) \
 { \
-    fprintf(stderr, "\033[91mError (%s, line %d):\033[0m\n\t" f "\n", \
+    fprintf(stderr, LO_RED "Error (%s, line %d):\n\t" LO_RESET f "\n", \
             __FILE__, __LINE__, ##__VA_ARGS__); \
 }
 

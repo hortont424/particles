@@ -81,7 +81,7 @@ int main(int argc, char ** argv)
             double elapsed = (currentTime.tv_sec - startTime.tv_sec) +
                 (double)(currentTime.tv_usec - startTime.tv_usec) / 1000000;
 
-            printf("%*.1lf sec",
+            printf(" %*.1lf sec",
                    (int)ceil(log10(FRAME_COUNT * (elapsed / step))) + 3,
                    (FRAME_COUNT - step) * (elapsed / step));
         }
