@@ -26,4 +26,4 @@ clean:
 	rm -rf ./Papers/build
 
 edit:
-	mate .
+	$(EDITOR) .
