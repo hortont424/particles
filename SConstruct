@@ -35,6 +35,8 @@ outerEnv = Environment(
     LIBPATH = ["#Libraries/build/libcurve",
                "#Libraries/build/libparticles",
                "#Libraries/build/libcomputer",
+               "#Libraries/build/librenderer",
+               "#Libraries/build/libsimulator",
                "#External/json-c/build"])
 
 Build.InstallTools(outerEnv)
@@ -53,8 +55,11 @@ libparticles = SConscript('Libraries/build/libparticles/SConscript', extern)
 libcurve = SConscript('Libraries/build/libcurve/SConscript', extern)
 libcomputer = SConscript('Libraries/build/libcomputer/SConscript', extern)
 librenderer = SConscript('Libraries/build/librenderer/SConscript', extern)
+libsimulator = SConscript('Libraries/build/libsimulator/SConscript',
+                          extern + ['libcomputer'])
 
-libraries = extern + ['libcomputer', 'libparticles', 'libcurve', 'librenderer']
+libraries = extern + ['libcomputer', 'libparticles', 'libcurve',
+                      'librenderer', 'libsimulator']
 
 # Tools
 simulator = SConscript('Simulator/build/SConscript', libraries)

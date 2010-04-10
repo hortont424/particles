@@ -1,4 +1,4 @@
-/* particles - simulator - SMProgramLibrary.h
+/* particles - libsimulator - SMProgramLibrary.h
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *

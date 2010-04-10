@@ -32,10 +32,9 @@
 #include <liblog/liblog.h>
 #include <libparticles/libparticles.h>
 #include <libcomputer/libcomputer.h>
+#include <libsimulator/libsimulator.h>
 
 #include <json.h>
-
-#include "SMProgramLibrary.h"
 
 #define ELEMENT_COUNT   8192
 #define FRAME_SIZE      (ELEMENT_COUNT * sizeof(PAPhysicsParticle))
