@@ -30,6 +30,7 @@
 #include <OpenCL/opencl.h>
 
 #include <libparticles/libparticles.h>
+#include <libcomputer/libcomputer.h>
 
 #include "SMSimulator.h"
 #include "SMProgramLibrary.h"

@@ -46,3 +46,13 @@ SMSimulator * SMSimulatorNew()
 
     return sim;
 }
+
+SMSimulator * SMSimulatorNewFromFile(const char * filename)
+{
+    SMSimulator * sim;
+
+    sim = SMSimulatorNew();
+    sim->system = PASystemNewFromFile(filename);
+
+    return sim;
+}

@@ -31,9 +31,10 @@
 
 typedef struct _SMSimulator
 {
-    int garbage;
+    PASystem * system;
 } SMSimulator;
 
 SMSimulator * SMSimulatorNew();
+SMSimulator * SMSimulatorNewFromFile(const char * filename);
 
 #endif

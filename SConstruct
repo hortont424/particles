@@ -56,7 +56,7 @@ libcurve = SConscript('Libraries/build/libcurve/SConscript', extern)
 libcomputer = SConscript('Libraries/build/libcomputer/SConscript', extern)
 librenderer = SConscript('Libraries/build/librenderer/SConscript', extern)
 libsimulator = SConscript('Libraries/build/libsimulator/SConscript',
-                          extern + ['libcomputer'])
+                          extern + ['libcomputer', 'libparticles'])
 
 libraries = extern + ['libcomputer', 'libparticles', 'libcurve',
                       'librenderer', 'libsimulator']
