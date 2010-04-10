@@ -1,4 +1,4 @@
-/* particles - libsimulator - libsimulator.h
+/* particles - libsimulator - SMSimulator.c
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,14 +24,25 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _LIBSIMULATOR_H_
-#define _LIBSIMULATOR_H_
+#include <stdio.h>
+#include <fcntl.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <sys/types.h>
+#include <sys/uio.h>
+#include <sys/stat.h>
+#include <string.h>
+#include <math.h>
 
-#include <OpenCL/opencl.h>
+#include <liblog/liblog.h>
 
-#include <libparticles/libparticles.h>
+#include "libsimulator.h"
 
-#include "SMSimulator.h"
-#include "SMProgramLibrary.h"
+SMSimulator * SMSimulatorNew()
+{
+    SMSimulator * sim;
 
-#endif
+    sim = (SMSimulator *)calloc(1, sizeof(SMSimulator));
+
+    return sim;
+}
