@@ -86,11 +86,18 @@ COProgram * COProgramNew(COContext * ctx, char * kernelName,
 {
     COProgram * prog;
 
-    prog = compileProgram(ctx, kernelName, kernelSource);
+    prog = compileProgram(ctx, strdup(kernelName), kernelSource);
     prog->context = ctx;
 
     if(prog)
-        printf("Successfully loaded kernel '%s'\n", kernelName);
+    {
+        LOLog("Successfully loaded kernel '%s'\n", kernelName);
+    }
+    else
+    {
+        LOError("Failed to load kernel '%s'\n", kernelName);
+        return NULL;
+    }
 
     prog->arguments = (COArgument **)calloc(COProgramGetArgumentCount(prog),
                                             sizeof(COArgument *));
@@ -147,6 +154,7 @@ COProgram * COProgramNewFromFile(COContext * ctx, const char * filename)
     prog = COProgramNew(ctx, kernelName, fileContent);
 
     free(fileContent);
+    free(kernelName);
 
     return prog;
 }
