@@ -34,7 +34,7 @@
 #include <libcomputer/libcomputer.h>
 #include <libsimulator/libsimulator.h>
 
-#define ELEMENT_COUNT   8192
+#define ELEMENT_COUNT   (256*1024)
 #define FRAME_COUNT     200
 
 void drawProgressBar(int width, double progress)

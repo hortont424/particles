@@ -35,6 +35,7 @@ __kernel void normal(__global PAPhysicsParticle * input,
 {
     int id = get_global_id(0);
     float4 fpoint, loc, accel;
+    float dist;
     fpoint = loc = accel = (float4)(0.0f);
 
     if(id > count || input[id].enabled == 0.0)
@@ -44,8 +45,12 @@ __kernel void normal(__global PAPhysicsParticle * input,
     fpoint = (float4)(force->particle.x, force->particle.y,
                       force->particle.z, 0.0f);
     accel = force->data.normal.strength * (loc - fpoint);
-    accel = accel * (1.0f / powr(distance(loc, fpoint),
-                                 force->data.normal.falloff.strength));
+    dist = distance(loc, fpoint);
+    accel = accel * (1.0f / powr(dist, force->data.normal.falloff.strength));
+
+    if(dist < force->data.normal.falloff.min ||
+       dist > force->data.normal.falloff.max)
+        accel = (float4)(0.0f);
 
     newtonOut[id].ax += accel.x;
     newtonOut[id].ay += accel.y;
