@@ -256,8 +256,8 @@ void COProgramSetGlobalCount(COProgram * prog, size_t globalCount)
     while(prog->globalCount % prog->localCount)
         prog->localCount = prog->globalCount / (multiplier++);
 
-    printf("Will run '%s' on %zd elements, %zd at a time\n",
-           prog->name, prog->globalCount, prog->localCount);
+    LOLog("Will run '%s' on %zd elements, %zd at a time\n",
+          prog->name, prog->globalCount, prog->localCount);
 }
 
 /**

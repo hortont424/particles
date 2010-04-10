@@ -64,7 +64,7 @@ CUCurve * CUCurveNewFromFile(char * filename)
 
     if(!strstr(filename, ".curve"))
     {
-        printf("'%s' is not a curve file", filename);
+        LOLog("'%s' is not a curve file", filename);
         return NULL;
     }
 
@@ -72,7 +72,7 @@ CUCurve * CUCurveNewFromFile(char * filename)
 
     if(fileHandle == -1)
     {
-        printf("Could not open '%s'", filename);
+        LOLog("Could not open '%s'", filename);
         return NULL;
     }
 
@@ -104,7 +104,7 @@ void CUCurveSave(CUCurve * curve, char * filename)
 
     if(!strstr(filename, ".curve"))
     {
-        printf("'%s' is not a curve file", filename);
+        LOLog("'%s' is not a curve file", filename);
         return;
     }
 
@@ -112,7 +112,7 @@ void CUCurveSave(CUCurve * curve, char * filename)
 
     if(fileHandle == -1)
     {
-        printf("Could not open '%s'", filename);
+        LOLog("Could not open '%s'", filename);
         return;
     }
 
@@ -133,7 +133,7 @@ void CUCurvePush(CUCurve * curve, CUPoint p, CUPoint cp1, CUPoint cp2)
 {
     if(curve->currentControlPoint >= curve->controlPoints + curve->pointCount)
     {
-        printf("Trying to push more than %d points.\n", curve->pointCount);
+        LOLog("Trying to push more than %d points.\n", curve->pointCount);
         return;
     }
 

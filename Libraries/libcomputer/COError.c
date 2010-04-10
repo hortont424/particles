@@ -47,5 +47,5 @@ void showBuildLog(COContext * ctx, COProgram * prog)
                           sizeof(buf), buf, &len);
 
     if(buf[0] != 0)
-        printf("%s\n", buf);
+        LOLog("%s\n", buf);
 }

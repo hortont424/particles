@@ -90,9 +90,13 @@ COContext * COContextNew()
     ctx->buildOptions = cwdSprintf("-I %s/../Libraries");
 
     if(ctx->buildOptions && ctx->ctx && ctx->cmds)
-        printf("Created simulator on '%s %s'\n", vendorName, deviceName);
+    {
+        LOLog("Created simulator on '%s %s'\n", vendorName, deviceName);
+    }
     else
+    {
         LOError("failed to create simulator");
+    }
 
     return ctx;
 }

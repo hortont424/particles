@@ -101,7 +101,7 @@ PAPhysicsForce * PAPhysicsForceNewFromJSON(json_object * jsForce)
     }
     else
     {
-        printf("Error: unknown kernel %s in psys file!\n", typestr);
+        LOError("unknown kernel %s in psys file!\n", typestr);
         return NULL;
     }
 
