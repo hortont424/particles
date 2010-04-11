@@ -48,6 +48,7 @@
 #endif
 
 #include <liblog/liblog.h>
+#include <libparticles/libparticles.h>
 
 #include "libpreviewer.h"
 
@@ -66,26 +67,34 @@ void timer(int extra)
 
 static void display()
 {
-    float * pts;
+    float zoom = 3.0;
 
     glClearColor(1, 1, 1, 0);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
+    glOrtho(0.0 - zoom, 1.0 + zoom, 0.0 - zoom, 1.0 + zoom, -100.0, 100.0);
 
-    glScalef(2.0, 2.0, 2.0);
-    glTranslatef(-0.5, -0.5, -0.5);
+    //glScalef(2.0, 2.0, 2.0);
+    //glTranslatef(-0.5, -0.5, -0.5);
 
     glColor3f(1.0, 0.0, 0.0);
-    glPointSize(2.0);
+    glPointSize(1.0);
 
     if(simulator)
     {
-        glEnableClientState(GL_VERTEX_ARRAY);
-        glVertexPointer(3, GL_FLOAT, sizeof(float) * 4, simulator->particles);
+        glBegin(GL_POINTS);
+        for(unsigned long i = 0; i < simulator->elementCount; i++)
+        {
+            PAPhysicsParticle p = simulator->particles[i];
+            glVertex3f(p.x, p.y, p.z);
+        }
+        glEnd();
+        /*glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(3, GL_FLOAT, sizeof(float) * 4, (float *)simulator->particles);
         glDrawArrays(GL_POINTS, 0, simulator->elementCount);
-        glDisableClientState(GL_VERTEX_ARRAY);
+        glDisableClientState(GL_VERTEX_ARRAY);*/
     }
 
     glutSwapBuffers();

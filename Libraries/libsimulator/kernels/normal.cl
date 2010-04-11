@@ -34,7 +34,7 @@ __kernel void normal(__global PAPhysicsParticle * input,
                      const unsigned int count)
 {
     int id = get_global_id(0);
-    float4 fpoint, loc, accel;
+    float4 fpoint, loc, accel, uv;
     float dist;
     fpoint = loc = accel = (float4)(0.0f);
 
@@ -44,9 +44,11 @@ __kernel void normal(__global PAPhysicsParticle * input,
     loc = (float4)(input[id].x, input[id].y, input[id].z, 0.0f);
     fpoint = (float4)(force->particle.x, force->particle.y,
                       force->particle.z, 0.0f);
-    accel = force->data.normal.strength * (loc - fpoint);
+    uv = normalize(loc - fpoint);
+    accel = force->data.normal.strength * uv;
     dist = distance(loc, fpoint);
-    accel = accel * (1.0f / powr(dist, force->data.normal.falloff.strength));
+    accel = accel * (1.0f / powr(dist + 1.0f,
+                                 force->data.normal.falloff.strength));
 
     if(dist < force->data.normal.falloff.min ||
        dist > force->data.normal.falloff.max)

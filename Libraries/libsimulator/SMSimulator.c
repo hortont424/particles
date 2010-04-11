@@ -171,8 +171,8 @@ void SMSimulatorRandomize(SMSimulator * sim)
             (PAFloat)rand()/(PAFloat)RAND_MAX;
         sim->newtonian[i].oy = sim->particles[i].y =
             (PAFloat)rand()/(PAFloat)RAND_MAX;
-        sim->newtonian[i].oz = sim->particles[i].z =
-            (PAFloat)rand()/(PAFloat)RAND_MAX;
+        sim->newtonian[i].oz = sim->particles[i].z = 0.0;
+//            (PAFloat)rand()/(PAFloat)RAND_MAX;
 
         sim->newtonian[i].mass = 50000000.0 * (PAFloat)rand()/(PAFloat)RAND_MAX;
     }

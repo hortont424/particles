@@ -1,11 +1,11 @@
 {
     "initialParticles": {
-        "count": 4096
+        "count": 1048576
     },
     "forces": [
         {
             "kernel": "normal",
-            "strength": 0.3,
+            "strength": 1.0,
             "noise": 0.0,
             "falloff" : {
                 "strength": 2.0
@@ -20,7 +20,7 @@
         },
         {
             "kernel": "normal",
-            "strength": 0.3,
+            "strength": 1.0,
             "noise": 0.0,
             "falloff" : {
                 "strength": 2.0
