@@ -34,6 +34,8 @@
 #include <sys/stat.h>
 #include <errno.h>
 #include <sys/resource.h>
+#include <sys/types.h>
+#include <stdbool.h>
 
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
@@ -49,17 +51,20 @@
 
 #include "libpreviewer.h"
 
-static PVPreviewer * globalPreviewer = NULL;
+static PVPreviewerFrameCallback pvFrameCallback;
+static bool pvInitialized = false;
 
 void PVPreviewerInit()
 {
-    if(globalPreviewer)
+    if(pvInitialized)
     {
         LOError("trying to initialize libpreviewer more than once");
         return;
     }
-
-    globalPreviewer = (PVPreviewer *)calloc(1, sizeof(PVPreviewer));
+    else
+    {
+        pvInitialized = true;
+    }
 
     glutInit(NULL, NULL);
     glutInitWindowSize(800, 800);
@@ -78,7 +83,12 @@ void PVPreviewerInit()
     //glutTimerFunc(0, timer, 0);
 }
 
-PVPreviewer * PVPreviewerGet()
+void PVPreviewerStart()
 {
-    return globalPreviewer;
+    glutMainLoop();
+}
+
+void PVPreviewerSetFrameCallback(PVPreviewerFrameCallback cb)
+{
+    pvFrameCallback = cb;
 }

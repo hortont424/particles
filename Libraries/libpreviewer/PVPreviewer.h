@@ -27,12 +27,11 @@
 #ifndef _PV_PREVIEWER_H_
 #define _PV_PREVIEWER_H_
 
-typedef struct _PVPreviewer
-{
-    int garbage;
-} PVPreviewer;
+typedef void (*PVPreviewerFrameCallback)();
 
 void PVPreviewerInit();
-PVPreviewer * PVPreviewerGet();
+void PVPreviewerStart();
+
+void PVPreviewerSetFrameCallback(PVPreviewerFrameCallback cb);
 
 #endif
