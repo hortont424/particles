@@ -57,6 +57,21 @@ SMSimulator * SMSimulatorNew(unsigned long elementCount)
     sim->newtonian = (PAPhysicsNewtonian *)
         calloc(elementCount, sizeof(PAPhysicsNewtonian));
 
+    if(!sim->particles || !sim->newtonian)
+    {
+        LOError("out of native memory");
+        SMProgramLibraryFree(sim->library);
+        COContextFree(sim->computer);
+
+        if(sim->particles)
+            free(sim->particles);
+
+        if(sim->newtonian)
+            free(sim->newtonian);
+
+        free(sim);
+    }
+
     // Allocate remote (OpenCL) buffers to copy native buffers to/from
     sim->clParticles = COBufferNew(sim->computer, elementCount,
                                    sizeof(PAPhysicsParticle), true);
@@ -82,9 +97,9 @@ SMSimulator * SMSimulatorNewFromFile(const char * filename)
 
     sim->forcePrograms = (COProgram **)calloc(sim->system->forceCount,
                                               sizeof(COProgram *));
-    sim->integrationProgram =
-        SMProgramLibraryMakeProgram(sim->library, PAPhysicsIntegrationType);
 
+    // Load each force from the PASystem; instantiate a copy of the necessary
+    // kernel, setting various arguments as needed
     for(unsigned int i = 0; i < sim->system->forceCount; i++)
     {
         PAPhysicsForce * force;
@@ -109,6 +124,11 @@ SMSimulator * SMSimulatorNewFromFile(const char * filename)
         COProgramSetArgument(k, 4, COArgumentNewWithBuffer(forceBuf, 0));
         COProgramSetArgument(k, 5, COArgumentNewWithInt(sim->elementCount));
     }
+
+    // Load the integrator and set its arguments
+
+    sim->integrationProgram =
+        SMProgramLibraryMakeProgram(sim->library, PAPhysicsIntegrationType);
 
     COProgramSetArgument(sim->integrationProgram, 0,
                          COArgumentNewWithBuffer(sim->clParticles, 0));
