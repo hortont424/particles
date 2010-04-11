@@ -27,13 +27,12 @@
 #ifndef _PV_PREVIEWER_H_
 #define _PV_PREVIEWER_H_
 
-#include <OpenCL/opencl.h>
-
 typedef struct _PVPreviewer
 {
     int garbage;
 } PVPreviewer;
 
-PVPreviewer * PVPreviewerNew();
+void PVPreviewerInit();
+PVPreviewer * PVPreviewerGet();
 
 #endif

@@ -36,7 +36,22 @@
 
 #define FRAME_COUNT     200
 
-void drawProgressBar(int width, double progress)
+int main(int argc, char ** argv)
+{
+    SMSimulator * simulator;
+
+    COOptionsParse(argc, argv);
+
+    simulator = SMSimulatorNewFromFile("../Systems/sample.psys");
+    SMSimulatorPushData(simulator);
+
+    for(int step = 0; step < FRAME_COUNT; step++)
+        SMSimulatorSimulate(simulator);
+
+    return EXIT_SUCCESS;
+}
+
+/*void drawProgressBar(int width, double progress)
 {
     printf(" [");
 
@@ -89,4 +104,4 @@ int main(int argc, char ** argv)
     printf("\n\n");
 
     return EXIT_SUCCESS;
-}
+}*/

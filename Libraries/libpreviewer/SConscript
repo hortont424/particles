@@ -1,7 +1,7 @@
 Import("outerEnv")
 
 env = outerEnv.Clone()
-env.AppendUnique(FRAMEWORKS = ["OpenCL"])
+env.AppendUnique(FRAMEWORKS = ["OpenGL", "GLUT"])
 
 libpreviewer = env.SharedLibrary("previewer", Glob("*.c"))
 

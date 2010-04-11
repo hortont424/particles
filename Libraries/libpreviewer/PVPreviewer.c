@@ -25,24 +25,60 @@
  */
 
 #include <stdio.h>
-#include <fcntl.h>
 #include <stdlib.h>
-#include <unistd.h>
-#include <sys/types.h>
-#include <sys/uio.h>
-#include <sys/stat.h>
-#include <string.h>
 #include <math.h>
+#include <sys/mman.h>
+#include <sys/uio.h>
+#include <fcntl.h>
+#include <unistd.h>
+#include <sys/stat.h>
+#include <errno.h>
+#include <sys/resource.h>
+
+#ifdef __APPLE__
+#include <OpenGL/gl.h>
+#include <OpenGL/glu.h>
+#include <GLUT/glut.h>
+#else
+#include <GL/gl.h>
+#include <GL/glu.h>
+#include <GL/glut.h>
+#endif
 
 #include <liblog/liblog.h>
 
 #include "libpreviewer.h"
 
-PVPreviewer * PVPreviewerNew()
+static PVPreviewer * globalPreviewer = NULL;
+
+void PVPreviewerInit()
 {
-    PVPreviewer * pv;
+    if(globalPreviewer)
+    {
+        LOError("trying to initialize libpreviewer more than once");
+        return;
+    }
 
-    pv = (PVPreviewer *)calloc(1, sizeof(PVPreviewer));
+    globalPreviewer = (PVPreviewer *)calloc(1, sizeof(PVPreviewer));
 
-    return pv;
+    glutInit(NULL, NULL);
+    glutInitWindowSize(800, 800);
+    glutInitWindowPosition(10, 10);
+    glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
+    glutCreateWindow("Previewer");
+
+    glHint(GL_LINE_SMOOTH_HINT, GL_NICEST);
+    glHint(GL_POINT_SMOOTH_HINT, GL_NICEST);
+    glHint(GL_POLYGON_SMOOTH_HINT, GL_NICEST);
+
+    glDisable(GL_LIGHTING);
+    glDisable(GL_DEPTH_TEST);
+
+    //glutDisplayFunc(PVPreviewerDisplay);
+    //glutTimerFunc(0, timer, 0);
+}
+
+PVPreviewer * PVPreviewerGet()
+{
+    return globalPreviewer;
 }

@@ -237,6 +237,12 @@ void COProgramSetGlobalCount(COProgram * prog, size_t globalCount)
 {
     int multiplier;
 
+    if(globalCount < 1)
+    {
+        LOError("cannot simulate < 1 particle at a time");
+        return;
+    }
+
     prog->globalCount = globalCount;
 
     clGetKernelWorkGroupInfo(prog->kernel, prog->context->devs,
