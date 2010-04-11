@@ -33,20 +33,28 @@
 #include <libparticles/libparticles.h>
 #include <libcomputer/libcomputer.h>
 #include <libsimulator/libsimulator.h>
+#include <libpreviewer/libpreviewer.h>
 
-#define FRAME_COUNT     200
+static SMSimulator * simulator;
+
+SMSimulator * simulateFrame()
+{
+    SMSimulatorSimulate(simulator);
+    SMSimulatorPullData(simulator);
+
+    return simulator;
+}
 
 int main(int argc, char ** argv)
 {
-    SMSimulator * simulator;
-
     COOptionsParse(argc, argv);
 
     simulator = SMSimulatorNewFromFile("../Systems/sample.psys");
     SMSimulatorPushData(simulator);
 
-    for(int step = 0; step < FRAME_COUNT; step++)
-        SMSimulatorSimulate(simulator);
+    PVPreviewerInit(&argc, argv);
+    PVPreviewerSetFrameCallback(simulateFrame);
+    PVPreviewerStart();
 
     return EXIT_SUCCESS;
 }

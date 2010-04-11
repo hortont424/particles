@@ -27,9 +27,11 @@
 #ifndef _PV_PREVIEWER_H_
 #define _PV_PREVIEWER_H_
 
-typedef void (*PVPreviewerFrameCallback)();
+#include <libsimulator/libsimulator.h>
 
-void PVPreviewerInit();
+typedef SMSimulator * (*PVPreviewerFrameCallback)();
+
+void PVPreviewerInit(int * argc, char ** argv);
 void PVPreviewerStart();
 
 void PVPreviewerSetFrameCallback(PVPreviewerFrameCallback cb);

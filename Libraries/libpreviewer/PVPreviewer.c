@@ -51,10 +51,47 @@
 
 #include "libpreviewer.h"
 
-static PVPreviewerFrameCallback pvFrameCallback;
+static PVPreviewerFrameCallback pvFrameCallback = NULL;
 static bool pvInitialized = false;
+static SMSimulator * simulator = NULL;
 
-void PVPreviewerInit()
+void timer(int extra)
+{
+    if(pvFrameCallback)
+        simulator = pvFrameCallback();
+
+    glutPostRedisplay();
+    glutTimerFunc(17, timer, 0);
+}
+
+static void display()
+{
+    float * pts;
+
+    glClearColor(1, 1, 1, 0);
+    glClear(GL_COLOR_BUFFER_BIT);
+
+    glMatrixMode(GL_MODELVIEW);
+    glLoadIdentity();
+
+    glScalef(2.0, 2.0, 2.0);
+    glTranslatef(-0.5, -0.5, -0.5);
+
+    glColor3f(1.0, 0.0, 0.0);
+    glPointSize(2.0);
+
+    if(simulator)
+    {
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(3, GL_FLOAT, sizeof(float) * 4, simulator->particles);
+        glDrawArrays(GL_POINTS, 0, simulator->elementCount);
+        glDisableClientState(GL_VERTEX_ARRAY);
+    }
+
+    glutSwapBuffers();
+}
+
+void PVPreviewerInit(int * argc, char ** argv)
 {
     if(pvInitialized)
     {
@@ -66,7 +103,7 @@ void PVPreviewerInit()
         pvInitialized = true;
     }
 
-    glutInit(NULL, NULL);
+    glutInit(argc, argv);
     glutInitWindowSize(800, 800);
     glutInitWindowPosition(10, 10);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);
@@ -79,8 +116,8 @@ void PVPreviewerInit()
     glDisable(GL_LIGHTING);
     glDisable(GL_DEPTH_TEST);
 
-    //glutDisplayFunc(PVPreviewerDisplay);
-    //glutTimerFunc(0, timer, 0);
+    glutDisplayFunc(display);
+    glutTimerFunc(0, timer, 0);
 }
 
 void PVPreviewerStart()
