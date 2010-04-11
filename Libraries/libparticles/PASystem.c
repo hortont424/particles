@@ -45,7 +45,7 @@ PASystem * PASystemNew()
 PASystem * PASystemNewFromJSON(json_object * jsSystem)
 {
     PASystem * sys;
-    json_object * jsForces, * jsInitialParticles;
+    json_object * jsForces, * jsInitialParticles, *jsPartCount;
     array_list * forces;
 
     sys = PASystemNew();
@@ -72,7 +72,14 @@ PASystem * PASystemNewFromJSON(json_object * jsSystem)
         return NULL;
     }
 
-    sys->initialParticleCount = json_object_get_double(jsInitialParticles);
+    if(!(jsPartCount = json_object_object_get(jsInitialParticles, "count")))
+    {
+        malformedFileError("initialParticles->count");
+        PASystemFree(sys);
+        return NULL;
+    }
+
+    sys->initialParticleCount = json_object_get_double(jsPartCount);
     sys->forceCount = array_list_length(forces);
     sys->forces = (PAPhysicsForce **)calloc(sys->forceCount,
                                             sizeof(PAPhysicsForce *));
