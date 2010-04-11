@@ -68,13 +68,15 @@ SMSimulator * SMSimulatorNew(unsigned long elementCount)
     return sim;
 }
 
-SMSimulator * SMSimulatorNewFromFile(const char * filename,
-                                     unsigned long elementCount)
+SMSimulator * SMSimulatorNewFromFile(const char * filename)
 {
     SMSimulator * sim;
+    PASystem * sys;
 
-    sim = SMSimulatorNew(elementCount);
-    sim->system = PASystemNewFromFile(filename);
+    sys = PASystemNewFromFile(filename);
+
+    sim = SMSimulatorNew(sys->initialParticleCount);
+    sim->system = sys;
 
     sim->forcePrograms = (COProgram **)calloc(sim->system->forceCount,
                                               sizeof(COProgram *));
@@ -116,6 +118,8 @@ SMSimulator * SMSimulatorNewFromFile(const char * filename,
                          COArgumentNewWithBuffer(sim->clNewtonian, 1));
     COProgramSetArgument(sim->integrationProgram, 4,
                          COArgumentNewWithInt(sim->elementCount));
+
+    SMSimulatorRandomize(sim);
 
     return sim;
 }

@@ -1,4 +1,7 @@
 {
+    "initialParticles": {
+        "count": 4096
+    },
     "forces": [
         {
             "kernel": "gravity",

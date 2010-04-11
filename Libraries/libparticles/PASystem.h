@@ -35,6 +35,8 @@ typedef struct _PASystem
 {
     PAPhysicsForce ** forces;
     unsigned int forceCount;
+
+    unsigned long initialParticleCount;
 } PASystem;
 
 PASystem * PASystemNew();

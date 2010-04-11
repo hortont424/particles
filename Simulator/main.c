@@ -34,7 +34,6 @@
 #include <libcomputer/libcomputer.h>
 #include <libsimulator/libsimulator.h>
 
-#define ELEMENT_COUNT   (256*1024)
 #define FRAME_COUNT     200
 
 void drawProgressBar(int width, double progress)
@@ -56,8 +55,7 @@ int main(int argc, char ** argv)
 
     COOptionsParse(argc, argv);
 
-    simulator = SMSimulatorNewFromFile("../Systems/sample.psys", ELEMENT_COUNT);
-    SMSimulatorRandomize(simulator);
+    simulator = SMSimulatorNewFromFile("../Systems/sample.psys");
     SMSimulatorPushData(simulator);
 
     printf("\n");

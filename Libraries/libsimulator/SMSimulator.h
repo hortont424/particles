@@ -50,8 +50,7 @@ typedef struct _SMSimulator
 } SMSimulator;
 
 SMSimulator * SMSimulatorNew(unsigned long elementCount);
-SMSimulator * SMSimulatorNewFromFile(const char * filename,
-                                     unsigned long elementCount);
+SMSimulator * SMSimulatorNewFromFile(const char * filename);
 
 void SMSimulatorPushData(SMSimulator * sim);
 void SMSimulatorPullData(SMSimulator * sim);
