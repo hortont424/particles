@@ -3,6 +3,6 @@ Import("outerEnv")
 env = outerEnv.Clone()
 env.AppendUnique(FRAMEWORKS = ["OpenCL"])
 
-librenderer = env.SharedLibrary("renderer", Glob("*.c"))
+libpreviewer = env.SharedLibrary("previewer", Glob("*.c"))
 
-Return("librenderer")
+Return("libpreviewer")

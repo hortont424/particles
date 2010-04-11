@@ -36,6 +36,7 @@ outerEnv = Environment(
                "#Libraries/build/libparticles",
                "#Libraries/build/libcomputer",
                "#Libraries/build/librenderer",
+               "#Libraries/build/libpreviewer",
                "#Libraries/build/libsimulator",
                "#External/json-c/build"])
 
@@ -47,21 +48,20 @@ Export("outerEnv")
 
 # External libraries
 libjsonc = SConscript('External/json-c/build/SConscript')
+libraries = ['libjsonc']
 
-extern = ['libjsonc']
+# Base Libraries
+libparticles = SConscript('Libraries/build/libparticles/SConscript', libraries)
+libcurve = SConscript('Libraries/build/libcurve/SConscript', libraries)
+libcomputer = SConscript('Libraries/build/libcomputer/SConscript', libraries)
+libraries += ['libcomputer', 'libparticles', 'libcurve']
 
-# Libraries
-libparticles = SConscript('Libraries/build/libparticles/SConscript', extern)
-libcurve = SConscript('Libraries/build/libcurve/SConscript', extern)
-libcomputer = SConscript('Libraries/build/libcomputer/SConscript', extern)
-librenderer = SConscript('Libraries/build/librenderer/SConscript', extern)
-libsimulator = SConscript('Libraries/build/libsimulator/SConscript',
-                          extern + ['libcomputer', 'libparticles'])
-
-libraries = extern + ['libcomputer', 'libparticles', 'libcurve',
-                      'librenderer', 'libsimulator']
+# High-level Libraries
+librenderer = SConscript('Libraries/build/librenderer/SConscript', libraries)
+libpreviewer = SConscript('Libraries/build/libpreviewer/SConscript', libraries)
+libsimulator = SConscript('Libraries/build/libsimulator/SConscript', libraries)
+libraries += ['librenderer', 'libpreviewer', 'libsimulator']
 
 # Tools
 simulator = SConscript('Simulator/build/SConscript', libraries)
 interpolator = SConscript('Interpolator/build/SConscript', libraries)
-previewer = SConscript('Previewer/build/SConscript', libraries)
