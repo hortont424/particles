@@ -29,6 +29,7 @@
 
 #include <stdio.h>
 #include <libgen.h>
+#include <stdlib.h>
 
 #define LO_BOLD     "\033[1m"
 #define LO_RED      "\033[91m"
@@ -44,6 +45,7 @@
 { \
     fprintf(stderr, LO_BOLD LO_RED "Error (%s, line %d): " LO_RESET f "\n", \
             basename(__FILE__), __LINE__, ##__VA_ARGS__); \
+    exit(EXIT_FAILURE); \
 }
 
 #endif
