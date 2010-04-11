@@ -50,12 +50,14 @@ SMSimulator * SMSimulatorNew(unsigned long elementCount)
 
     SMProgramLibrarySetGlobalCount(sim->library, elementCount);
 
+    // Allocate native buffers for particles / newtonian properties
     sim->particles = (PAPhysicsParticle *)
         calloc(elementCount, sizeof(PAPhysicsParticle));
 
     sim->newtonian = (PAPhysicsNewtonian *)
         calloc(elementCount, sizeof(PAPhysicsNewtonian));
 
+    // Allocate remote (OpenCL) buffers to copy native buffers to/from
     sim->clParticles = COBufferNew(sim->computer, elementCount,
                                    sizeof(PAPhysicsParticle), true);
     sim->clNewtonian = COBufferNew(sim->computer, elementCount,
