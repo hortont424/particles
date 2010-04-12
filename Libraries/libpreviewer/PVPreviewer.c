@@ -100,7 +100,7 @@ static void display()
     glutSwapBuffers();
 }
 
-void PVPreviewerInit(int * argc, char ** argv)
+void PVPreviewerInit(int * argc, const char ** argv)
 {
     if(pvInitialized)
     {
@@ -112,7 +112,7 @@ void PVPreviewerInit(int * argc, char ** argv)
         pvInitialized = true;
     }
 
-    glutInit(argc, argv);
+    glutInit(argc, (char **)argv);
     glutInitWindowSize(800, 800);
     glutInitWindowPosition(10, 10);
     glutInitDisplayMode(GLUT_DOUBLE | GLUT_RGB);

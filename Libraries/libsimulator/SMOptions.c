@@ -1,4 +1,4 @@
-/* particles - libcomputer - COOptions.h
+/* particles - libsimulator - SMOptions.c
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,18 +24,41 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _CO_OPTIONS_H_
-#define _CO_OPTIONS_H_
+#include <stdio.h>
+#include <stdlib.h>
+#include <unistd.h>
+#include <stdbool.h>
+#include <popt.h>
 
-/**
- * @defgroup COOptions Command-line Options
- * @{
- */
+#include <liblog/liblog.h>
 
-extern int computerUsesCPU; /**< Whether to restrict computation to the CPU */
+#include "libsimulator.h"
 
-void COOptionsParse(int argc, const char ** argv);
+int simulatorOutputMode = SM_RENDERER_OUTPUT;
 
-/** @} */
+static int simulatorPreviewMode = false;
+static int simulatorBenchmarkMode = false;
 
-#endif
+static struct poptOption optionsTable[] = {
+    { "preview", 'p', 0, &simulatorPreviewMode, 0, "preview output" },
+    { "benchmark", 'b', 0, &simulatorBenchmarkMode, 0, "benchmark simulation" },
+    POPT_AUTOHELP
+    POPT_TABLEEND
+};
+
+void SMOptionsParse(int argc, const char ** argv)
+{
+    poptContext optionContext;
+    int optionCount = 0;
+
+    optionContext = poptGetContext(NULL, argc, argv, optionsTable, 0);
+
+    while(poptGetNextOpt(optionContext) >= 0);
+
+    if(simulatorPreviewMode)
+        simulatorOutputMode = SM_PREVIEWER_OUTPUT;
+    else if(simulatorBenchmarkMode)
+        simulatorOutputMode = SM_NO_OUTPUT;
+
+    poptFreeContext(optionContext);
+}

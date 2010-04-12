@@ -35,6 +35,8 @@
 #include <libsimulator/libsimulator.h>
 #include <libpreviewer/libpreviewer.h>
 
+#define BENCHMARK_FRAMES 200
+
 static SMSimulator * simulator;
 
 SMSimulator * simulateFrame()
@@ -45,16 +47,25 @@ SMSimulator * simulateFrame()
     return simulator;
 }
 
-int main(int argc, char ** argv)
+int main(int argc, const char ** argv)
 {
     COOptionsParse(argc, argv);
+    SMOptionsParse(argc, argv);
 
     simulator = SMSimulatorNewFromFile("../Systems/sample.psys");
     SMSimulatorPushData(simulator);
 
-    PVPreviewerInit(&argc, argv);
-    PVPreviewerSetFrameCallback(simulateFrame);
-    PVPreviewerStart();
+    if(simulatorOutputMode == SM_PREVIEWER_OUTPUT)
+    {
+        PVPreviewerInit(&argc, argv);
+        PVPreviewerSetFrameCallback(simulateFrame);
+        PVPreviewerStart();
+    }
+    else if(simulatorOutputMode == SM_NO_OUTPUT)
+    {
+        for(unsigned int i = 0; i < BENCHMARK_FRAMES; i++)
+            simulateFrame();
+    }
 
     return EXIT_SUCCESS;
 }

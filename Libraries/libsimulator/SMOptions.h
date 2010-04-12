@@ -1,4 +1,4 @@
-/* particles - libcomputer - COOptions.h
+/* particles - libsimulator - SMOptions.h
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,18 +24,18 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef _CO_OPTIONS_H_
-#define _CO_OPTIONS_H_
+#ifndef _SM_OPTIONS_H_
+#define _SM_OPTIONS_H_
 
-/**
- * @defgroup COOptions Command-line Options
- * @{
- */
+typedef enum _SMOutputMode
+{
+    SM_NO_OUTPUT,
+    SM_PREVIEWER_OUTPUT,
+    SM_RENDERER_OUTPUT
+} SMOutputMode;
 
-extern int computerUsesCPU; /**< Whether to restrict computation to the CPU */
+extern int simulatorOutputMode;
 
-void COOptionsParse(int argc, const char ** argv);
-
-/** @} */
+void SMOptionsParse(int argc, const char ** argv);
 
 #endif

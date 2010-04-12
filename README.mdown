@@ -25,6 +25,7 @@ Dependencies
 * XCode Developer Tools (with OpenCL)
 * SCons
 * Doxygen
+* popt
 
 Libraries
 ---------

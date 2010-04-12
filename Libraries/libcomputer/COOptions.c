@@ -28,12 +28,19 @@
 #include <stdlib.h>
 #include <unistd.h>
 #include <stdbool.h>
+#include <popt.h>
 
 #include <liblog/liblog.h>
 
 #include "libcomputer.h"
 
 int computerUsesCPU = false;
+
+static struct poptOption optionsTable[] = {
+    { "cpu", 'c', 0, &computerUsesCPU, 0, "use CPU for computation" },
+    POPT_AUTOHELP
+    POPT_TABLEEND
+};
 
 /**
  * Parse the given command line options, setting flags relevant to our
@@ -45,17 +52,14 @@ int computerUsesCPU = false;
  * @param argc The number of arguments in the argument array.
  * @param argv The command line argument array.
  */
-void COOptionsParse(int argc, char * const * argv)
+void COOptionsParse(int argc, const char ** argv)
 {
-    char currentOption;
+    poptContext optionContext;
+    int optionCount = 0;
 
-    while((currentOption = getopt(argc, argv, "c")) != EOF)
-    {
-        switch(currentOption)
-        {
-            case 'c':
-                computerUsesCPU = true;
-                break;
-        }
-    }
+    optionContext = poptGetContext(NULL, argc, argv, optionsTable, 0);
+
+    while(poptGetNextOpt(optionContext) >= 0);
+
+    poptFreeContext(optionContext);
 }

@@ -9,7 +9,7 @@ env.AppendUnique(FRAMEWORKS = ["OpenCL"])
 inlineKernels = env.InlineCLKernel("AllInOneFile.c", Glob("kernels/*.cl"))
 
 libsimulator = env.SharedLibrary("simulator", Glob("*.c"),
-                                 LIBS=["computer", "particles"])
+                                 LIBS=["computer", "particles", "popt"])
 Depends(libsimulator, libcomputer)
 Depends(libsimulator, libparticles)
 Depends(libsimulator, inlineKernels)

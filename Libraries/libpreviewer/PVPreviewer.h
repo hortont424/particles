@@ -31,7 +31,7 @@
 
 typedef SMSimulator * (*PVPreviewerFrameCallback)();
 
-void PVPreviewerInit(int * argc, char ** argv);
+void PVPreviewerInit(int * argc, const char ** argv);
 void PVPreviewerStart();
 
 void PVPreviewerSetFrameCallback(PVPreviewerFrameCallback cb);

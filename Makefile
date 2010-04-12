@@ -8,14 +8,13 @@ docs:
 	open Libraries/build/doc/html/index.html
 
 simulate:
-	rm -f ./Simulator/test.out
 	cd Simulator ; DYLD_LIBRARY_PATH=../Libraries/build/libcomputer/:../Libraries/build/libparticles/:../External/json-c/build/:../Libraries/build/libsimulator/:../Libraries/build/librenderer/:../Libraries/build/libpreviewer/ ./build/simulator
 
 interpolate:
 	./Interpolator/build/Interpolator.app/Contents/MacOS/Interpolator
 
 preview:
-	cd Previewer ; ./build/previewer
+	cd Simulator ; DYLD_LIBRARY_PATH=../Libraries/build/libcomputer/:../Libraries/build/libparticles/:../External/json-c/build/:../Libraries/build/libsimulator/:../Libraries/build/librenderer/:../Libraries/build/libpreviewer/ ./build/simulator -p
 
 clean:
 	rm -rf ./Libraries/build

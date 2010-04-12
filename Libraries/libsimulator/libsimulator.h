@@ -34,5 +34,6 @@
 
 #include "SMSimulator.h"
 #include "SMProgramLibrary.h"
+#include "SMOptions.h"
 
 #endif
