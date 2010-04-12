@@ -40,29 +40,18 @@ Libraries
 =========
 
 * (PA) libparticles - various global data structures
-
 * (CU) libcurve - manipulation of and interpolation along b-splines
-
 * (CO) libcomputer - generic, reusable OpenCL wrappers
-
 * (SM) libsimulator - physical simulation of particle interactions
-
 * (RE) librenderer - cinematic rendering of particle simulations
-
 * (IP) libinterpolator - widgets for editing curves and curve sets
-
 * (PV) libpreviewer - widgets for previewing simulations
 
 Tools
 =====
 
 * Interpolator - curve editor for animating various properties of systems
-
-* Simulator - uses OpenCL to simulate and record the motion of particles
-
-* Previewer - low-quality OpenGL-based instant-feedback system preview
-
-* Renderer - render Simulator's output to high-quality image sequences
+* Simulator - uses OpenCL to simulate and output the motion of particles
 
 File Format
 ===========
