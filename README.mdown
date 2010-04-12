@@ -19,7 +19,10 @@ All code is being released under the two-clause BSD license, which can be found
 in the LICENSE file in each project's subtree.
 
 Dependencies
-------------
+============
+
+Software
+--------
 
 * Mac OS 10.6+
 * XCode Developer Tools (with OpenCL)
@@ -27,8 +30,14 @@ Dependencies
 * Doxygen
 * popt
 
+Hardware
+--------
+
+* NVidia GeForce 8600+
+* ATI Radeon 4850+
+
 Libraries
----------
+=========
 
 * (PA) libparticles - various global data structures
 
@@ -45,7 +54,7 @@ Libraries
 * (PV) libpreviewer - widgets for previewing simulations
 
 Tools
------
+=====
 
 * Interpolator - curve editor for animating various properties of systems
 
@@ -56,7 +65,7 @@ Tools
 * Renderer - render Simulator's output to high-quality image sequences
 
 File Format
------------
+===========
 
 The on-disk file format will be a ZIP with various parts:
 
