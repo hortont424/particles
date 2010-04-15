@@ -65,3 +65,6 @@ libraries += ['librenderer', 'libpreviewer', 'libsimulator']
 # Tools
 simulator = SConscript('Simulator/build/SConscript', libraries)
 interpolator = SConscript('Interpolator/build/SConscript', libraries)
+
+outerEnv.Install('/usr/local/lib', [libjsonc, libparticles, libcurve, libcomputer, librenderer, libpreviewer, libsimulator])
+outerEnv.Alias('install', '/usr/local/lib')
