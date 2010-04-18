@@ -16,7 +16,7 @@ be possible to port Simulator and Renderer to other POSIX platforms which
 have OpenCL drivers with some effort.
 
 All code is being released under the two-clause BSD license, which can be found
-in the LICENSE file in each project's subtree.
+in the toplevel LICENSE file.
 
 Dependencies
 ============

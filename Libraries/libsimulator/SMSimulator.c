@@ -157,6 +157,7 @@ void SMSimulatorPushData(SMSimulator * sim)
 void SMSimulatorPullData(SMSimulator * sim)
 {
     COBufferGet(sim->clParticles, (void**)&sim->particles);
+    COBufferGet(sim->clNewtonian, (void**)&sim->newtonian);
 }
 
 // randomly choose particle positions, using all available particles
@@ -180,6 +181,56 @@ void SMSimulatorRandomize(SMSimulator * sim)
 
 void SMSimulatorSimulate(SMSimulator * sim)
 {
+    SMSimulatorPullData(sim);
+
+    for(unsigned int i = 0; i < sim->system->emitterCount; i++)
+    {
+        unsigned int oldCount = sim->elementCount;
+
+        sim->elementCount += sim->system->emitters[i]->birthRate;
+
+        SMProgramLibrarySetGlobalCount(sim->library, sim->elementCount);
+
+        sim->particles = (PAPhysicsParticle *)
+            realloc(sim->particles,
+                    sim->elementCount * sizeof(PAPhysicsParticle));
+
+        sim->newtonian = (PAPhysicsNewtonian *)
+            realloc(sim->newtonian,
+                    sim->elementCount * sizeof(PAPhysicsNewtonian));
+
+        for(unsigned int p = oldCount; p < sim->elementCount; p++)
+        {
+            sim->particles[p].enabled = 1.0;
+            sim->newtonian[p].ox = sim->particles[p].x =
+                (PAFloat)rand()/(PAFloat)RAND_MAX;
+            sim->newtonian[p].oy = sim->particles[p].y =
+                (PAFloat)rand()/(PAFloat)RAND_MAX;
+            sim->newtonian[p].oz = sim->particles[p].z =
+                (PAFloat)rand()/(PAFloat)RAND_MAX;
+
+            sim->newtonian[p].mass = 50000000.0 *
+                (PAFloat)rand()/(PAFloat)RAND_MAX;
+        }
+
+        COBufferResize(sim->clParticles, sim->elementCount);
+        COBufferResize(sim->clNewtonian, sim->elementCount);
+
+        for(unsigned int j = 0; i < sim->system->forceCount; j++)
+        {
+            COProgramSetArgument(sim->forcePrograms[j], 5,
+                                 COArgumentNewWithInt(sim->elementCount));
+        }
+        COProgramSetArgument(sim->integrationProgram, 4,
+                             COArgumentNewWithInt(sim->elementCount));
+    }
+
+    SMSimulatorPushData(sim);
+    SMSimulatorPullData(sim);
+
+    if(sim->elementCount > 35)
+        printf("%f\n", sim->particles[35].x);
+
     for(unsigned int i = 0; i < sim->system->forceCount; i++)
     {
         COProgramExecute(sim->forcePrograms[i]);
@@ -191,4 +242,9 @@ void SMSimulatorSimulate(SMSimulator * sim)
 
     COBufferSwap(sim->clParticles);
     COBufferSwap(sim->clNewtonian);
+
+    SMSimulatorPullData(sim);
+
+    if(sim->elementCount > 35)
+        printf("%f\n", sim->particles[35].x);
 }

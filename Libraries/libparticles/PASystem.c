@@ -45,21 +45,23 @@ PASystem * PASystemNew()
 PASystem * PASystemNewFromJSON(json_object * jsSystem)
 {
     PASystem * sys;
-    json_object * jsForces, * jsInitialParticles, *jsPartCount;
-    array_list * forces;
+    json_object * jsForces, * jsInitialParticles, *jsPartCount, *jsEmitters;
+    array_list * forces, * emitters;
 
     sys = PASystemNew();
 
-    if(!(jsForces = json_object_object_get(jsSystem, "forces")))
+    if(!((jsForces = json_object_object_get(jsSystem, "forces")) &&
+         (forces = json_object_get_array(jsForces))))
     {
         malformedFileError("forces");
         PASystemFree(sys);
         return NULL;
     }
 
-    if(!(forces = json_object_get_array(jsForces)))
+    if(!((jsEmitters = json_object_object_get(jsSystem, "emitters")) &&
+         (emitters = json_object_get_array(jsEmitters))))
     {
-        malformedFileError("forces");
+        malformedFileError("emitters");
         PASystemFree(sys);
         return NULL;
     }
@@ -83,6 +85,9 @@ PASystem * PASystemNewFromJSON(json_object * jsSystem)
     sys->forceCount = array_list_length(forces);
     sys->forces = (PAPhysicsForce **)calloc(sys->forceCount,
                                             sizeof(PAPhysicsForce *));
+    sys->emitterCount = array_list_length(emitters);
+    sys->emitters = (PAEmitter **)calloc(sys->emitterCount,
+                                         sizeof(PAEmitter *));
 
     for(int i = 0; i < sys->forceCount; i++)
     {
@@ -96,6 +101,20 @@ PASystem * PASystemNewFromJSON(json_object * jsSystem)
         }
 
         sys->forces[i] = PAPhysicsForceNewFromJSON(jsForce);
+    }
+
+    for(int i = 0; i < sys->emitterCount; i++)
+    {
+        json_object * jsEmitter;
+
+        if(!(jsEmitter = (json_object *)array_list_get_idx(emitters, i)))
+        {
+            malformedFileError("emitter");
+            PASystemFree(sys);
+            return NULL;
+        }
+
+        sys->emitters[i] = PAEmitterNewFromJSON(jsEmitter);
     }
 
     return sys;

@@ -35,4 +35,7 @@
 PAPhysicsForce * PAPhysicsForceNew();
 PAPhysicsForce * PAPhysicsForceNewFromJSON(json_object * js);
 
+PAEmitter * PAEmitterNew();
+PAEmitter * PAEmitterNewFromJSON(json_object * jsEmitter);
+
 #endif

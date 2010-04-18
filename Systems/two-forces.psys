@@ -1,0 +1,41 @@
+{
+    "initialParticles": {
+        "count": 1048576
+    },
+    "forces": [
+        {
+            "kernel": "normal",
+            "strength": 1.0,
+            "noise": 0.0,
+            "falloff" : {
+                "strength": 2.0
+            },
+            "particle": {
+                "enabled": true,
+                "fixed": true,
+                "x": 0.3,
+                "y": 0.3,
+                "z": 0.5
+            }
+        },
+        {
+            "kernel": "normal",
+            "strength": 1.0,
+            "noise": 0.0,
+            "falloff" : {
+                "strength": 2.0
+            },
+            "particle": {
+                "enabled": true,
+                "fixed": true,
+                "x": 0.7,
+                "y": 0.7,
+                "z": 0.5
+            }
+        }
+    ],
+    "integration": {
+        "kernel": "verlet",
+        "timestep": 0.005
+    }
+}

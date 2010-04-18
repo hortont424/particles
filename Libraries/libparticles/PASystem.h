@@ -34,7 +34,8 @@
 typedef struct _PASystem
 {
     PAPhysicsForce ** forces;
-    unsigned int forceCount;
+    PAEmitter ** emitters;
+    unsigned int forceCount, emitterCount;
 
     unsigned long initialParticleCount;
 } PASystem;

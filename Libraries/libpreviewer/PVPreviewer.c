@@ -67,7 +67,7 @@ void timer(int extra)
 
 static void display()
 {
-    float zoom = 3.0;
+    float zoom = 0.0;
 
     glClearColor(1, 1, 1, 0);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -80,7 +80,7 @@ static void display()
     //glTranslatef(-0.5, -0.5, -0.5);
 
     glColor3f(1.0, 0.0, 0.0);
-    glPointSize(1.0);
+    glPointSize(2.0);
 
     if(simulator)
     {
@@ -89,6 +89,7 @@ static void display()
         {
             PAPhysicsParticle p = simulator->particles[i];
             glVertex3f(p.x, p.y, p.z);
+            //printf("%d %f %f %f\n", i, p.x, p.y, p.z);
         }
         glEnd();
         /*glEnableClientState(GL_VERTEX_ARRAY);

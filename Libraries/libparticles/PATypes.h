@@ -114,6 +114,7 @@ typedef struct _PAPhysicsBoidsData
 // There should be one PAPhysicsForce for each particle that exerts a force
 // on others, mapped to said particle (so that force particles can be interacted
 // with, and move just like other particles)
+// TODO: force particle movement calculation
 typedef struct _PAPhysicsForce
 {
     PAPhysicsType type;
@@ -140,5 +141,15 @@ typedef struct _PAPhysicsNewtonian
     PAFloat ax, ay, az;
     PAFloat ox, oy, oz;
 } PAPhysicsNewtonian;
+
+typedef struct _PAEmitter
+{
+    PAPhysicsParticle particle;
+
+    PAFloat birthRate, birthRateNoise;
+    PAFloat lifetime, lifetimeNoise;
+    PAFloat initialVelocity, initialVelocityNoise;
+    PAFloat emissionAngleStart, emissionAngleEnd, emissionAngleNoise;
+} PAEmitter;
 
 #endif

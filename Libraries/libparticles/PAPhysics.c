@@ -112,3 +112,37 @@ PAPhysicsForce * PAPhysicsForceNewFromJSON(json_object * jsForce)
 
     return force;
 }
+
+PAEmitter * PAEmitterNew()
+{
+    PAEmitter * emitter;
+
+    emitter = (PAEmitter *)calloc(1, sizeof(PAEmitter));
+
+    return emitter;
+}
+
+PAEmitter * PAEmitterNewFromJSON(json_object * jsEmitter)
+{
+    const char * typestr = NULL;
+    PAEmitter * emitter = NULL;
+    json_object * jsParticle = NULL;
+
+    if(!(jsParticle = json_object_object_get(jsEmitter, "particle")))
+    {
+        malformedFileError("force->particle");
+        return NULL;
+    }
+
+    emitter = PAEmitterNew();
+
+    readJSONProperty(jsEmitter, (*emitter), birthRate, 0.0);
+    readJSONProperty(jsEmitter, (*emitter), birthRateNoise, 0.0);
+
+    readJSONProperty(jsParticle, emitter->particle, enabled, 1.0);
+    readJSONProperty(jsParticle, emitter->particle, x, 0.0);
+    readJSONProperty(jsParticle, emitter->particle, y, 0.0);
+    readJSONProperty(jsParticle, emitter->particle, z, 0.0);
+
+    return emitter;
+}

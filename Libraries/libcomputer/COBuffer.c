@@ -265,3 +265,16 @@ void COBufferSwap(COBuffer * buf)
     buf->gpuBuffer = buf->gpuBackBuffer;
     buf->gpuBackBuffer = temp;
 }
+
+void COBufferResize(COBuffer * buf, size_t newElementCount)
+{
+    buf->elementCount = newElementCount;
+
+    buf->gpuBuffer = clCreateBuffer(buf->context->ctx, CL_MEM_READ_WRITE,
+                                    COBufferGetSize(buf), NULL, NULL);
+
+    if(buf->doubleBuffered)
+        buf->gpuBackBuffer = clCreateBuffer(buf->context->ctx,
+                                            CL_MEM_READ_WRITE,
+                                            COBufferGetSize(buf), NULL, NULL);
+}

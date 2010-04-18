@@ -77,6 +77,8 @@ void COBufferSet(COBuffer * buf, void * data);
 
 void COBufferSwap(COBuffer * buf);
 
+void COBufferResize(COBuffer * buf, size_t newElementCount);
+
 /** @} */
 
 #endif
