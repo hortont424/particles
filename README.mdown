@@ -7,7 +7,7 @@ particle systems in real time, it will utilize OpenCL - and thus, the parallel
 processing power of modern GPUs - to enable systems with enormous particle
 counts.
 
-The rendering component of this software is my final project for RPI's
+This software was designed and developed as my final project for RPI's
 CSCI-4530, Advanced Computer Graphics.
 
 All software will be built and tested on Mac OS 10.6 and will likely not run on
