@@ -49,7 +49,6 @@ static struct poptOption optionsTable[] = {
 void SMOptionsParse(int argc, const char ** argv)
 {
     poptContext optionContext;
-    int optionCount = 0;
 
     optionContext = poptGetContext(NULL, argc, argv, optionsTable, 0);
 

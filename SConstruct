@@ -10,8 +10,8 @@ VariantDir('Previewer/build', 'Previewer', duplicate = 0)
 VariantDir('External/json-c/build', 'External/json-c', duplicate = 0)
 VariantDir('Papers/build', 'Papers', duplicate = 0)
 
-includes = ["-ILibraries", "-IExternal/json-c"]
-flags = includes + ["--std=c99", "-Wall", "-Werror", "-fobjc-gc"]
+includes = ["-ILibraries", "-IExternal/json-c", "-I/opt/local/include"]
+flags = includes + ["-std=c99", "-Wall", "-Werror", "-fobjc-gc"]
 
 releaseFlags = flags + ["-O4"]
 debugFlags = flags + ["-g"]
@@ -38,7 +38,8 @@ outerEnv = Environment(
                "#Libraries/build/librenderer",
                "#Libraries/build/libpreviewer",
                "#Libraries/build/libsimulator",
-               "#External/json-c/build"])
+               "#External/json-c/build",
+               "/opt/local/lib"])
 
 Build.InstallTools(outerEnv)
 Export("outerEnv")

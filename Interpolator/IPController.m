@@ -52,7 +52,7 @@
 
 - (IBAction)addCurveSet:(id)sender
 {
-    IPCurveSet * newSet = [curveStorage addCurveSet];
+    [curveStorage addCurveSet];
     [self updateCurveSets];
 }
 

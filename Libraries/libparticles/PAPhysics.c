@@ -89,7 +89,7 @@ PAPhysicsForce * PAPhysicsForceNewFromJSON(json_object * jsForce)
         readJSONProperty(jsForce, force->data.normal, strength, 1.0);
         readJSONProperty(jsForce, force->data.normal, noise, 1.0);
 
-        if(jsFalloff = json_object_object_get(jsForce, "falloff"))
+        if((jsFalloff = json_object_object_get(jsForce, "falloff")))
             readFalloff(jsFalloff, force->data.normal.falloff);
     }
     else if(strcmp(typestr, "gravity") == 0)
