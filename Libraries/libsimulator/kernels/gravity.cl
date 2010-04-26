@@ -53,10 +53,7 @@ __kernel void gravity(__global PAPhysicsParticle * input,
 
         iloc = (float4)(input[i].x, input[i].y, input[i].z, 0.0f);
         dir = normalize(iloc - loc);
-        dist = distance(loc, iloc);
-
-        if(dist < 1.0)
-            dist = 1.0;
+        dist = distance(loc, iloc) + 1.0;
 
         accel += dir * ((GRAV_CONSTANT * newtonIn[i].mass) / pow(dist, 2));
     }

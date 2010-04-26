@@ -1,6 +1,6 @@
 {
     "initialParticles": {
-        "count": 8192
+        "count": 2048
     },
     "forces": [
         {
@@ -14,9 +14,36 @@
                 "y": 0.0,
                 "z": 0.0
             }
+        },
+        {
+            "kernel": "normal",
+            "strength": 10.0,
+            "noise": 0.0,
+            "falloff" : {
+                "strength": 20.0
+            },
+            "particle": {
+                "enabled": true,
+                "fixed": true,
+                "x": 0.5,
+                "y": 0.5,
+                "z": 0.5
+            }
         }
     ],
-    "emitters": [ ],
+    "emitters": [
+        {
+            "birthRate": 1.0,
+            "initialVelocity": 0.0,
+            "particle": {
+                "enabled": true,
+                "fixed": true,
+                "x": 0.5,
+                "y": 0.5,
+                "z": 0.5
+            }
+        }
+    ],
     "integration": {
         "kernel": "verlet",
         "timestep": 0.005

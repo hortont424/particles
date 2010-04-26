@@ -187,8 +187,9 @@ void SMSimulatorSimulate(SMSimulator * sim)
     for(unsigned int i = 0; i < sim->system->emitterCount; i++)
     {
         unsigned int oldCount = sim->elementCount;
+        PAEmitter * emitter = sim->system->emitters[i];
 
-        sim->elementCount += sim->system->emitters[i]->birthRate;
+        sim->elementCount += emitter->birthRate;
 
         SMProgramLibrarySetGlobalCount(sim->library, sim->elementCount);
 
@@ -203,12 +204,13 @@ void SMSimulatorSimulate(SMSimulator * sim)
         for(unsigned int p = oldCount; p < sim->elementCount; p++)
         {
             sim->particles[p].enabled = 1.0;
-            sim->newtonian[p].ox = sim->particles[p].x =
-                (PAFloat)rand()/(PAFloat)RAND_MAX;
-            sim->newtonian[p].oy = sim->particles[p].y =
-                (PAFloat)rand()/(PAFloat)RAND_MAX;
-            sim->newtonian[p].oz = sim->particles[p].z =
-                (PAFloat)rand()/(PAFloat)RAND_MAX;
+            sim->particles[p].x = emitter->particle.x;
+            sim->particles[p].y = emitter->particle.y;
+            sim->particles[p].z = emitter->particle.z;
+
+            sim->newtonian[p].ox = sim->particles[p].x;
+            sim->newtonian[p].oy = sim->particles[p].y;
+            sim->newtonian[p].oz = sim->particles[p].z;
 
             sim->newtonian[p].mass = 50000000.0 *
                 (PAFloat)rand()/(PAFloat)RAND_MAX;
