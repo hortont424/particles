@@ -49,6 +49,8 @@ SMProgramLibrary * SMProgramLibraryNew(COContext * ctx)
     SMProgramLibrary * lib;
     lib = (SMProgramLibrary *)calloc(1, sizeof(SMProgramLibrary));
 
+    lib->instances = NULL;
+    lib->instanceCount = 0;
     lib->context = ctx;
     lib->programs = (COProgram **)calloc(PAPhysicsLastType,
                                          sizeof(COProgram *));
@@ -102,6 +104,10 @@ void SMProgramLibrarySetGlobalCount(SMProgramLibrary * lib, size_t globalCount)
     for(int i = 0; i < PAPhysicsLastType; i++)
         if(lib->programs[i])
             COProgramSetGlobalCount(lib->programs[i], globalCount);
+
+    for(unsigned int i = 0; i < lib->instanceCount; i++)
+        if(lib->instances[i])
+            COProgramSetGlobalCount(lib->instances[i], globalCount);
 }
 
 /**
@@ -111,7 +117,7 @@ void SMProgramLibrarySetGlobalCount(SMProgramLibrary * lib, size_t globalCount)
  * @param type The simulation type to return an COProgram for.
  */
 COProgram * SMProgramLibraryMakeProgram(SMProgramLibrary * lib,
-                                               PAPhysicsType type)
+                                        PAPhysicsType type)
 {
     COProgram * prog;
 
@@ -123,5 +129,18 @@ COProgram * SMProgramLibraryMakeProgram(SMProgramLibrary * lib,
         return NULL;
     }
 
-    return COProgramCopy(prog);
+    prog = COProgramCopy(prog);
+    lib->instanceCount++;
+
+    if(!lib->instances)
+        lib->instances = (COProgram **)calloc(lib->instanceCount,
+                                              sizeof(COProgram *));
+    else
+        lib->instances = (COProgram **)realloc(lib->instances,
+                                               lib->instanceCount *
+                                               sizeof(COProgram *));
+
+    lib->instances[lib->instanceCount - 1] = prog;
+
+    return prog;
 }

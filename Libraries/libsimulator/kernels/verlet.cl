@@ -34,8 +34,8 @@ __kernel void verlet(__global PAPhysicsParticle * input,
 {
     int id = get_global_id(0);
 
-    if(id > count || input[id].enabled == 0.0)
-        return;
+    //if(id > count || input[id].enabled == 0.0)
+    //    return;
 
     // Extract useful vectors; set the next frame's old position to our position
     float4 acceleration, position, oldPosition;
@@ -60,7 +60,8 @@ __kernel void verlet(__global PAPhysicsParticle * input,
 
     // Pass through useful properties
     newtonOut[id].mass = newtonIn[id].mass;
-    output[id].enabled = input[id].enabled;
+    output[id].enabled = 1.0; //input[id].enabled;
+    input[id].enabled = 1.0;
 
     // Clear acceleration for next simulation step
     newtonOut[id].ax = newtonOut[id].ay = newtonOut[id].az = 0.0f;

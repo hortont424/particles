@@ -43,6 +43,9 @@ typedef struct _SMProgramLibrary
                                      PAPhysicsType identifier */
 
     COContext * context;        /**< The context that owns the programs */
+
+    COProgram ** instances;     /**< List of instances of library programs */
+    unsigned int instanceCount; /**< Number of entries in instances */
 } SMProgramLibrary;
 
 SMProgramLibrary * SMProgramLibraryNew(COContext * ctx);
@@ -52,7 +55,7 @@ void SMProgramLibraryLoadProgram(SMProgramLibrary * lib, PAPhysicsType type,
                                  char * kernelName, const char * kernelSource);
 void SMProgramLibrarySetGlobalCount(SMProgramLibrary * lib, size_t globalCount);
 COProgram * SMProgramLibraryMakeProgram(SMProgramLibrary * lib,
-                                               PAPhysicsType type);
+                                        PAPhysicsType type);
 
 /** @} */
 

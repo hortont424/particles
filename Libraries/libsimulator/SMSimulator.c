@@ -216,7 +216,7 @@ void SMSimulatorSimulate(SMSimulator * sim)
         COBufferResize(sim->clParticles, sim->elementCount);
         COBufferResize(sim->clNewtonian, sim->elementCount);
 
-        for(unsigned int j = 0; i < sim->system->forceCount; j++)
+        for(unsigned int j = 0; j < sim->system->forceCount; j++)
         {
             COProgramSetArgument(sim->forcePrograms[j], 5,
                                  COArgumentNewWithInt(sim->elementCount));
@@ -227,9 +227,6 @@ void SMSimulatorSimulate(SMSimulator * sim)
 
     SMSimulatorPushData(sim);
     SMSimulatorPullData(sim);
-
-    if(sim->elementCount > 35)
-        printf("%f\n", sim->particles[35].x);
 
     for(unsigned int i = 0; i < sim->system->forceCount; i++)
     {
@@ -244,7 +241,4 @@ void SMSimulatorSimulate(SMSimulator * sim)
     COBufferSwap(sim->clNewtonian);
 
     SMSimulatorPullData(sim);
-
-    if(sim->elementCount > 35)
-        printf("%f\n", sim->particles[35].x);
 }
