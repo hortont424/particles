@@ -124,7 +124,6 @@ PAEmitter * PAEmitterNew()
 
 PAEmitter * PAEmitterNewFromJSON(json_object * jsEmitter)
 {
-    const char * typestr = NULL;
     PAEmitter * emitter = NULL;
     json_object * jsParticle = NULL;
 
