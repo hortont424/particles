@@ -52,7 +52,7 @@ int main(int argc, const char ** argv)
     COOptionsParse(argc, argv);
     SMOptionsParse(argc, argv);
 
-    simulator = SMSimulatorNewFromFile("../Systems/sample.psys");
+    simulator = SMSimulatorNewFromFile("../Systems/n-body.psys");
     SMSimulatorPushData(simulator);
 
     if(simulatorOutputMode == SM_PREVIEWER_OUTPUT)

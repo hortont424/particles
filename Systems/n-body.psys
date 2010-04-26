@@ -16,6 +16,7 @@
             }
         }
     ],
+    "emitters": [ ],
     "integration": {
         "kernel": "verlet",
         "timestep": 0.005
