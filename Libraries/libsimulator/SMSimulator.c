@@ -181,7 +181,8 @@ void SMSimulatorRandomize(SMSimulator * sim)
 
 void SMSimulatorSimulate(SMSimulator * sim)
 {
-    SMSimulatorPullData(sim);
+    if(sim->system->emitterCount)
+        SMSimulatorPullData(sim);
 
     for(unsigned int i = 0; i < sim->system->emitterCount; i++)
     {
@@ -225,8 +226,8 @@ void SMSimulatorSimulate(SMSimulator * sim)
                              COArgumentNewWithInt(sim->elementCount));
     }
 
-    SMSimulatorPushData(sim);
-    SMSimulatorPullData(sim);
+    if(sim->system->emitterCount)
+        SMSimulatorPushData(sim);
 
     for(unsigned int i = 0; i < sim->system->forceCount; i++)
     {
