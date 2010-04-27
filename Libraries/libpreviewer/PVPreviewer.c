@@ -94,6 +94,8 @@ void PVExportImage(int frame)
     png_write_image(png_ptr, (png_byte **)rowPtrs);
     png_write_end(png_ptr, info_ptr);
     fclose(file);
+
+    png_destroy_write_struct(&png_ptr, &info_ptr);
 }
 
 void timer(int extra)
