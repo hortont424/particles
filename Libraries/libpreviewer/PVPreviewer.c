@@ -36,6 +36,7 @@
 #include <sys/resource.h>
 #include <sys/types.h>
 #include <stdbool.h>
+#include <png.h>
 
 #ifdef __APPLE__
 #include <OpenGL/gl.h>
@@ -56,6 +57,45 @@ static PVPreviewerFrameCallback pvFrameCallback = NULL;
 static bool pvInitialized = false;
 static SMSimulator * simulator = NULL;
 
+int frameCount = 0;
+static GLbyte * outputImage = NULL;
+static GLbyte * rowPtrs[800];
+
+void PVExportImage(int frame)
+{
+    char filename[1024];
+    FILE * file;
+    png_structp png_ptr;
+    png_infop info_ptr;
+
+    snprintf(filename, 1024, "/tmp/particles/%09d.png", frame);
+
+    file = fopen(filename, "wb");
+    if(!file)
+        printf("Error opening file '%s'.\n", filename);
+
+    png_ptr = png_create_write_struct(PNG_LIBPNG_VER_STRING, NULL, NULL, NULL);
+    info_ptr = png_create_info_struct(png_ptr);
+
+    if(setjmp(png_jmpbuf(png_ptr)))
+    {
+        LOError("png output");
+        return;
+    }
+
+    png_init_io(png_ptr, file);
+    png_set_IHDR(png_ptr, info_ptr, 800, 800, 8, PNG_COLOR_TYPE_RGB,
+                 PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT,
+                 PNG_FILTER_TYPE_DEFAULT);
+    png_write_info(png_ptr, info_ptr);
+
+    glReadPixels(0, 0, 800, 800, GL_RGB, GL_UNSIGNED_BYTE, outputImage);
+
+    png_write_image(png_ptr, (png_byte **)rowPtrs);
+    png_write_end(png_ptr, info_ptr);
+    fclose(file);
+}
+
 void timer(int extra)
 {
     if(pvFrameCallback)
@@ -69,7 +109,7 @@ static void display()
 {
     float zoom = 0.0;
 
-    glClearColor(1, 1, 1, 0);
+    glClearColor(1.0, 1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
 
     glMatrixMode(GL_MODELVIEW);
@@ -98,7 +138,10 @@ static void display()
         glDisableClientState(GL_VERTEX_ARRAY);*/
     }
 
+    PVExportImage(frameCount);
+
     glutSwapBuffers();
+    frameCount++;
 }
 
 void PVPreviewerInit(int * argc, const char ** argv)
@@ -128,6 +171,10 @@ void PVPreviewerInit(int * argc, const char ** argv)
 
     glutDisplayFunc(display);
     glutTimerFunc(0, timer, 0);
+
+    outputImage = calloc(1, 800 * 800 * 3 * sizeof(GLbyte));
+    for(unsigned int i = 0; i < 800; i++)
+        rowPtrs[i] = &outputImage[i * 800 * 3];
 }
 
 void PVPreviewerStart()
