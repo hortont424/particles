@@ -27,15 +27,6 @@
 #ifndef _CO_OPTIONS_H_
 #define _CO_OPTIONS_H_
 
-/**
- * @defgroup COOptions Command-line Options
- * @{
- */
-
 extern int computerUsesCPU; /**< Whether to restrict computation to the CPU */
-
-void COOptionsParse(int argc, const char ** argv);
-
-/** @} */
 
 #endif

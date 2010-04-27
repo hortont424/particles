@@ -3,6 +3,6 @@ Import("outerEnv")
 env = outerEnv.Clone()
 env.AppendUnique(FRAMEWORKS = ["OpenCL"])
 
-libcomputer = env.SharedLibrary("computer", Glob("*.c"), LIBS=["popt"])
+libcomputer = env.SharedLibrary("computer", Glob("*.c"))
 
 Return("libcomputer")

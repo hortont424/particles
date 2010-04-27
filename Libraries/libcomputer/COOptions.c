@@ -24,41 +24,6 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
-#include <unistd.h>
 #include <stdbool.h>
-#include <popt.h>
-
-#include <liblog/liblog.h>
-
-#include "libcomputer.h"
 
 int computerUsesCPU = false;
-
-static struct poptOption optionsTable[] = {
-    { "cpu", 'c', 0, &computerUsesCPU, 0, "use CPU for computation" },
-    POPT_AUTOHELP
-    POPT_TABLEEND
-};
-
-/**
- * Parse the given command line options, setting flags relevant to our
- * interests.
- *
- * @todo This should be made much more robust; it should remove arguments from
- * the argc/argv; it should provide -h/--help, etc.
- *
- * @param argc The number of arguments in the argument array.
- * @param argv The command line argument array.
- */
-void COOptionsParse(int argc, const char ** argv)
-{
-    poptContext optionContext;
-
-    optionContext = poptGetContext(NULL, argc, argv, optionsTable, 0);
-
-    while(poptGetNextOpt(optionContext) >= 0);
-
-    poptFreeContext(optionContext);
-}

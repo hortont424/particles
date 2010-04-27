@@ -35,7 +35,7 @@
 #include <libsimulator/libsimulator.h>
 #include <libpreviewer/libpreviewer.h>
 
-#define BENCHMARK_FRAMES 200
+#define BENCHMARK_FRAMES 10
 
 static SMSimulator * simulator;
 
@@ -49,7 +49,6 @@ SMSimulator * simulateFrame()
 
 int main(int argc, const char ** argv)
 {
-    COOptionsParse(argc, argv);
     SMOptionsParse(argc, argv);
 
     simulator = SMSimulatorNewFromFile("../Systems/n-body.psys");
@@ -64,7 +63,7 @@ int main(int argc, const char ** argv)
     else if(simulatorOutputMode == SM_NO_OUTPUT)
     {
         for(unsigned int i = 0; i < BENCHMARK_FRAMES; i++)
-            simulateFrame();
+            SMSimulatorSimulate(simulator);
     }
 
     return EXIT_SUCCESS;
