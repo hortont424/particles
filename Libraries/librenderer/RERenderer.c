@@ -43,8 +43,10 @@
 #include "librenderer.h"
 
 #define FRAME_COUNT 500
+#define RESOLUTION 500
 
 static RERendererFrameCallback reFrameCallback = NULL;
+extern const char * SMKernelSource_render;
 
 void drawProgressBar(int width, double progress)
 {
@@ -62,6 +64,11 @@ void RERendererStart()
 {
     SMSimulator * reSimulator = NULL;
     struct timeval startTime, currentTime;
+
+    COContext * ctx = COContextNew();
+    COProgram * prog = COProgramNew(ctx, "render", SMKernelSource_render);
+    showBuildLog(ctx, prog);
+    COProgramSetGlobalCount(prog, RESOLUTION * RESOLUTION);
 
     printf("\n");
     gettimeofday(&startTime, NULL);
