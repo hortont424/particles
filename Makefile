@@ -16,6 +16,9 @@ interpolate:
 preview:
 	cd Simulator ; DYLD_LIBRARY_PATH=../Libraries/build/libcomputer/:../Libraries/build/libparticles/:../External/json-c/build/:../Libraries/build/libsimulator/:../Libraries/build/librenderer/:../Libraries/build/libpreviewer/ ./build/simulator -p
 
+render:
+	cd Simulator ; DYLD_LIBRARY_PATH=../Libraries/build/libcomputer/:../Libraries/build/libparticles/:../External/json-c/build/:../Libraries/build/libsimulator/:../Libraries/build/librenderer/:../Libraries/build/libpreviewer/ ./build/simulator -r
+
 clean:
 	rm -rf ./Libraries/build
 	rm -rf ./Interpolator/build

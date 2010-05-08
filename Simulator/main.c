@@ -26,14 +26,13 @@
 
 #include <stdio.h>
 #include <stdlib.h>
-#include <sys/time.h>
-#include <math.h>
 
 #include <liblog/liblog.h>
 #include <libparticles/libparticles.h>
 #include <libcomputer/libcomputer.h>
 #include <libsimulator/libsimulator.h>
 #include <libpreviewer/libpreviewer.h>
+#include <librenderer/librenderer.h>
 
 #define BENCHMARK_FRAMES 10
 
@@ -60,6 +59,11 @@ int main(int argc, const char ** argv)
         PVPreviewerSetFrameCallback(simulateFrame);
         PVPreviewerStart();
     }
+    else if(simulatorOutputMode == SM_RENDERER_OUTPUT)
+    {
+        RERendererSetFrameCallback(simulateFrame);
+        RERendererStart();
+    }
     else if(simulatorOutputMode == SM_NO_OUTPUT)
     {
         for(unsigned int i = 0; i < BENCHMARK_FRAMES; i++)
@@ -68,58 +72,3 @@ int main(int argc, const char ** argv)
 
     return EXIT_SUCCESS;
 }
-
-/*void drawProgressBar(int width, double progress)
-{
-    printf(" [");
-
-    for(int i = 0; i < width; i++)
-    {
-        printf(((double)i/width) < progress ? "=" : " ");
-    }
-
-    printf("]");
-}
-
-int main(int argc, char ** argv)
-{
-    struct timeval startTime, currentTime;
-    SMSimulator * simulator;
-
-    COOptionsParse(argc, argv);
-
-    simulator = SMSimulatorNewFromFile("../Systems/sample.psys");
-    SMSimulatorPushData(simulator);
-
-    printf("\n");
-    gettimeofday(&startTime, NULL);
-
-    for(int step = 0; step < FRAME_COUNT; step++)
-    {
-        // Clear the line
-        printf("\033[K");
-        printf("%*d/%d", (int)ceil(log10(FRAME_COUNT)), step + 1, FRAME_COUNT);
-        drawProgressBar(50, ((double)step) / FRAME_COUNT);
-
-        // Print time estimate
-        if(step > 0)
-        {
-            gettimeofday(&currentTime, NULL);
-            double elapsed = (currentTime.tv_sec - startTime.tv_sec) +
-                (double)(currentTime.tv_usec - startTime.tv_usec) / 1000000;
-
-            printf(" %*.1lf sec",
-                   (int)ceil(log10(FRAME_COUNT * (elapsed / step))) + 3,
-                   (FRAME_COUNT - step) * (elapsed / step));
-        }
-
-        printf("\r");
-        fflush(stdout);
-
-        SMSimulatorSimulate(simulator);
-    }
-
-    printf("\n\n");
-
-    return EXIT_SUCCESS;
-}*/

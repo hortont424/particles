@@ -38,10 +38,12 @@ int simulatorOutputMode = SM_RENDERER_OUTPUT;
 
 static int simulatorPreviewMode = false;
 static int simulatorBenchmarkMode = false;
+static int simulatorRenderMode = false;
 
 static struct poptOption optionsTable[] = {
     { "preview", 'p', 0, &simulatorPreviewMode, 0, "preview output" },
     { "benchmark", 'b', 0, &simulatorBenchmarkMode, 0, "benchmark simulation" },
+    { "render", 'r', 0, &simulatorRenderMode, 0, "render output" },
     POPT_AUTOHELP
     POPT_TABLEEND
 };
@@ -56,6 +58,8 @@ void SMOptionsParse(int argc, const char ** argv)
 
     if(simulatorPreviewMode)
         simulatorOutputMode = SM_PREVIEWER_OUTPUT;
+    if(simulatorPreviewMode)
+        simulatorOutputMode = SM_RENDERER_OUTPUT;
     else if(simulatorBenchmarkMode)
         simulatorOutputMode = SM_NO_OUTPUT;
 

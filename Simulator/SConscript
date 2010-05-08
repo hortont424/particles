@@ -9,7 +9,8 @@ env = outerEnv.Clone()
 env.AppendUnique(FRAMEWORKS = ["OpenCL"])
 
 simulator = env.Program("simulator", Glob("*.c"),
-    LIBS = ["computer", "particles", "jsonc", "simulator", "previewer"])
+    LIBS = ["computer", "particles", "jsonc", "simulator",
+            "previewer", "renderer"])
 Depends(simulator, libcomputer)
 Depends(simulator, libparticles)
 Depends(simulator, libjsonc)

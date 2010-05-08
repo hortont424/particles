@@ -29,11 +29,9 @@
 
 #include <OpenCL/opencl.h>
 
-typedef struct _RERenderer
-{
-    int garbage;
-} RERenderer;
+typedef SMSimulator * (*RERendererFrameCallback)();
 
-RERenderer * RERendererNew();
+void RERendererStart();
+void RERendererSetFrameCallback(RERendererFrameCallback cb);
 
 #endif
