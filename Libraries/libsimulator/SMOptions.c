@@ -58,7 +58,7 @@ void SMOptionsParse(int argc, const char ** argv)
 
     if(simulatorPreviewMode)
         simulatorOutputMode = SM_PREVIEWER_OUTPUT;
-    if(simulatorPreviewMode)
+    if(simulatorRenderMode)
         simulatorOutputMode = SM_RENDERER_OUTPUT;
     else if(simulatorBenchmarkMode)
         simulatorOutputMode = SM_NO_OUTPUT;

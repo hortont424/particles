@@ -140,7 +140,8 @@ static void display()
         glDisableClientState(GL_VERTEX_ARRAY);*/
     }
 
-    PVExportImage(frameCount);
+    // TODO: MAKE AN OPTION FOR IMAGE EXPORT
+    //PVExportImage(frameCount);
 
     glutSwapBuffers();
     frameCount++;
