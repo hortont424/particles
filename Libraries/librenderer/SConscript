@@ -3,6 +3,6 @@ Import("outerEnv")
 env = outerEnv.Clone()
 env.AppendUnique(FRAMEWORKS = ["OpenCL"])
 
-librenderer = env.SharedLibrary("renderer", Glob("*.c"), LIBS=["particles", "computer", "simulator"])
+librenderer = env.SharedLibrary("renderer", Glob("*.c"), LIBS=["particles", "computer", "simulator", "png"])
 
 Return("librenderer")

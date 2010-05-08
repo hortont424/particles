@@ -30,9 +30,11 @@
 #ifndef cl_float
 typedef float PAFloat;
 typedef int PAInt;
+typedef unsigned char PAUChar;
 #else
 typedef cl_float PAFloat;
 typedef cl_int PAInt;
+typedef cl_uchar PAUChar;
 #endif
 
 // Basic particle data; all you need to do the most simplistic rendering

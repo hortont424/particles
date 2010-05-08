@@ -28,9 +28,9 @@
 
 __kernel void render(__global PAPhysicsParticle * input,
                      __global PAPhysicsNewtonian * newton,
-                     __global float * output)
+                     __global PAUChar * output)
 {
     int id = get_global_id(0);
 
-    output[id] = 0.5;
+    output[id] = 127;
 }
