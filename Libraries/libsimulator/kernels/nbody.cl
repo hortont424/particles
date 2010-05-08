@@ -1,4 +1,4 @@
-/* particles - simulator - gravity.cl
+/* particles - simulator - nbody.cl
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -28,31 +28,35 @@
 
 #define GRAV_CONSTANT 0.0000000000667300f
 
-__kernel void gravity(__global PAPhysicsParticle * input,
-                      __global PAPhysicsParticle * output,
-                      __global PAPhysicsNewtonian * newtonIn,
-                      __global PAPhysicsNewtonian * newtonOut,
-                      __global PAPhysicsForce * force,
-                      const unsigned int count)
+__kernel void nbody(__global PAPhysicsParticle * input,
+                    __global PAPhysicsParticle * output,
+                    __global PAPhysicsNewtonian * newtonIn,
+                    __global PAPhysicsNewtonian * newtonOut,
+                    __global PAPhysicsForce * force,
+                    const unsigned int count)
 {
     float dist;
-    float4 loc, accel, vel, iloc, dir, fpoint;
+    float4 loc, accel, vel, iloc, dir;
     loc = accel = vel = iloc = dir = (float4)(0.0f);
 
     int id = get_global_id(0);
 
-    if(id > count)// || input[id].enabled == 0.0)
+    if(id > count || input[id].enabled == 0.0)
         return;
 
     loc = (float4)(input[id].x, input[id].y, input[id].z, 0.0f);
 
-    fpoint = (float4)(force->particle.x, force->particle.y,
-                      force->particle.z, 0.0f);
+    for(int i = 0; i < count; i++)
+    {
+        if(i == id)
+            continue;
 
-    dir = normalize(fpoint - loc);
-    dist = distance(loc, fpoint) + 1.0;
+        iloc = (float4)(input[i].x, input[i].y, input[i].z, 0.0f);
+        dir = normalize(iloc - loc);
+        dist = distance(loc, iloc) + 1.0;
 
-    accel = dir * ((GRAV_CONSTANT * force->data.gravity.mass) / pow(dist, 2));
+        accel += dir * ((GRAV_CONSTANT * newtonIn[i].mass) / pow(dist, 2));
+    }
 
     newtonOut[id].ax += accel.x * force->data.gravity.strength;
     newtonOut[id].ay += accel.y * force->data.gravity.strength;

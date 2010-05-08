@@ -87,7 +87,7 @@ PAPhysicsForce * PAPhysicsForceNewFromJSON(json_object * jsForce)
         force = PAPhysicsForceNew(PAPhysicsNormalType);
 
         readJSONProperty(jsForce, force->data.normal, strength, 1.0);
-        readJSONProperty(jsForce, force->data.normal, noise, 1.0);
+        readJSONProperty(jsForce, force->data.normal, noise, 0.0);
 
         if((jsFalloff = json_object_object_get(jsForce, "falloff")))
             readFalloff(jsFalloff, force->data.normal.falloff);
@@ -97,7 +97,15 @@ PAPhysicsForce * PAPhysicsForceNewFromJSON(json_object * jsForce)
         force = PAPhysicsForceNew(PAPhysicsGravityType);
 
         readJSONProperty(jsForce, force->data.gravity, strength, 1.0);
-        readJSONProperty(jsForce, force->data.gravity, noise, 1.0);
+        readJSONProperty(jsForce, force->data.gravity, noise, 0.0);
+        readJSONProperty(jsForce, force->data.gravity, mass, 1.0);
+    }
+    else if(strcmp(typestr, "nbody") == 0)
+    {
+        force = PAPhysicsForceNew(PAPhysicsNBodyType);
+
+        readJSONProperty(jsForce, force->data.nbody, strength, 1.0);
+        readJSONProperty(jsForce, force->data.nbody, noise, 0.0);
     }
     else
     {

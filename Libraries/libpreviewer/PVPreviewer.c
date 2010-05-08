@@ -109,7 +109,7 @@ void timer(int extra)
 
 static void display()
 {
-    float zoom = 0.0;
+    float zoom = 2.0;
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -122,7 +122,7 @@ static void display()
     //glTranslatef(-0.5, -0.5, -0.5);
 
     glColor3f(1.0, 0.0, 0.0);
-    glPointSize(2.0);
+    glPointSize(1.0);
 
     if(simulator)
     {

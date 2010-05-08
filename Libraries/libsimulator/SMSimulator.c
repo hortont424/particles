@@ -208,9 +208,12 @@ void SMSimulatorSimulate(SMSimulator * sim)
             sim->particles[p].y = emitter->particle.y;
             sim->particles[p].z = emitter->particle.z;
 
-            sim->newtonian[p].ox = sim->particles[p].x;
-            sim->newtonian[p].oy = sim->particles[p].y;
-            sim->newtonian[p].oz = sim->particles[p].z;
+            sim->newtonian[p].ox = sim->particles[p].x +
+                ((PAFloat)rand()/(PAFloat)RAND_MAX - 0.5) * 0.01;
+            sim->newtonian[p].oy = sim->particles[p].y +
+                ((PAFloat)rand()/(PAFloat)RAND_MAX - 0.5) * 0.01;
+            sim->newtonian[p].oz = sim->particles[p].z +
+                ((PAFloat)rand()/(PAFloat)RAND_MAX - 0.5) * 0.01;
 
             sim->newtonian[p].mass = 50000000.0 *
                 (PAFloat)rand()/(PAFloat)RAND_MAX;

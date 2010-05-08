@@ -4,7 +4,7 @@
     },
     "forces": [
         {
-            "kernel": "gravity",
+            "kernel": "nbody",
             "strength": 1.0,
             "noise": 0.0,
             "particle": {

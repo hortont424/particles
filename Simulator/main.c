@@ -51,7 +51,7 @@ int main(int argc, const char ** argv)
 {
     SMOptionsParse(argc, argv);
 
-    simulator = SMSimulatorNewFromFile("../Systems/n-body.psys");
+    simulator = SMSimulatorNewFromFile("../Systems/gravity.psys");
     SMSimulatorPushData(simulator);
 
     if(simulatorOutputMode == SM_PREVIEWER_OUTPUT)

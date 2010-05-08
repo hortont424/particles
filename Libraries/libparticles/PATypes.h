@@ -50,6 +50,7 @@ typedef enum _PAPhysicsType
     PAPhysicsVortexType,
     PAPhysicsHarmonicType,
     PAPhysicsGravityType,
+    PAPhysicsNBodyType,
     PAPhysicsDragType,
     PAPhysicsTurbulenceType,
     PAPhysicsBoidsType,
@@ -93,7 +94,13 @@ typedef struct _PAPhysicsHarmonicData
 typedef struct _PAPhysicsGravityData
 {
     PAFloat strength, noise;
+    PAFloat mass;
 } PAPhysicsGravityData;
+
+typedef struct _PAPhysicsNBodyData
+{
+    PAFloat strength, noise;
+} PAPhysicsNBodyData;
 
 typedef struct _PAPhysicsDragData
 {
@@ -127,6 +134,7 @@ typedef struct _PAPhysicsForce
         PAPhysicsVortexData vortex;
         PAPhysicsHarmonicData harmonic;
         PAPhysicsGravityData gravity;
+        PAPhysicsNBodyData nbody;
         PAPhysicsDragData drag;
         PAPhysicsTurbulenceData turbulence;
         PAPhysicsBoidsData boids;

@@ -34,6 +34,7 @@
 
 extern const char * SMKernelSource_normal;
 extern const char * SMKernelSource_gravity;
+extern const char * SMKernelSource_nbody;
 extern const char * SMKernelSource_verlet;
 
 /**
@@ -59,6 +60,8 @@ SMProgramLibrary * SMProgramLibraryNew(COContext * ctx)
                                 SMKernelSource_normal);
     SMProgramLibraryLoadProgram(lib, PAPhysicsGravityType, "gravity",
                                 SMKernelSource_gravity);
+    SMProgramLibraryLoadProgram(lib, PAPhysicsNBodyType, "nbody",
+                                SMKernelSource_nbody);
     SMProgramLibraryLoadProgram(lib, PAPhysicsIntegrationType, "verlet",
                                 SMKernelSource_verlet);
 
