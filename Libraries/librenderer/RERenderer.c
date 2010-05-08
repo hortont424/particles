@@ -39,6 +39,7 @@
 
 #include <liblog/liblog.h>
 #include <libsimulator/libsimulator.h>
+#include <libparticles/libparticles.h>
 
 #include "librenderer.h"
 
@@ -62,13 +63,18 @@ void drawProgressBar(int width, double progress)
 
 void RERendererStart()
 {
-    SMSimulator * reSimulator = NULL;
+    SMSimulator * reSimulator = reFrameCallback();;
     struct timeval startTime, currentTime;
 
-    COContext * ctx = COContextNew();
+    COContext * ctx = reSimulator->computer;
     COProgram * prog = COProgramNew(ctx, "render", SMKernelSource_render);
     showBuildLog(ctx, prog);
     COProgramSetGlobalCount(prog, RESOLUTION * RESOLUTION);
+
+    COBuffer * output = COBufferNew(ctx, RESOLUTION * RESOLUTION,
+                                    sizeof(PAFloat), false);
+
+    PAFloat * image = (PAFloat *)calloc(RESOLUTION * RESOLUTION, sizeof(PAFloat));
 
     printf("\n");
     gettimeofday(&startTime, NULL);
@@ -96,6 +102,14 @@ void RERendererStart()
         fflush(stdout);
 
         reSimulator = reFrameCallback();
+        COProgramSetArgument(prog, 0, COArgumentNewWithBuffer(reSimulator->clParticles, false));
+        COProgramSetArgument(prog, 1, COArgumentNewWithBuffer(reSimulator->clNewtonian, false));
+        COProgramSetArgument(prog, 2, COArgumentNewWithBuffer(output, false));
+        COProgramExecute(prog);
+        COContextWait(ctx);
+        COBufferGet(output, (void **)&image);
+
+        printf("%f\n", image[0]);
     }
 
     printf("\n\n");
