@@ -44,8 +44,8 @@
 
 #include "librenderer.h"
 
-#define FRAME_COUNT 1000
-#define RESOLUTION 300
+#define FRAME_COUNT 10000
+#define RESOLUTION 800
 
 static RERendererFrameCallback reFrameCallback = NULL;
 extern const char * SMKernelSource_render;
