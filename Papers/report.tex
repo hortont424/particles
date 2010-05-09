@@ -1,0 +1,74 @@
+\documentclass{acmsiggraph}
+
+\usepackage[scaled=.92]{helvet}
+\usepackage{times}
+\usepackage{parskip}
+\onlineid{0}
+
+\title{Cinematic Particle Systems with OpenCL}
+
+\author{Tim Horton\thanks{e-mail: hortot2@rpi.edu}\\Rensselaer Polytechnic Institute}
+
+\begin{document}
+
+\maketitle
+
+\section{Proposal}
+
+As my final project for Advanced Computer Graphics, I'm going to design, implement, and analyze a set of tools for creating, simulating, and rendering offline particle systems. The simulation and rendering tools will utilize OpenCL in order to take advantage of the incredibly parallelizable nature of this problem domain and the very powerful graphics hardware that ships with nearly every computer today.
+
+\section{Software and Hardware}
+
+All software will be built and tested on Mac OS 10.6 (Snow Leopard) and will likely not run on other platforms due to dependence on Apple-specific libraries. However, it may be possible to port the simulation and rendering components to other POSIX platforms which have OpenCL drivers, given some effort.
+
+All benchmarks and tests will be run on a machine with an Intel Core 2 Duo E7200 CPU running at 2.53 GHz, 8GB of DDR2-1066 RAM, an ATI Radeon HD 4890 graphics card with 1GB of video memory, and an array of disks providing approximately 150MB/s read and 80MB/s write throughput. All of these specifications contribute significantly to the measured performance of the code, so a different configuration could generate wildly different statistics.
+
+\section{Examples}
+
+During initial development, I've been using an n-body particle simulation as my primary test case. While it's extremely simple to generate and compute, it's incredibly computationally intensive (each particle acts on each other particle), so it's a prime test of the speedup gained by using OpenCL. I generally test the n-body simulation --- which is $\textrm{O}(n^2)$ --- with 4,096 particles, bumping the count up to 32,768 when I want to strain performance; when simulating $\textrm{O}(n)$ forces, more than 1,000,000 particles is relatively painless.
+
+Later on, I plan to use various yet-to-be-designed arrangements of other forces and emitters, double-checking my work against Blender's particle simulation engine and common sense.
+
+\section{Components}
+
+\subsection{Interpolator}
+
+Interpolator is the primary GUI component of this project. Written in Objective-C against Cocoa, it provides a b-spline editor and a simple way to map curves to arbitrary properties on emitters or forces.
+
+\subsection{Simulator}
+
+Simulator takes various description files, including the output of Interpolator, and uses OpenCL to simulate --- with reasonable physical accuracy --- the motion of the particle system. Simulator provides OpenCL kernels for simulating various different forces, including gravity, wind, vortex, drag, and turbulence.
+
+\subsection{Previewer}
+
+Previewer provides a simple OpenGL-driven preview of the particle data output by Simulator. Each particle is represented by an OpenGL point, so it's not a particularly interesting nor attractive output, but it provides very quick turn-around compared to Renderer, making it an essential part of the design cycle.
+
+\subsection{Renderer}
+
+Renderer makes use of OpenCL to render Simulator's output into image sequences. It provides many settings controlling things like particle texture, nearest-neighbor merging, self-shadowing, and other output-related functionality. The output of Renderer is the end of the chain of tools being constructed for this project.
+
+\section{Timeline}
+
+A timeline is somewhat hard to generate, since I've been working on this since the beginning of the semester. I'll try to instead predict dates of completion for each of the components.
+
+\subsection{Core Tasks}
+
+\begin{tabular}{ l l }
+    April 16 & Simulator complete (all force kernels finished)\\
+    April 20 & Previewer complete (able preview Simulator output)\\
+    April 23 & Interpolator complete (able to edit/export curves)\\
+    May 7 & Renderer complete (outputs image sequences)\\
+\end{tabular}
+
+\subsection{Extra Tasks}
+
+\begin{tabular}{ l }
+    H.264 output (removes manual encoder roundtrip)\\
+    Integrate Previewer window into Interpolator\\
+\end{tabular}
+
+\bibliographystyle{acmsiggraph}
+\nocite{*}
+\bibliography{report}
+
+\end{document}
