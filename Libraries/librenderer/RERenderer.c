@@ -110,11 +110,13 @@ void RERendererStart()
     COProgramSetGlobalCount(prog, RESOLUTION * RESOLUTION);
 
     COBuffer * output = COBufferNew(ctx, RESOLUTION * RESOLUTION,
-                                    sizeof(PAUChar), false);
+                                    sizeof(PAFloat), false);
 
-    PAUChar * image = (PAUChar *)calloc(RESOLUTION * RESOLUTION, sizeof(PAUChar));
+    PAFloat * image = (PAFloat *)calloc(RESOLUTION * RESOLUTION, sizeof(PAFloat));
+    GLbyte * imageGL = (GLbyte *)calloc(RESOLUTION * RESOLUTION, sizeof(GLbyte));
+
     for(unsigned int i = 0; i < RESOLUTION; i++)
-        rowPtrs[i] = (GLbyte*)&image[i * RESOLUTION];
+        rowPtrs[i] = &imageGL[i * RESOLUTION];
 
     printf("\n");
     gettimeofday(&startTime, NULL);
@@ -143,22 +145,20 @@ void RERendererStart()
 
         reSimulator = reFrameCallback();
 
-        //if(step == 350)
-        {
-            COProgramSetArgument(prog, 0, COArgumentNewWithBuffer(reSimulator->clParticles, false));
-            COProgramSetArgument(prog, 1, COArgumentNewWithBuffer(reSimulator->clNewtonian, false));
-            COProgramSetArgument(prog, 2, COArgumentNewWithBuffer(output, false));
-            COProgramSetArgument(prog, 3, COArgumentNewWithInt(reSimulator->elementCount));
-            COProgramSetArgument(prog, 4, COArgumentNewWithInt(RESOLUTION));
-            COProgramExecute(prog);
-            COContextWait(ctx);
-            COBufferGet(output, (void **)&image);
+        COProgramSetArgument(prog, 0, COArgumentNewWithBuffer(reSimulator->clParticles, false));
+        COProgramSetArgument(prog, 1, COArgumentNewWithBuffer(reSimulator->clNewtonian, false));
+        COProgramSetArgument(prog, 2, COArgumentNewWithBuffer(output, false));
+        COProgramSetArgument(prog, 3, COArgumentNewWithInt(reSimulator->elementCount));
+        COProgramSetArgument(prog, 4, COArgumentNewWithInt(RESOLUTION));
+        COProgramExecute(prog);
+        COContextWait(ctx);
+        COBufferGet(output, (void **)&image);
 
-            REExportImage(step);
-            //exit(0);
-        }
+        // This whole nonsense is due to a bug in (maybe) the Apple-ATI OpenCL
+        for(int a = 0; a < RESOLUTION * RESOLUTION; a++)
+            imageGL[a] = (GLbyte)image[a];
 
-        //printf("%f\n", image[0]);
+        REExportImage(step);
     }
 
     printf("\n\n");

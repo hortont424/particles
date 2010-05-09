@@ -28,7 +28,7 @@
 
 __kernel void render(__global PAPhysicsParticle * input,
                      __global PAPhysicsNewtonian * newton,
-                     __global PAUChar * output,
+                     __global PAFloat * output,
                      int count,
                      int resolution)
 {
@@ -39,7 +39,7 @@ __kernel void render(__global PAPhysicsParticle * input,
     loc = (float4)((float)(id % resolution), (float)id / (float)resolution, 0.0f, 0.0f);
     realLoc = loc / ((float)resolution);
 
-    float scale = 4.0;
+    float scale = 5.0;
     realLoc *= scale;
     realLoc.x += (0.5 - (scale / 2.0f));
     realLoc.y += (0.5 - (scale / 2.0f));
