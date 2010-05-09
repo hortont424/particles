@@ -222,7 +222,12 @@ void SMSimulatorSimulate(SMSimulator * sim)
         }
 
         if(neededParticles > 0)
-            sim->elementCount += neededParticles;
+        {
+            sim->elementCount += (neededParticles * 10) + 1024;
+
+            if(sim->elementCount % 2) // We really don't like odd elementCounts
+                sim->elementCount++;
+        }
 
         if(oldCount != sim->elementCount)
         {
@@ -236,7 +241,7 @@ void SMSimulatorSimulate(SMSimulator * sim)
                 realloc(sim->newtonian,
                         sim->elementCount * sizeof(PAPhysicsNewtonian));
 
-            for(unsigned int p = oldCount; p < sim->elementCount; p++)
+            for(unsigned int p = oldCount; p < oldCount + neededParticles; p++)
                 setupEmitterParticle(sim, p, emitter);
 
             COBufferResize(sim->clParticles, sim->elementCount);
