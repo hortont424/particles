@@ -34,7 +34,7 @@ __kernel void verlet(__global PAPhysicsParticle * input,
 {
     int id = get_global_id(0);
 
-    if(id > count || input[id].lifetime <= 0)
+    if(id > count || input[id].lifetime == 0)
         return;
 
     // Extract useful vectors; set the next frame's old position to our position

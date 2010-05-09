@@ -43,7 +43,6 @@
     "emitters": [
     {
         "birthRate": 20.0,
-        "lifetime": 500.0,
         "initialVelocity": 0.0,
         "particle": {
             "fixed": true,
@@ -54,7 +53,6 @@
     },
     {
         "birthRate": 20.0,
-        "lifetime": 500.0,
         "initialVelocity": 0.0,
         "particle": {
             "fixed": true,
