@@ -179,6 +179,24 @@ void SMSimulatorRandomize(SMSimulator * sim)
     }
 }
 
+void setupEmitterParticle(SMSimulator * sim, int p, PAEmitter * emitter)
+{
+    sim->particles[p].lifetime = emitter->lifetime;
+    sim->particles[p].x = emitter->particle.x;
+    sim->particles[p].y = emitter->particle.y;
+    sim->particles[p].z = emitter->particle.z;
+
+    sim->newtonian[p].ox = sim->particles[p].x +
+        ((PAFloat)rand()/(PAFloat)RAND_MAX - 0.5) * 0.01;
+    sim->newtonian[p].oy = sim->particles[p].y +
+        ((PAFloat)rand()/(PAFloat)RAND_MAX - 0.5) * 0.01;
+    sim->newtonian[p].oz = sim->particles[p].z +
+        ((PAFloat)rand()/(PAFloat)RAND_MAX - 0.5) * 0.01;
+
+    sim->newtonian[p].mass = 50000000.0 *
+        (PAFloat)rand()/(PAFloat)RAND_MAX;
+}
+
 void SMSimulatorSimulate(SMSimulator * sim)
 {
     if(sim->system->emitterCount)
@@ -189,46 +207,48 @@ void SMSimulatorSimulate(SMSimulator * sim)
         unsigned int oldCount = sim->elementCount;
         PAEmitter * emitter = sim->system->emitters[i];
 
-        sim->elementCount += emitter->birthRate;
+        unsigned int neededParticles = emitter->birthRate;
 
-        SMProgramLibrarySetGlobalCount(sim->library, sim->elementCount);
+        for(unsigned int p = 0; p < sim->elementCount; p++)
+        {
+            if(sim->particles[p].lifetime == 0)
+            {
+                setupEmitterParticle(sim, p, emitter);
+                neededParticles--;
+            }
+        }
 
-        sim->particles = (PAPhysicsParticle *)
-            realloc(sim->particles,
-                    sim->elementCount * sizeof(PAPhysicsParticle));
+        sim->elementCount += neededParticles;
 
-        sim->newtonian = (PAPhysicsNewtonian *)
-            realloc(sim->newtonian,
-                    sim->elementCount * sizeof(PAPhysicsNewtonian));
+        if(oldCount != sim->elementCount)
+        {
+            SMProgramLibrarySetGlobalCount(sim->library, sim->elementCount);
+
+            sim->particles = (PAPhysicsParticle *)
+                realloc(sim->particles,
+                        sim->elementCount * sizeof(PAPhysicsParticle));
+
+            sim->newtonian = (PAPhysicsNewtonian *)
+                realloc(sim->newtonian,
+                        sim->elementCount * sizeof(PAPhysicsNewtonian));
+        }
 
         for(unsigned int p = oldCount; p < sim->elementCount; p++)
+            setupEmitterParticle(sim, p, emitter);
+
+        if(oldCount != sim->elementCount)
         {
-            sim->particles[p].lifetime = emitter->lifetime;
-            sim->particles[p].x = emitter->particle.x;
-            sim->particles[p].y = emitter->particle.y;
-            sim->particles[p].z = emitter->particle.z;
+            COBufferResize(sim->clParticles, sim->elementCount);
+            COBufferResize(sim->clNewtonian, sim->elementCount);
 
-            sim->newtonian[p].ox = sim->particles[p].x +
-                ((PAFloat)rand()/(PAFloat)RAND_MAX - 0.5) * 0.01;
-            sim->newtonian[p].oy = sim->particles[p].y +
-                ((PAFloat)rand()/(PAFloat)RAND_MAX - 0.5) * 0.01;
-            sim->newtonian[p].oz = sim->particles[p].z +
-                ((PAFloat)rand()/(PAFloat)RAND_MAX - 0.5) * 0.01;
-
-            sim->newtonian[p].mass = 50000000.0 *
-                (PAFloat)rand()/(PAFloat)RAND_MAX;
-        }
-
-        COBufferResize(sim->clParticles, sim->elementCount);
-        COBufferResize(sim->clNewtonian, sim->elementCount);
-
-        for(unsigned int j = 0; j < sim->system->forceCount; j++)
-        {
-            COProgramSetArgument(sim->forcePrograms[j], 5,
+            for(unsigned int j = 0; j < sim->system->forceCount; j++)
+            {
+                COProgramSetArgument(sim->forcePrograms[j], 5,
+                                     COArgumentNewWithInt(sim->elementCount));
+            }
+            COProgramSetArgument(sim->integrationProgram, 4,
                                  COArgumentNewWithInt(sim->elementCount));
         }
-        COProgramSetArgument(sim->integrationProgram, 4,
-                             COArgumentNewWithInt(sim->elementCount));
     }
 
     if(sim->system->emitterCount)
