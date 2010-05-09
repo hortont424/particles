@@ -40,7 +40,7 @@ typedef cl_uchar PAUChar;
 // Basic particle data; all you need to do the most simplistic rendering
 typedef struct _PAPhysicsParticle
 {
-    PAFloat enabled;
+    PAInt lifetime;
     PAFloat x, y, z;
 } PAPhysicsParticle;
 

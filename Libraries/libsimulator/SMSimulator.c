@@ -167,7 +167,7 @@ void SMSimulatorRandomize(SMSimulator * sim)
 
     for(unsigned int i = 0; i < sim->elementCount; i++)
     {
-        sim->particles[i].enabled = 1.0;
+        sim->particles[i].lifetime = 1.0;
         sim->newtonian[i].ox = sim->particles[i].x =
             (PAFloat)rand()/(PAFloat)RAND_MAX;
         sim->newtonian[i].oy = sim->particles[i].y =
@@ -203,7 +203,7 @@ void SMSimulatorSimulate(SMSimulator * sim)
 
         for(unsigned int p = oldCount; p < sim->elementCount; p++)
         {
-            sim->particles[p].enabled = 1.0;
+            sim->particles[p].lifetime = emitter->lifetime;
             sim->particles[p].x = emitter->particle.x;
             sim->particles[p].y = emitter->particle.y;
             sim->particles[p].z = emitter->particle.z;

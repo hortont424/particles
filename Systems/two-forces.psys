@@ -11,7 +11,6 @@
                 "strength": 2.0
             },
             "particle": {
-                "enabled": true,
                 "fixed": true,
                 "x": 0.3,
                 "y": 0.3,
@@ -26,7 +25,6 @@
                 "strength": 2.0
             },
             "particle": {
-                "enabled": true,
                 "fixed": true,
                 "x": 0.7,
                 "y": 0.7,

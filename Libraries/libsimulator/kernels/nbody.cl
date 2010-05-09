@@ -41,7 +41,7 @@ __kernel void nbody(__global PAPhysicsParticle * input,
 
     int id = get_global_id(0);
 
-    if(id > count || input[id].enabled == 0.0)
+    if(id > count || input[id].lifetime == 0)
         return;
 
     loc = (float4)(input[id].x, input[id].y, input[id].z, 0.0f);

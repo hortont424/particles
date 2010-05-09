@@ -38,7 +38,7 @@ __kernel void normal(__global PAPhysicsParticle * input,
     float dist;
     fpoint = loc = accel = (float4)(0.0f);
 
-    if(id > count || input[id].enabled == 0.0)
+    if(id > count || input[id].lifetime == 0)
         return;
 
     loc = (float4)(input[id].x, input[id].y, input[id].z, 0.0f);

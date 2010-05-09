@@ -38,7 +38,7 @@ __kernel void passthrough(__global PAPhysicsParticle * input,
     if(id > count)
         return;
 
-    output[id].enabled = input[id].enabled;
+    output[id].lifetime = input[id].lifetime;
     output[id].x = input[id].x;
     output[id].y = input[id].y;
     output[id].z = input[id].z;

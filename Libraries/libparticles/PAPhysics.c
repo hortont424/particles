@@ -113,7 +113,7 @@ PAPhysicsForce * PAPhysicsForceNewFromJSON(json_object * jsForce)
         return NULL;
     }
 
-    readJSONProperty(jsParticle, force->particle, enabled, 1.0);
+    readJSONProperty(jsParticle, force->particle, lifetime, -1.0);
     readJSONProperty(jsParticle, force->particle, x, 0.0);
     readJSONProperty(jsParticle, force->particle, y, 0.0);
     readJSONProperty(jsParticle, force->particle, z, 0.0);
@@ -144,9 +144,10 @@ PAEmitter * PAEmitterNewFromJSON(json_object * jsEmitter)
     emitter = PAEmitterNew();
 
     readJSONProperty(jsEmitter, (*emitter), birthRate, 0.0);
+    readJSONProperty(jsEmitter, (*emitter), lifetime, -1.0);
     readJSONProperty(jsEmitter, (*emitter), birthRateNoise, 0.0);
 
-    readJSONProperty(jsParticle, emitter->particle, enabled, 1.0);
+    readJSONProperty(jsParticle, emitter->particle, lifetime, -1.0);
     readJSONProperty(jsParticle, emitter->particle, x, 0.0);
     readJSONProperty(jsParticle, emitter->particle, y, 0.0);
     readJSONProperty(jsParticle, emitter->particle, z, 0.0);

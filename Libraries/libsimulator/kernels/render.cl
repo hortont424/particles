@@ -29,18 +29,20 @@
 __kernel void render(__global PAPhysicsParticle * input,
                      __global PAPhysicsNewtonian * newton,
                      __global PAUChar * output,
-                     int count)
+                     int count,
+                     int resolution)
 {
     int id = get_global_id(0);
     float4 iloc, loc, realLoc;
     float dist;
 
-    loc = (float4)((float)(id % 500), (float)id / 500.0f, 0.0f, 0.0f);
-    realLoc = loc / 500.0f;
-    realLoc.x -= 0.5;
-    realLoc.y -= 0.5;
+    loc = (float4)((float)(id % resolution), (float)id / (float)resolution, 0.0f, 0.0f);
+    realLoc = loc / ((float)resolution);
 
-    realLoc *= 3.0;
+    float scale = 3.0;
+    realLoc *= scale;
+    realLoc.x += (0.5 - (scale / 2.0f));
+    realLoc.y += (0.5 - (scale / 2.0f));
 
     output[id] = 0;
 
@@ -52,7 +54,7 @@ __kernel void render(__global PAPhysicsParticle * input,
         dist = distance(realLoc, iloc);
 
         if(dist < 0.1)
-            colorVal += (0.1 - dist) * 20;
+            colorVal += 1.0f;//(0.1 - dist) * 50;
     }
 
     if(colorVal > 255)

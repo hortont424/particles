@@ -9,7 +9,6 @@
             "noise": 0.0,
             "mass": 100000000000.0,
             "particle": {
-                "enabled": true,
                 "fixed": true,
                 "x": 1.2,
                 "y": 1.2,
@@ -22,7 +21,6 @@
             "noise": 0.0,
             "mass": 100000000000.0,
             "particle": {
-                "enabled": true,
                 "fixed": true,
                 "x": 0.2,
                 "y": 1.2,
@@ -35,7 +33,6 @@
             "noise": 0.0,
             "mass": 100000000000.0,
             "particle": {
-                "enabled": true,
                 "fixed": true,
                 "x": 0.0,
                 "y": -0.5,
@@ -48,7 +45,6 @@
         "birthRate": 20.0,
         "initialVelocity": 0.0,
         "particle": {
-            "enabled": true,
             "fixed": true,
             "x": -1.2,
             "y": 1.2,
@@ -59,7 +55,6 @@
         "birthRate": 20.0,
         "initialVelocity": 0.0,
         "particle": {
-            "enabled": true,
             "fixed": true,
             "x": -1.2,
             "y": -1.2,
