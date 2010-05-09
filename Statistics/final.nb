@@ -1,0 +1,453 @@
+(* Content-type: application/mathematica *)
+
+(*** Wolfram Notebook File ***)
+(* http://www.wolfram.com/nb *)
+
+(* CreatedBy='Mathematica 7.0' *)
+
+(*CacheID: 234*)
+(* Internal cache information:
+NotebookFileLineBreakTest
+NotebookFileLineBreakTest
+NotebookDataPosition[       145,          7]
+NotebookDataLength[     19976,        444]
+NotebookOptionsPosition[     19607,        427]
+NotebookOutlinePosition[     19948,        442]
+CellTagsIndexPosition[     19905,        439]
+WindowFrame->Normal*)
+
+(* Beginning of Notebook Content *)
+Notebook[{
+
+Cell[CellGroupData[{
+Cell[BoxData[{
+ RowBox[{"basicSpeedPlot", "=", 
+  RowBox[{"Show", "[", 
+   RowBox[{"{", 
+    RowBox[{
+     RowBox[{"BarChart", "[", 
+      RowBox[{
+       RowBox[{"{", "\[IndentingNewLine]", 
+        RowBox[{
+         RowBox[{"500", "/", 
+          RowBox[{"{", 
+           RowBox[{"6.856", ",", "64.550"}], "}"}]}], ",", 
+         RowBox[{"(*", "nbody", "*)"}], "\[IndentingNewLine]", 
+         RowBox[{"500", "/", 
+          RowBox[{"{", 
+           RowBox[{"3.410", ",", "1.044"}], "}"}]}], ",", 
+         RowBox[{"(*", "gravity", "*)"}], "\[IndentingNewLine]", 
+         RowBox[{"(*", 
+          RowBox[{
+           RowBox[{"500", "/", 
+            RowBox[{"{", 
+             RowBox[{"1.176", ",", "0.118"}], "}"}]}], ","}], "*)"}], 
+         RowBox[{"(*", "sample", "*)"}], "\[IndentingNewLine]", 
+         RowBox[{"500", "/", 
+          RowBox[{"{", 
+           RowBox[{"15.673", ",", "68.19"}], "}"}]}]}], 
+        RowBox[{"(*", 
+         RowBox[{"two", "-", "forces"}], "*)"}], "\[IndentingNewLine]", "}"}],
+        ",", 
+       RowBox[{"ChartLabels", "\[Rule]", 
+        RowBox[{"{", 
+         RowBox[{
+          RowBox[{"{", 
+           RowBox[{
+           "\"\<n-body\>\"", ",", "\"\<simple gravity\>\"", ",", 
+            "\"\<two-forces\>\""}], "}"}], ",", 
+          RowBox[{"Placed", "[", 
+           RowBox[{
+            RowBox[{"{", 
+             RowBox[{"\"\<GPU\>\"", ",", "\"\<CPU\>\""}], "}"}], ",", 
+            "Below"}], "]"}]}], "}"}]}], ",", 
+       RowBox[{"ChartStyle", "\[Rule]", "\"\<DarkRainbow\>\""}], ",", 
+       RowBox[{"AxesLabel", "\[Rule]", "\"\<fps\>\""}]}], "]"}], ",", 
+     RowBox[{"Plot", "[", 
+      RowBox[{"60", ",", 
+       RowBox[{"{", 
+        RowBox[{"x", ",", "0", ",", "6.7"}], "}"}], ",", 
+       RowBox[{"PlotStyle", "\[Rule]", 
+        RowBox[{"{", "Black", "}"}]}]}], "]"}]}], "}"}], 
+   "]"}]}], "\[IndentingNewLine]", 
+ RowBox[{
+  RowBox[{"Export", "[", 
+   RowBox[{
+    RowBox[{
+     RowBox[{"NotebookDirectory", "[", "]"}], "<>", 
+     "\"\<../Papers/basicSpeedPlot.pdf\>\""}], ",", "basicSpeedPlot"}], "]"}],
+   ";"}]}], "Input",
+ CellChangeTimes->{{3.482088271657754*^9, 3.482088388953065*^9}, {
+  3.482088441038711*^9, 3.4820885146405888`*^9}, {3.482088654857893*^9, 
+  3.482088760938239*^9}, {3.482088843313463*^9, 3.482088905358823*^9}, {
+  3.482089069057335*^9, 3.4820890701811247`*^9}, {3.4820896634544888`*^9, 
+  3.482089680553652*^9}, {3.482108300760961*^9, 3.48210830091223*^9}, {
+  3.4824307755817966`*^9, 3.482431011609386*^9}, {3.482431151056348*^9, 
+  3.482431174540374*^9}, {3.482431215428729*^9, 3.48243123132206*^9}, {
+  3.482431407523958*^9, 3.482431554048991*^9}, {3.482431678628668*^9, 
+  3.482431679135803*^9}}],
+
+Cell[BoxData[
+ GraphicsBox[{{{{}, {{{}, {
+        {RGBColor[0.237736, 0.340215, 0.575113], EdgeForm[Opacity[0.7]], {}, 
+         TagBox[
+          TooltipBox[
+           TagBox[{
+             DynamicBox[{
+               FrontEnd`If[
+                CurrentValue["MouseOver"], 
+                EdgeForm[{
+                  GrayLevel[0.5], 
+                  AbsoluteThickness[1.5], 
+                  Opacity[0.66]}], {}, {}], 
+               RectangleBox[{0., 0.}, {1., 72.92882147024504}]},
+              
+              ImageSizeCache->{{17.750000000000004`, 68.09221748400853}, {
+               66.00997031221718, 97.93778676483909}}], InsetBox[
+              StyleBox["\<\"GPU\"\>",
+               StripOnInput->False,
+               FrontFaceColor->GrayLevel[0],
+               BackFaceColor->GrayLevel[0],
+               GraphicsColor->GrayLevel[0],
+               FontColor->GrayLevel[0]], Offset[{0, -4}, {0.5, 0.}], 
+              ImageScaled[{0.5, 1}]]},
+            StatusArea[#, 72.92882147024504]& ,
+            TagBoxNote->"72.92882147024504"],
+           StyleBox["72.92882147024504`", {
+             GrayLevel[0]}, StripOnInput -> False]],
+          Annotation[#, 
+           Style[72.92882147024504, {
+             GrayLevel[0]}], "Tooltip"]& ]}, 
+        {RGBColor[0.72987, 0.239399, 0.230961], EdgeForm[Opacity[0.7]], {}, 
+         TagBox[
+          TooltipBox[
+           TagBox[{
+             DynamicBox[{
+               FrontEnd`If[
+                CurrentValue["MouseOver"], 
+                EdgeForm[{
+                  GrayLevel[0.5], 
+                  AbsoluteThickness[1.5], 
+                  Opacity[0.66]}], {}, {}], 
+               RectangleBox[{1.1, 0.}, {2.1, 7.745933384972889}]},
+              
+              ImageSizeCache->{{72.57643923240938, 122.91865671641791`}, {
+               94.09976802588982, 97.93778676483909}}], InsetBox[
+              StyleBox["\<\"CPU\"\>",
+               StripOnInput->False,
+               FrontFaceColor->GrayLevel[0],
+               BackFaceColor->GrayLevel[0],
+               GraphicsColor->GrayLevel[0],
+               FontColor->GrayLevel[0]], Offset[{0, -4}, {1.6, 0.}], 
+              ImageScaled[{0.5, 1}]]},
+            StatusArea[#, 7.745933384972889]& ,
+            TagBoxNote->"7.745933384972889"],
+           StyleBox["7.745933384972889`", {
+             GrayLevel[0]}, StripOnInput -> False]],
+          Annotation[#, 
+           Style[7.745933384972889, {
+             GrayLevel[0]}], "Tooltip"]& ]}}, {}, {}}, {{}, {
+        {RGBColor[0.237736, 0.340215, 0.575113], EdgeForm[Opacity[0.7]], {}, 
+         TagBox[
+          TooltipBox[
+           TagBox[{
+             DynamicBox[{
+               FrontEnd`If[
+                CurrentValue["MouseOver"], 
+                EdgeForm[{
+                  GrayLevel[0.5], 
+                  AbsoluteThickness[1.5], 
+                  Opacity[0.66]}], {}, {}], 
+               
+               RectangleBox[{2.3000000000000003`, 0.}, {3.3000000000000003`, 
+                146.62756598240466`}]},
+              
+              ImageSizeCache->{{132.38710021321964`, 182.72931769722817`}, {
+               34.25036459499281, 97.93778676483909}}], InsetBox[
+              StyleBox["\<\"GPU\"\>",
+               StripOnInput->False,
+               FrontFaceColor->GrayLevel[0],
+               BackFaceColor->GrayLevel[0],
+               GraphicsColor->GrayLevel[0],
+               FontColor->GrayLevel[0]], 
+              Offset[{0, -4}, {2.8000000000000003`, 0.}], 
+              ImageScaled[{0.5, 1}]]},
+            StatusArea[#, 146.62756598240466`]& ,
+            TagBoxNote->"146.62756598240466"],
+           StyleBox["146.62756598240466`", {
+             GrayLevel[0]}, StripOnInput -> False]],
+          Annotation[#, 
+           Style[146.62756598240466`, {
+             GrayLevel[0]}], "Tooltip"]& ]}, 
+        {RGBColor[0.72987, 0.239399, 0.230961], EdgeForm[Opacity[0.7]], {}, 
+         TagBox[
+          TooltipBox[
+           TagBox[{
+             DynamicBox[{
+               FrontEnd`If[
+                CurrentValue["MouseOver"], 
+                EdgeForm[{
+                  GrayLevel[0.5], 
+                  AbsoluteThickness[1.5], 
+                  Opacity[0.66]}], {}, {}], 
+               
+               RectangleBox[{3.4000000000000004`, 0.}, {4.4, 
+                478.9272030651341}]},
+              
+              ImageSizeCache->{{187.213539445629, 
+               237.55575692963754`}, {-108.9502492496972, 
+               97.93778676483909}}], InsetBox[
+              StyleBox["\<\"CPU\"\>",
+               StripOnInput->False,
+               FrontFaceColor->GrayLevel[0],
+               BackFaceColor->GrayLevel[0],
+               GraphicsColor->GrayLevel[0],
+               FontColor->GrayLevel[0]], 
+              Offset[{0, -4}, {3.9000000000000004`, 0.}], 
+              ImageScaled[{0.5, 1}]]},
+            StatusArea[#, 478.9272030651341]& ,
+            TagBoxNote->"478.9272030651341"],
+           StyleBox["478.9272030651341`", {
+             GrayLevel[0]}, StripOnInput -> False]],
+          Annotation[#, 
+           Style[478.9272030651341, {
+             GrayLevel[0]}], "Tooltip"]& ]}}, {}, {}}, {{}, {
+        {RGBColor[0.237736, 0.340215, 0.575113], EdgeForm[Opacity[0.7]], {}, 
+         TagBox[
+          TooltipBox[
+           TagBox[{
+             DynamicBox[{
+               FrontEnd`If[
+                CurrentValue["MouseOver"], 
+                EdgeForm[{
+                  GrayLevel[0.5], 
+                  AbsoluteThickness[1.5], 
+                  Opacity[0.66]}], {}, {}], 
+               
+               RectangleBox[{4.6000000000000005`, 0.}, {5.6000000000000005`, 
+                31.90199706501627}]},
+              
+              ImageSizeCache->{{247.02420042643925`, 297.3664179104478}, {
+               83.68999696076993, 97.93778676483909}}], InsetBox[
+              StyleBox["\<\"GPU\"\>",
+               StripOnInput->False,
+               FrontFaceColor->GrayLevel[0],
+               BackFaceColor->GrayLevel[0],
+               GraphicsColor->GrayLevel[0],
+               FontColor->GrayLevel[0]], 
+              Offset[{0, -4}, {5.1000000000000005`, 0.}], 
+              ImageScaled[{0.5, 1}]]},
+            StatusArea[#, 31.90199706501627]& ,
+            TagBoxNote->"31.90199706501627"],
+           StyleBox["31.90199706501627`", {
+             GrayLevel[0]}, StripOnInput -> False]],
+          Annotation[#, 
+           Style[31.90199706501627, {
+             GrayLevel[0]}], "Tooltip"]& ]}, 
+        {RGBColor[0.72987, 0.239399, 0.230961], EdgeForm[Opacity[0.7]], {}, 
+         TagBox[
+          TooltipBox[
+           TagBox[{
+             DynamicBox[{
+               FrontEnd`If[
+                CurrentValue["MouseOver"], 
+                EdgeForm[{
+                  GrayLevel[0.5], 
+                  AbsoluteThickness[1.5], 
+                  Opacity[0.66]}], {}, {}], 
+               RectangleBox[{5.7, 0.}, {6.7, 7.332453438920663}]},
+              
+              ImageSizeCache->{{301.85063965884865`, 352.1928571428572}, {
+               94.27795233751579, 97.93778676483909}}], InsetBox[
+              StyleBox["\<\"CPU\"\>",
+               StripOnInput->False,
+               FrontFaceColor->GrayLevel[0],
+               BackFaceColor->GrayLevel[0],
+               GraphicsColor->GrayLevel[0],
+               FontColor->GrayLevel[0]], Offset[{0, -4}, {6.2, 0.}], 
+              ImageScaled[{0.5, 1}]]},
+            StatusArea[#, 7.332453438920663]& ,
+            TagBoxNote->"7.332453438920663"],
+           StyleBox["7.332453438920663`", {
+             GrayLevel[0]}, StripOnInput -> False]],
+          Annotation[#, 
+           Style[7.332453438920663, {
+             GrayLevel[0]}], "Tooltip"]& ]}}, {}, {}}}, {}, {}}, {}, 
+    GraphicsGroupBox[
+     StyleBox[
+      GraphicsGroupBox[{
+        LineBox[{{{0., 0}, Offset[{0, -6}, {0., 0}]}, {{6.7, 0}, 
+           Offset[{0, -6}, {6.7, 0}]}}], 
+        LineBox[{{{0., 0}, Offset[{0, -4}, {0., 0}]}, {{2.1, 0}, 
+           Offset[{0, -4}, {2.1, 0}]}}], InsetBox[
+         PaneBox["\<\"n-body\"\>"], Offset[{0, -14}, {1.05, 0}], 
+         ImageScaled[{Rational[1, 2], 1}]], 
+        LineBox[{{{2.3000000000000003`, 0}, 
+           Offset[{0, -4}, {2.3000000000000003`, 0}]}, {{4.4, 0}, 
+           Offset[{0, -4}, {4.4, 0}]}}], InsetBox[
+         PaneBox["\<\"simple gravity\"\>"], 
+         Offset[{0, -14}, {3.3500000000000005`, 0}], 
+         ImageScaled[{Rational[1, 2], 1}]], 
+        LineBox[{{{4.6000000000000005`, 0}, 
+           Offset[{0, -4}, {4.6000000000000005`, 0}]}, {{6.7, 0}, 
+           Offset[{0, -4}, {6.7, 0}]}}], InsetBox[
+         PaneBox["\<\"two-forces\"\>"], Offset[{0, -14}, {5.65, 0}], 
+         ImageScaled[{Rational[1, 2], 1}]]}],
+      Antialiasing->False]]}, {{}, {}, 
+    {GrayLevel[0], LineBox[CompressedData["
+1:eJxTTMoPSmViYGAwAWIQvWihkZh2VJMdAxj4OTRxrGdOubrBHsaXD+e5l3T1
+AJy/oL325/yui3D+mQo3rUP8t+D8vr9r1/CaPoTz/ZmjpG/ueQrnz7+sF2v3
+/SWc3/FCpcyp5x2cz7RYgf1j60c4n9388B7e+Z/h/Mjcb3crn36F8z9x7Hth
+xPoDzr9yQmKzpdQvhHnaLC/7Y/7A+eWfmjmMK/7B+TJ6p05OSmBwgPGVvkq/
+31TPCOeffmfeWdnNBOfPspS5+XwtM5zPu/3U3D97WOD8Za2OEjsfscL5Kc8a
+i2SY2eH8o5U9jmoCHHC+b1z8sevGnHB+Remf/fouXHD+CbnkmXr+3HC+neQk
+jasFPHB+uFu3jlI9L5w//YjPM7ElfHD+7yvX6zcd5ofzGXvE3H+lC8D5EmGq
+mvk/EfwGy5mu5o2CCP1PP14MYhOC8zl361kemobgZ668cKtFVhjOjzkQFj57
+PYK/4IMjH6uFCJz//aWg6aG9CP5D7mNml/1E4XxZ9/tF5tcQ/Der7nS+zxCD
+889e3yfw+weCzyDHdimyXhzOP9ZjmMcjKAHn3xM55CI0E8HnSDPvzpaTRMTH
+/QlrJNYj+FeK/DkkzaTgfO6p358WNSL4TtvnHz5zBsEHAM6B0dg=
+      "]]}}},
+  AspectRatio->NCache[GoldenRatio^(-1), 0.6180339887498948],
+  Axes->{True, True},
+  AxesLabel->FormBox["\"fps\"", TraditionalForm],
+  PlotRangePadding->Scaled[0.02],
+  Ticks->{None, Automatic}]], "Output",
+ CellChangeTimes->{{3.482431442517561*^9, 3.482431554567501*^9}, 
+   3.482431644981689*^9, 3.4824316794457207`*^9},
+ ImageCache->GraphicsData["CompressedBitmap", "\<\
+eJztXVuo7NZ5lj17nxOffZxz7DhtjuOCG7u2e5PBJzTpxanVS1JaaiVQmhYU
+WhMi7IcQkeYhKiQPelOfKhqInjotRHZh0lJBywSXoSBoohpE6bQgzvHUTGLk
+UD2ooPMwD3r4+///Wkuj2Xu2954927OPbW2Y2aOlpW/9t/Vflm6//8LXXvzS
+l1/42ktffOHRz3z1BefFl774Z49++itfxabBPZp2z4v4GTyq7eFv0LSVL/p7
+ib6O//05/jeARV1B3fAe7Q9lW12WUFYlFGWt3S/bABqouH2hPdS2LaCqFrz1
+LQH7Wf63h71zsJkcD+YACrlIQ6IQoqzQrnLbJfyag29ooJs2uK4LthPAbAEP
+ykNmkcWHuONCDfKbavxFDVUtxr+3baugKKpO22VsW8BC8Mh/Df6usiF48Vz7
+nQ5/JAtE0w4UE4sMTCOEivY1sK+6NguoBR4fKJgoILA9yBdiiDKLIEzK6+3u
+RlJAXxUMHR9mAIbEaJbUEbmtcMuiZIKutoopQMgbtH0F3awyJ6lr5YEj1lXN
+W08I8f1SS1QJQwt1ZEeQT0ego5TDtLzEuz8Es5GDOvEgDFAnXgyEMZ8EoOkO
+jEYBWHYIBQ6cYz9N01FvNkLo4I2mgpBFitIL6Djt04z5EeY9NAwI4jGKy4W0
+qmDso4J1F7I3XmOTscMJTCfCTobZDCYB7jdQtG+9Bia2OX4AjmlCNK2gymN4
+nowDx6ym0b1s/gOwggSkSKQRfBRmQ5MhDUMHXbcheeO/wDeRe5PNDerpkPeb
+DrKr439/wgB1GiD8TKDVOR+jOxGQqYxsPB6xJoVQSuab4KeV9hyPeQ0WsxFj
+2kgPSyQfghNOWSkjHGcqrWVRTMDSUCyjEbimA0mx0IQaHoB87DOGP87xsDkE
+Joo6HEHoWBAkRbs/mAga85ELwhEYKL6KxKIJuVwScqlRLZoN8SQCxxkiH/Az
+wi4+Ie1qGhqg+4LKwDAhXYCmjCL1kMNMkJ24Ov6+BS5N6LmQd+rp4L76b8iN
+BqM5sMI9zYSkFpzOY4epGxeNNIpHuM+EqS/AQ8n7WQ2LaQCGn/EsCKltSvg4
+HXWfDbFR+4kb2Qb1BA3QZ818+7nn4QfoHoboWJyYCYFiMoQ4rwfSIEg55Gvi
+cQqVnDvTwAQvFbSWEyTVJsXlYKAws1rM35iUzsMsj/F5ZwWBjuKq1UScgUOK
+cMatQdSpD4aXtnM1QXFpmguzMsMx0I4nJbePHQ0sIT+cRh5obiJVcANxSQwe
+j1+OkUZr1M43Hd1t2SzFRG6YVBFm1LuG8fDv4FuHRfLvP4BJXtMGHm8Q/dqK
+RVxGFskihDbIIkibs3GA4nPRttBpax8GF6e/H8/UHBCiQUsy/uI7DCuNRmB5
+f4NtlrT/Gl2CspCCRTZMYvDDTPuMVFWZCXdAnoq61ZkSYy2sg8Cb1t0s99fL
+NjQpVmOKTv4v0TqSOzXyokOUF+hn0a+ik2xaj/4I5BR37BgKNBPDHJIfFrxl
+Sr8oztAHz7N5rgkLIBE6EKN7jKZLn+CxPKpWdswpqQ75IQwU+a/zsA90WAMR
+f3CqJplwzjTtA49cj2JbYNFk0bQAytkYHNuRKnkYvx30lmOopRgqJgfdX5C1
++CyStzpiqhMw9KV1E5tHxdRAFoqw7ETTJ7rGcgldANn8RCrTYIYXVbmHYblA
+O8EEAokwwGafWoKPIF5yG72IDhMelTwGtqVv4H9sY6rmGBrYNKFK0L8ZQyZi
+5HIY1X5b6oyIJbwAzbnOU5hxf08KVIzljAs5VUy2vxr3625CHVEYNuQN+emI
+pyWyK20Fpz1GSms4gTT2ONyh7JWpZJ4BXkbHJQhLh4mZrfsJlJQzzWNwvATz
+i5RNhdjIQxP1MGXv4slQM3F0aSpiSqRsQSWLYzhDfDRFzFmEqVzv+EgUdWyT
+k+DujpRaEfvogxuERa6FaIVySBqLSijkYczyKuFT0AJowHLiSv0J4bGvqxKe
+xMkcuSl/hG4aJ6/oAK73T/Ddw8J5K2FOp5iZzJKMLEu6lDb5aAoIbRPl4oGl
+t1NbOLmH2KlqKAJyipoVAoWXGoO9g0mD55hg+TGbaD2Lwca2MKC4giKr5iJC
+2xzZYOKamDnORah5GKZDF9wwRJgQBVVCjLmHHWbQlCl4GFg1wwILrd3yQghc
+my08zEqYoihN3OfYIolw45wNVRgHMoP+O0BOXAs5GmZ7PNxPwWI+kRRbYJoW
+hP/4PUx7EMZzhCGUOcZ7GwKk3vLGnAeYYlLx9HF1A/7hP/8DfIQlF97MRT5h
+OSEksc+iHpITKMeY13gkJe1ZaR3kq2M0KA1DUvhqwpHVwtQqYxUZMMI5Qj5I
+dycir7Ed9GUOGJYPed2I9PIGwySBcHGuP8RUqUKpOfjbY4nEeQV5HIBpoa9B
+wRvoW1hRDkkDU5Vhdlg6LLnIcSAcemD7icpLf4P/DToBFbT7ZFsnSsgaY8Bp
+vPyTKbvImr8tlKKpCmLRya6Ffe3J7BDnhu9CUsFvKchiDG7A3lceLqoAS3pE
+TNQVajdnl7at0nksLjiTpVTwimwrufIR0dWUbXMKMcLXtyn+/2aUhj7HDNxo
+mWogMsglVtoXJFVpQDpAvejst395VYSdoqCloMF0SMZg7flOP1XKqEqvuXOn
+7Xeje6zEszpUlfOCqkftV8Tw3EEWmI+1Q2CRhmk+DtOSUuN2WVYcb5/s9OMA
+UzcdrcuiEwvRX1SkYPwmPCRnbb+nOv2ofqq7/WgM6odj/EL3WMTDQnIpKjq2
+FMc+1dJcsqtsOlbZ7SdEpf10a441Vi42OyV/OAQfXYBhBezIpjJFd3E6Vo0q
+UURBFtnkhRx0CegXLax6auk5r2Bm74mQiwWQjzPV9kaY7JUYBQ0eJpzkRF2L
+hlZIyZSBtWaASYrlcg33s4rAxQwCnKC6id5ziC7RMtCrTkiphxG1EyAfb+0M
+fYNnCp6DgN2eF2UYazJw0X41w4VxXomwuc8luC758dCxeqNc+zkJNcNCk4pJ
+NwghRHdjYMAZzxdYzYw4JpjoAfOqWUoOM5Kh3Y5so7NFB6ckh4eBRwRgbRVg
+vuVYNkTk1lcVcQLaR7oavgKpr3NsLJQbaCjB1EX+34hkE6sWtULAYbVTNuDs
+B9NLHlf+IRHuHAsAKe59DB8pJJjDNDn6Dj3kpQAFN3EpkCfQomEV7iWVslZR
+jFCXSau9Jg9aCjqQJyAqApMluxJxD+bphHOsnCrGYDpoBy+4KMSj23WZEYY9
+mYPIKX8FqlTyvBQh57UiBxKFXzBdCNjLlJlw96QVIRZYJvOz9DYyy9NbvvcZ
+KsUir14qRTsN5k8KfT+qoLGAMKVXb1eWlM7JYXI2rfNiQNOZ1ZxxyzRNShai
+KF1SLKpU3U/lms4HoJ4KTRVNA8sgh4m4xkl/u7ZTJBClZUemA15ikAxJCg6E
+sjVZGr09tLYO+2NrJKAWw6icI6tBnpfH1qkq+dq2IolAwKl1KMm6KVhvJaoK
+fk4ARJ3jJQUt2rV9qEaSca+1m2SIzrBjCItp2MphT5rrIQ2dBm7FBq5TZcnu
+RxW47CkiT1RntMjDFRv+9nz0Gjo6yiGvkWWigF4uymHqOcpWhSvtABOojh2I
+pMGjZEvXMXlKaTlPCqhq4dC/jlbs4Hp7aFutYqCIXItlQstGZ4BuKZVCCNBc
+FKVTLGdoJcz3bK6shmmxLC9rUHBVFq+1glAyLvpd5eVTEynRLVpjFPt12+Mw
+oWMUSctGWjKrTcFnoxgE+pJaMSFYENIQ7jtWTR1IbR3mT3StQcwHS84H4VCu
+LDMvyTyvW8kazo7np7OEBUS0MonTYgmLmQaGqDoL2G8zajXh6DWa/x/7+kNq
+i4/xDJSBKljK6wjqDLAttXKJyesIoakKiqeC2UAsB5dcSjowP61VCCHorRAO
+eLaJbLVWsYEPSihy2fGJ6ls1CeEbFMkVporNMTo7wdKkVYi84JqYCuhh5W7m
+ZGjJ6CdDUHZoBBlAta5ZDP0xJ1/Ko9XSoy0zhCsoYCxvk1J6eKm/UugvLu4o
+KS31l0Aglv6WeXcbf5I2YJBh24Zg4QRobR32Y4dE0cZ3Xv43WRSSZWEbnBu5
+UKACdCGeFrdKQohnzQrNShRJuQxyOSZsXlKyuCmYKePgtMYet3wsOsaRhiHM
+DhmHkscyczpoV5nLY9R3EvaKhTzEdpyGDpfmPnbzbJEzU+aYcUqKdTPWy7aJ
+KbkXwQ+xfub0FR1sPJVLq5Hoh2msyNA+hCE2ZOlRziwWL3D37EeYzQt4D2td
+U0eXH6XwY8yjyQPqdgACkcKDwSd3srKRVc9DvEwztA1RJYSUClMaT6fEyrPg
+PtZKYAFJSNWrhQl5CK5tsHP4b8UpJuoesqDj/ghDyVSWPrZc9iFH5OriRAyq
+/CklgTTkqsHxQ65PdI5SSGsmqDJpUQKFbWBhlRZKMnQ6SthhhWHH4PWXTFNS
+pXMuIUnAkhIg8uwRfH+NooqmfFtMmU2oJQR1qpa2Psjf+xw/5FI02wl5gGda
+02y4dKbSVxT8e+zB5TlQypFuqq5LGO2TClqeClQLF5Skqv4dGF5HPUzepeMp
+5+/f2+yYL61pu7ymzT5lv3V4/fAXP/yB3NS0L9DXPUeJevbzf0UfnEj0PYAH
+b/x8C6Jc6ScefABeffZX6aM9zd+i7TBRdKzCe/qC8PQ1eGt00bO9HvYmIdy3
+BSFbM/YMHfqBzUj/1AUR/Gs9me9vMpnKu5W4d4kMezJ7MnsyV8m8SYd+6mIJ
++frdM/zO3OxdxHM/fD/8+3r4Jz/5J/TBLfX9p23bg2va9ta0XTnUdnD9o9gv
+iiJse/nll+kXb23a9sorr7RtgzVt5zFGt+1e2Yb0t7w9LXk7uP7IkX6PHRyA
+++QT8PUnn9D2+Xugtnlrb4u2wRmOJXq6surytr+mbV2/08pqF/pYZwdvR8vZ
+7Wq/248/uN3ivvnmm+0U2u9MIZ5BiPrx3/0G3JQf/H2ZfuBhnWbcOtq2d8q2
+0xx77cOPY9utW7ew7fbt2/SLt7ZpG2x47Ouvv75xv3tlG9KveEERvx2/39xY
+fpu2ES2H6dOvfRCGH38G/vrmM0gffQ/UNm/tbdE2OMOxRM9xOto/Z12+U3Zw
+3jZ50rgDKZ1OG39wu8W9c+fO2ql+dwTrfvgLHJ5g8IPd8fu5d348tesr742h
+eKT3CC/vuaHENUPQyIvNm9U7Kyt5QfC6tr0dEnmNN9tbBUepuJiNLtc1HMzV
+fDCdkbiq+2ibpq7b3B2lfKOOru5waWBsa2CPxRUzdFuhM/7hmrbiQijt3rZF
+l3wY6jpWyAIdNG+8pi29aEqXF1mJPXQT1Df/9mjbBVFad2RaoSUs5SeuJ/2X
+NW2S0n3C+fI7SB/O4ILu31B3corr0OyxuIiJrNIZ/8+att1b5wLyyRB12rnn
+tJazeyRmd72+bZeUXpLdxcMC6hWIbtsO3eV7M1L1Q/XJWD9UP9TdNFQ/m85t
+KD4lu7c92Ms9xFYQjPDuJb+HOFeI3hq2g1hWB5svpmw4FJZMaSAe30D3BfDt
+BPQMki0WSTangErfyLb5Xmb6ncT/yk+ROuvix1kooL85eKbLzzrZdlFjQwqE
+cu/nR1aYZgjVpisVXP9/Z2O2lw+BEPeXRvMfb7busLXgx54HfNtoM+e7o4Np
+udXKwhlUXyZ8qx6haCh7HmOLFYNNKRjIhgbqetEinmVh4F3p6+4iiD5s9RBL
+iN4aeohzhegNqodYQvTWcC55k3wGVydv2kXJJG7ht/h5VMEok0+I2GXJ1CwW
+7ZNqEteEYX5nq/PFG1IgIK6KhzMmt09bK51fsVZmMT9Jj+5AiG+9tpNqSfw1
+MJsgljOGjc/Sbs15Ho/kw7Tp0Z86JPV252HPVi05hiEfQRkdVxntoFrCSkjr
+q6U+gPUQdwNEbw09xLlC9AbVQ5wrxPvaoHZ4Rqk9l7HIls/P32ltVMxymOY5
+5GnED69PZm/tsjZCCuixWpbn8bN++ZRa8Pfwjd2dTkIKyiQAn6Gn4hn2Ozqj
+xNctuy5MZgnY/HaFXddI/NfMxBPT+KFsO62RlPkvZhE/P5V53F2BtM2Fpe9K
+z3YXQbyvI0wP0VtDD9EbVA9xcRD8nMA/73Ra9vmD4w89z/38+4SXbG76+5oc
+s/sCTt7/+dX93ddoHt1/5MWVKitq6KGw8iGvfNjnxGHi3TNXV181KB+R3n3b
+Ij0lXLcCGGMi54TZUYj7V15Ot+7dfG9MJyDeNeepZ+4LUj67Sgp0Xlm2/i1u
+8t2VJIW8XsdN951W617udZsf+x8ibAVpOu9CHChuDr386J+/u+Y1UJjdurYH
+oW9DkJRrBHvkFULc5Y9Fl/tll0Pv8+G/P+p2WX3hTheia0HaPf8P4AIMNg==
+\
+\>"]]
+}, Open  ]]
+},
+WindowSize->{640, 750},
+WindowMargins->{{233, Automatic}, {49, Automatic}},
+FrontEndVersion->"7.0 for Mac OS X x86 (32-bit) (November 10, 2008)",
+StyleDefinitions->"Default.nb"
+]
+(* End of Notebook Content *)
+
+(* Internal cache information *)
+(*CellTagsOutline
+CellTagsIndex->{}
+*)
+(*CellTagsIndex
+CellTagsIndex->{}
+*)
+(*NotebookFileOutline
+Notebook[{
+Cell[CellGroupData[{
+Cell[567, 22, 2692, 65, 163, "Input"],
+Cell[3262, 89, 16329, 335, 274, 9688, 224, "CachedBoxData", "BoxData", \
+"Output"]
+}, Open  ]]
+}
+]
+*)
+
+(* End of internal cache information *)

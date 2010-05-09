@@ -36,6 +36,8 @@ This is what we aim to address with this paper. While it's unlikely that we can 
 
 We will also explore a simple parallelized particle renderer, as well as the potential for the integration of our simulator into the popular open-source 3D package, Blender.
 
+It is important to understand that the system we've developed is purely for offline work --- it is not suitable for realtime simulation and rendering. Thus, {\it cinematic}. This is primarily because of the relatively poor performance of the renderer. However, as you'll notice in section \ref{performanceSection}, the speedup provided by our work {\it is} actually sufficient to make some simulations fast enough to run in real time, if one were to find a faster renderer.
+
 \section{Prior Art}
 
 \section{Implementation}
@@ -58,6 +60,14 @@ It consists of about 3000 lines of C and Objective C, which encompass the curve 
 
 \section{Performance \& Results}
 
+\label{performanceSection}
+
+\begin{figure}
+    \includegraphics[width=84.5mm]{basicSpeedPlot.pdf}
+    \caption{Simulation frame-rate of various different systems on CPU vs. GPU; higher values are better; the horizontal line rests at 60 fps}
+    \label{fig:basicSpeedPlot}
+\end{figure}
+
 \subsection{Hardware}
 
 \subsection{Benchmarks}
@@ -69,6 +79,8 @@ It consists of about 3000 lines of C and Objective C, which encompass the curve 
 \section{Future Work}
 
 \subsection{Spatial Hashing}
+
+One improvement which would massively improve the performance of both the renderer and the
 
 \subsection{Design Tools}
 
