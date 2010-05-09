@@ -32,7 +32,9 @@ We will also touch briefly on ways to design a system for describing particle sy
 
 Simulation of large particle systems requires a large amount of computation --- each particle must be inspected and updated. For certain types of particle systems --- n-body gravity, for example --- each particle is affected by its neighbors, increasing the required calculation time drastically.
 
-This is what we aim to address with this paper. While it's unlikely that we can contribute any improved simulation algorithms, we can instead work to parallelize these algorithms and implement them with OpenCL, which will allow them to run on the very-parallel processor contained within modern graphics cards. This paper will demonstrate both the parallelization of the application of forces on large numbers of particles and the significant performance gained by doing so.
+This is what we aim to address with this paper. While it's unlikely that we can contribute any improved simulation algorithms, we can instead work to parallelize these algorithms and implement them with OpenCL, which will allow them to run on the GPU contained within modern graphics cards. This paper will demonstrate both the parallelization of the application of forces on large numbers of particles and the significant performance gained by doing so.
+
+We will also explore a simple parallelized particle renderer, as well as the potential for the integration of our simulator into the popular open-source 3D package, Blender.
 
 \section{Prior Art}
 
