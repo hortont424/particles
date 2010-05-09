@@ -44,7 +44,7 @@
 
 #include "librenderer.h"
 
-#define FRAME_COUNT 500
+#define FRAME_COUNT 1000
 #define RESOLUTION 500
 
 static RERendererFrameCallback reFrameCallback = NULL;
@@ -142,14 +142,20 @@ void RERendererStart()
         fflush(stdout);
 
         reSimulator = reFrameCallback();
-        COProgramSetArgument(prog, 0, COArgumentNewWithBuffer(reSimulator->clParticles, false));
-        COProgramSetArgument(prog, 1, COArgumentNewWithBuffer(reSimulator->clNewtonian, false));
-        COProgramSetArgument(prog, 2, COArgumentNewWithBuffer(output, false));
-        COProgramExecute(prog);
-        COContextWait(ctx);
-        COBufferGet(output, (void **)&image);
 
-        REExportImage(step);
+        //if(step == 350)
+        {
+            COProgramSetArgument(prog, 0, COArgumentNewWithBuffer(reSimulator->clParticles, false));
+            COProgramSetArgument(prog, 1, COArgumentNewWithBuffer(reSimulator->clNewtonian, false));
+            COProgramSetArgument(prog, 2, COArgumentNewWithBuffer(output, false));
+            COProgramSetArgument(prog, 3, COArgumentNewWithInt(reSimulator->elementCount));
+            COProgramExecute(prog);
+            COContextWait(ctx);
+            COBufferGet(output, (void **)&image);
+
+            REExportImage(step);
+            //exit(0);
+        }
 
         //printf("%f\n", image[0]);
     }
