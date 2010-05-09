@@ -34,7 +34,7 @@
 #include <libpreviewer/libpreviewer.h>
 #include <librenderer/librenderer.h>
 
-#define BENCHMARK_FRAMES 10
+#define BENCHMARK_FRAMES 500
 
 static SMSimulator * simulator;
 
@@ -50,7 +50,7 @@ int main(int argc, const char ** argv)
 {
     SMOptionsParse(argc, argv);
 
-    simulator = SMSimulatorNewFromFile("../Systems/n-body.psys");
+    simulator = SMSimulatorNewFromFile("../Systems/gravity.psys");
     SMSimulatorPushData(simulator);
 
     if(simulatorOutputMode == SM_PREVIEWER_OUTPUT)
