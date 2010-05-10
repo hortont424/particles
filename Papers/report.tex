@@ -144,7 +144,62 @@ One key performance consideration while evaluating emitters is how many new part
 
 \subsubsection{Evaluate forces}
 
+At this point, all particle data is copied to the GPU. Each force's kernel is instantiated once for each particle, and many such kernels can operate on their respective particles in parallel.
+
+Each instance of the force kernel computes its own contribution to the acceleration of the particle it affects, adding the result to that particle's global acceleration accumulator.
+
+A sample force --- pushing outward on all particles from one direction, with falloff --- is described in figure \ref{forceCode}.
+
+\begin{figure}
+
+    \lstset{language=C}
+    \lstset{basicstyle=\footnotesize\ttfamily}
+    \lstset{stringstyle=\color{blue}\ttfamily}
+    \begin{lstlisting}[frame=trbl]{}
+__kernel void force(
+    __global PAPhysicsParticle * input,
+    __global PAPhysicsParticle * output,
+    __global PAPhysicsNewtonian * newtonIn,
+    __global PAPhysicsNewtonian * newtonOut,
+    __global PAPhysicsForce * force,
+    const unsigned int count)
+{
+    int id = get_global_id(0);
+    float4 fpoint, loc, accel, uv;
+    float dist;
+    fpoint = loc = accel = uv = (float4)(0.0f);
+
+    if(id > count || input[id].lifetime == 0)
+        return;
+
+    loc = (float4)(input[id].x, input[id].y,
+                   input[id].z, 0.0f);
+    fpoint = (float4)(force->particle.x,
+                      force->particle.y,
+                      force->particle.z, 0.0f);
+    uv = normalize(loc - fpoint);
+    accel = force->data.normal.strength * uv;
+    dist = distance(loc, fpoint);
+    accel = accel * (1.0f / powr(dist + 1.0f,
+        force->data.normal.falloff.strength));
+
+    if(dist < force->data.normal.falloff.min ||
+       dist > force->data.normal.falloff.max)
+        accel = (float4)(0.0f);
+
+    newtonOut[id].ax += accel.x;
+    newtonOut[id].ay += accel.y;
+    newtonOut[id].az += accel.z;
+}
+    \end{lstlisting}
+
+    \caption{A simple sample force, which pushes outward on particles from a point, with falloff}
+    \label{forceCode}
+\end{figure}
+
 \subsubsection{Integrate positions}
+
+Our simulation uses a form of Verlet integration from \cite{verlet}, which is theoretically much more stable than basic Euler integration (which was used during the project's inception).
 
 \subsection{Preview}
 
@@ -169,6 +224,8 @@ The preview subsystem takes the output from the simulator and uses an OpenGL vie
 \end{figure}
 
 \subsection{Hardware}
+
+All benchmarks and performance tests were taken on a machine running Mac OS X with a Core 2 Duo E7200 at 2$\times$2.53GHz with 8GB of RAM and an ATI Radeon 4890 at 800$\times$850MHz with 1GB of VRAM.
 
 \subsection{Benchmarks}
 
