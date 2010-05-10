@@ -103,6 +103,7 @@ void RERendererStart()
 {
     SMSimulator * reSimulator = reFrameCallback();;
     struct timeval startTime, currentTime;
+    bool doRender = true;
 
     COContext * ctx = reSimulator->computer;
     COProgram * prog = COProgramNew(ctx, "render", SMKernelSource_render);
@@ -145,20 +146,25 @@ void RERendererStart()
 
         reSimulator = reFrameCallback();
 
-        COProgramSetArgument(prog, 0, COArgumentNewWithBuffer(reSimulator->clParticles, false));
-        COProgramSetArgument(prog, 1, COArgumentNewWithBuffer(reSimulator->clNewtonian, false));
-        COProgramSetArgument(prog, 2, COArgumentNewWithBuffer(output, false));
-        COProgramSetArgument(prog, 3, COArgumentNewWithInt(reSimulator->elementCount));
-        COProgramSetArgument(prog, 4, COArgumentNewWithInt(RESOLUTION));
-        COProgramExecute(prog);
-        COContextWait(ctx);
-        COBufferGet(output, (void **)&image);
+        //doRender = (step == 350);
 
-        // This whole nonsense is due to a bug in (maybe) the Apple-ATI OpenCL
-        for(int a = 0; a < RESOLUTION * RESOLUTION; a++)
-            imageGL[a] = (GLbyte)image[a];
+        if(doRender)
+        {
+            COProgramSetArgument(prog, 0, COArgumentNewWithBuffer(reSimulator->clParticles, false));
+            COProgramSetArgument(prog, 1, COArgumentNewWithBuffer(reSimulator->clNewtonian, false));
+            COProgramSetArgument(prog, 2, COArgumentNewWithBuffer(output, false));
+            COProgramSetArgument(prog, 3, COArgumentNewWithInt(reSimulator->elementCount));
+            COProgramSetArgument(prog, 4, COArgumentNewWithInt(RESOLUTION));
+            COProgramExecute(prog);
+            COContextWait(ctx);
+            COBufferGet(output, (void **)&image);
 
-        REExportImage(step);
+            // This whole nonsense is due to a bug in (maybe) the Apple-ATI OpenCL
+            for(int a = 0; a < RESOLUTION * RESOLUTION; a++)
+                imageGL[a] = (GLbyte)image[a];
+
+            REExportImage(step);
+        }
     }
 
     printf("\n\n");
