@@ -22,6 +22,7 @@
 \begin{figure}
     \includegraphics[width=84.5mm]{gravity.png}
     \caption{A simple gravity simulation with two emitters and three supermassive particles (approx. 45,000 particles)}
+    \label{titlefig}
 \end{figure}
 
 \section*{Abstract}
@@ -117,6 +118,8 @@ The particle system design tools implemented during the course of this project a
 
 The primary design tool, which can be seen in figure \ref{fig:interpolator}, is called {\it Interpolator}, as it is quite literally a tool to design interpolation curves. It's a Cocoa application which provides an interface to edit arbitrary B\'{e}zier splines and map them to properties of an element in the particle system. For example, one curve might dictate the $x$ position of an emitter, while another might be mapped to the lifetime that emitter's children.
 
+Since this tool was not finished in time for this paper, it is not integrated into the simulation and rendering phases introduced here.
+
 \subsection{Simulation}
 
 The simulation phase is the heart of our project. Starting from a system description file (as shown in figure \ref{curveListing}), it eventually provides the position of each particle to either the previewing or rendering subsystems in a frame-by-frame manner. It involves various steps, which we'll outline below.
@@ -129,13 +132,15 @@ The particle system description file, in JSON format, is parsed with Michael Cla
 
 There are quite a few OpenCL kernels included with this project; since the program now knows which ones it needs, it can now instantiate one kernel for each force, as well as one copy of the interpolator kernel.
 
-This is done by making a copy of the appropriate master kernel, all of which are loaded into a kernel library at the beginning of the process.
+This is done by making a copy of the appropriate master kernel, all of which are loaded into a kernel library and compiled at the beginning of the process.
 
 \subsubsection{Randomly generate default particles}
 
-Some particle system have an initial set of particles --- some, because they don't include any emitters, others, because they simply want to start with some particles displayed. At the moment, the only parameter of the initial particles that can be controlled is the number; they are placed randomly in the unit cube with zero initial velocity. Eventually, it would be ideal to support manipulation of the range and location of random positions, as well as of the mass and initial velocity.
+Some particle systems have an initial set of particles --- some, because they don't include any emitters, others, because they simply want to start with some particles displayed. At the moment, the only parameter of the initial particles that can be controlled is the number; they are placed randomly in the unit cube with zero initial velocity. Eventually, it would be ideal to support manipulation of the range and location of random positions, as well as of the mass and initial velocity.
 
 \subsubsection{Evaluate emitters}
+
+\label{emitters}
 
 Evaluation of emitters primarily involves adding new particles at the location of the particle and giving them an initial velocity (depending on the emitter's settings).
 
@@ -149,7 +154,7 @@ At this point, all particle data is copied to the GPU. Each force's kernel is in
 
 Each instance of the force kernel computes its own contribution to the acceleration of the particle it affects, adding the result to that particle's global acceleration accumulator.
 
-A sample force --- pushing outward on all particles from one direction, with falloff --- is described in figure \ref{forceCode}.
+A sample force --- pushing outward on all particles from one direction, with falloff --- is included in figure \ref{forceCode}.
 
 \begin{figure}
 
@@ -201,7 +206,13 @@ __kernel void force(
 
 \subsubsection{Integrate positions}
 
-Our simulation uses a form of Verlet integration from \cite{verlet}, which is theoretically much more stable than basic Euler integration (which was used during the project's inception).
+Our simulation uses a form of Verlet integration from \cite{verlet}, which is theoretically much more stable than basic Euler integration (which was used during the project's inception) in order to apply the acceleration values to the particles positions. This works by keeping around the previous position of the particle, instead of a velocity value:
+
+\begin{equation}
+    p_{next}=(p-p_{last}) + (a_p * t^2),
+\end{equation}
+
+where $t$ is the timestep and $a_p$ is the acceleration due to all of the forces on the given particle.
 
 \subsection{Preview}
 
@@ -211,9 +222,23 @@ Our simulation uses a form of Verlet integration from \cite{verlet}, which is th
     \label{fig:preview}
 \end{figure}
 
-The preview subsystem takes the output from the simulator and uses an OpenGL view to draw all of the particles as uniformly sized red dots.
+The preview subsystem takes the output from the simulator and uses an OpenGL view to draw all of the particles as uniformly sized red dots, as you can see in figure \ref{fig:preview}. This rendering is very rough but also very quick --- fast enough to be real-time, in many cases.
+
+Preview rendering should be used when designing particle systems, as it provides nearly instant --- though relatively unattractive --- feedback.
 
 \subsection{Rendering}
+
+Our renderer is currently very simple: it takes the particle data from the simulation phase and turns it into a greyscale image. It does this by iterating over each pixel of the output image, mapping the pixel's location into 'particle space', then searching through all of the particles, finding those which are within $\epsilon$ units of it, and updating the output image. Particles are orthographically projected onto the plane of the image, and --- at the moment --- depth information is completely ignored.
+
+For the purposes of all of the systems contained in this paper, $\epsilon=0.1$.
+
+There are two main rendering modes at the moment: {\bf smooth}, and {\bf cloudy}.
+
+{\bf Cloudy} simply increments the luminance of the pixel for each particle it finds that's within $\epsilon$ units, leading to 'circles of influence' around each particle, as seen in figure \ref{titlefig}.
+
+{\bf Smooth} weights the increase in luminance by the distance to the particle, according to $(0.1 - dist) \cdot 50$, as seen in figure \ref{smoothfig}.
+
+We've asked numerous people which of the two rendering modes they prefer, and have come up almost completely split, so they're both included, for the time being.
 
 \section{Performance \& Results}
 
@@ -231,7 +256,23 @@ All benchmarks and performance tests were taken on a machine running Mac OS X wi
 
 \subsection{Benchmarks}
 
+Figure \ref{fig:basicSpeedPlot} shows the relative frame-rates of three different particle systems which we've been using as sample systems on the CPU versus the GPU.
+
+The {\bf n-body} system is a simulation of 16,384 particles all interacting with each other, simulating gravity. There are no emitters in this system, and only one force.
+
+The {\bf simple gravity} system (also pictured in figure \ref{titlefig}) is a simulation with two emitters --- which emit 20 particles per frame each --- and three equal-strength gravity wells (in the top right, top left, and center). The gravity simulation in this system is much simpler than in {\bf n-body}, as the particles don't interact with each other, just with the three wells.
+
+The {\bf two-forces} system is a simulation with 1,048,576 particles and two outward-acting normal forces placed equidistant from the center on a diagonal through the random cloud of particles.
+
+You'll note that {\bf n-body} shows a drastic speedup when moved to the GPU --- almost 10x! This is primarily because the n-body force is perfect for parallelization, as it has a long per-particle runtime (each particle has to iterate over all of the other particles, since we lack a spatial hashing data structure).
+
+Something similar is true for {\bf two-forces}: while it's not actually nearly as computationally intensive per-particle, there are such a sheer number of particles that the parallelism comes into play in a big way, providing a less-impressive-but-still-significant 4$\times$ speedup.
+
+The {\bf simple gravity} system shows the weakness of our approach: since emitters are evaluated on the CPU no matter what (because of the infeasbility of resizing buffers on the GPU discussed in section \ref{emitters}), and incur an additional pair of copies to/from the GPU, the CPU is able to significantly outpace the GPU. This makes it clear that emitter-heavy systems with few expensive forces are {\it not} well suited for our approach.
+
 \subsection{Video}
+
+Both the preview and rendering subsystems have the ability to output a PNG file for each simulated frame. These can be recombined and encoded with most video editing tools into a usable format.
 
 \section{Applications}
 

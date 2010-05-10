@@ -1,1 +1,1 @@
-pdflatex report.tex && bibtex report && pdflatex report.tex && open ./report.pdf
+bibtex report && pdflatex report.tex && pdflatex report.tex && open ./report.pdf
