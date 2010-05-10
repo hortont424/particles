@@ -146,7 +146,7 @@ void RERendererStart()
 
         reSimulator = reFrameCallback();
 
-        //doRender = (step == 350);
+        doRender = (step % 100 == 0);
 
         if(doRender)
         {

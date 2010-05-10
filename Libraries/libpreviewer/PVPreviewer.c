@@ -119,7 +119,7 @@ static void display()
     glOrtho(0.0 - zoom, 1.0 + zoom, 0.0 - zoom, 1.0 + zoom, -100.0, 100.0);
 
     glColor3f(1.0, 0.0, 0.0);
-    glPointSize(1.0);
+    glPointSize(2.0);
 
     if(simulator)
     {

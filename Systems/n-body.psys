@@ -1,6 +1,6 @@
 {
     "initialParticles": {
-        "count": 16384
+        "count": 1024
     },
     "forces": [
         {
