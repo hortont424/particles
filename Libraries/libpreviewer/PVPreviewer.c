@@ -109,7 +109,7 @@ void timer(int extra)
 
 static void display()
 {
-    float zoom = 2.0;
+    float zoom = 0.1;
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
@@ -117,9 +117,6 @@ static void display()
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
     glOrtho(0.0 - zoom, 1.0 + zoom, 0.0 - zoom, 1.0 + zoom, -100.0, 100.0);
-
-    //glScalef(2.0, 2.0, 2.0);
-    //glTranslatef(-0.5, -0.5, -0.5);
 
     glColor3f(1.0, 0.0, 0.0);
     glPointSize(1.0);
