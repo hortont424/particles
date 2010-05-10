@@ -2,9 +2,13 @@
 
 \usepackage{parskip}
 \usepackage{graphicx}
+\usepackage{courier}
 \usepackage{footmisc}
+\usepackage{listings}
 \usepackage{amsmath}
 \usepackage{url}
+\usepackage{color}
+\usepackage{xcolor}
 \onlineid{0}
 
 \title{Cinematic Particle Systems with OpenCL}
@@ -46,7 +50,57 @@ The code for this paper is available under the 2-clause BSD license at:
 
 \url{http://github.com/hortont424/particles}
 
-It consists of about 3000 lines of C and Objective C, which encompass the curve editor and other design tools, an abstraction layer on top of OpenCL, and all of the code to drive simulation, preview, and rendering. In addition, there are about 350 {\bf [UPDATE THIS]} lines of OpenCL Kernel Language, which includes the code to apply each of the forces as well as the renderer.
+It consists of about 3000 lines\footnote{According to {\it sloccount}} of C and Objective C, which encompass the curve editor and other design tools, an abstraction layer on top of OpenCL\footnote{the Open Computing Language, a framework for creating programs using a language similar to GLSL and run on the GPU}, and all of the code to drive simulation, preview, and rendering. In addition, there are about 350 {\bf [UPDATE THIS]} lines of OpenCL Kernel Language, which includes the code to apply each of the forces as well as the renderer.
+
+\subsection{Particle Systems}
+
+A particle system is defined by a simple JSON\footnote{JavaScript Object Notation, a format often used today for information exchange in place of things like XML, due to its lightweight nature} file (figure \ref{curveListing} is a very simple example of such a file), which lays out all of the system's parameters: the number of particles to start out with, the location and properties of emitters, the location and properties of forces, and many other things. If {\it Interpolator} had been finished, this file would also contain the mappings between these properties and various curve files.
+
+\begin{figure}
+
+    \lstset{language=Python}
+    \lstset{basicstyle=\footnotesize\ttfamily}
+    \lstset{stringstyle=\color{blue}\ttfamily}
+    \begin{lstlisting}[frame=trbl]{}
+{
+    "initialParticles": {
+        "count": 1
+    },
+    "forces": [
+        {
+            "kernel": "gravity",
+            "strength": 1.0,
+            "noise": 0.0,
+            "mass": 100000000000.0,
+            "particle": {
+                "fixed": true,
+                "x": 1.2,
+                "y": 1.2,
+                "z": 0.5
+            }
+        }
+    ],
+    "emitters": [
+    {
+        "birthRate": 20.0,
+        "initialVelocity": 0.0,
+        "particle": {
+            "fixed": true,
+            "x": -1.2,
+            "y": 1.2,
+            "z": 1.5
+        }
+    }],
+    "integration": {
+        "kernel": "verlet",
+        "timestep": 0.005
+    }
+}
+    \end{lstlisting}
+
+    \caption{A simple sample curve file, with one emitter and one force}
+    \label{curveListing}
+\end{figure}
 
 \subsection{Design}
 
@@ -58,7 +112,7 @@ It consists of about 3000 lines of C and Objective C, which encompass the curve 
 
 The particle system design tools implemented during the course of this project are not entirely functional, as they took a backseat to the simulation, preview, and rendering components, mostly due to the fact that it's possible to design a system by hand.
 
-The primary tool
+The primary design tool, which can be seen in figure \ref{fig:interpolator}, is called {\it Interpolator}, as it is quite literally a tool to design interpolation curves. It's a Cocoa application which provides an interface to edit arbitrary B\'{e}zier splines and map them to properties of an element in the particle system. For example, one curve might dictate the $x$ position of an emitter, while another might be mapped to the lifetime that emitter's children.
 
 \subsection{Simulation}
 
@@ -68,7 +122,7 @@ The primary tool
 
 \begin{figure}
     \includegraphics[width=84.5mm]{preview.png}
-    \caption{Example frame of preview output (simple gravity system)}
+    \caption{Example frame of preview output (simple gravity system); approximately 15,000 particles}
     \label{fig:preview}
 \end{figure}
 
