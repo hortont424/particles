@@ -17,7 +17,7 @@
 
 \begin{figure}
     \includegraphics[width=84.5mm]{gravity.png}
-    \caption{A gravity simulation with two emitters and three supermassive particles (approx. 45,000 particles)}
+    \caption{A simple gravity simulation with two emitters and three supermassive particles (approx. 45,000 particles)}
 \end{figure}
 
 \section*{Abstract}
@@ -50,11 +50,27 @@ It consists of about 3000 lines of C and Objective C, which encompass the curve 
 
 \subsection{Design}
 
+\begin{figure}
+    \includegraphics[width=84.5mm]{interpolator.png}
+    \caption{A screenshot of the unfinished {\it Interpolator} particle system design tool}
+    \label{fig:interpolator}
+\end{figure}
+
+The particle system design tools implemented during the course of this project are not entirely functional, as they took a backseat to the simulation, preview, and rendering components, mostly due to the fact that it's possible to design a system by hand.
+
+The primary tool
+
 \subsection{Simulation}
 
 \subsubsection{Physics}
 
 \subsection{Preview}
+
+\begin{figure}
+    \includegraphics[width=84.5mm]{preview.png}
+    \caption{Example frame of preview output (simple gravity system)}
+    \label{fig:preview}
+\end{figure}
 
 \subsection{Rendering}
 
@@ -80,7 +96,9 @@ It consists of about 3000 lines of C and Objective C, which encompass the curve 
 
 \subsection{Spatial Hashing}
 
-One improvement which would massively improve the performance of both the renderer and the
+One improvement which would massively improve the performance of both the renderer and some of the forces would be the inclusion of a spatial hashing mechanism.
+
+For example, the renderer currently iterates over all of the particles to find the few which are very close to the pixel currently being rendered --- this operation is currently implemented in the most na\"{i}ve way possible, which is $O(n^2)$. The implementation of a kd-tree would make this $O(n^{2/3})$ instead --- quite a significant improvement, though at the expense of a measurable increase in complexity.
 
 \subsection{Design Tools}
 
