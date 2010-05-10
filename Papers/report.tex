@@ -63,6 +63,7 @@ A particle system is defined by a simple JSON\footnote{JavaScript Object Notatio
     \lstset{language=Python}
     \lstset{basicstyle=\footnotesize\ttfamily}
     \lstset{stringstyle=\color{blue}\ttfamily}
+    \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
     \begin{lstlisting}[frame=trbl]{}
 {
     "initialParticles": {
@@ -155,6 +156,7 @@ A sample force --- pushing outward on all particles from one direction, with fal
     \lstset{language=C}
     \lstset{basicstyle=\footnotesize\ttfamily}
     \lstset{stringstyle=\color{blue}\ttfamily}
+    \lstset{numbers=left, numberstyle=\tiny, stepnumber=1, numbersep=5pt}
     \begin{lstlisting}[frame=trbl]{}
 __kernel void force(
     __global PAPhysicsParticle * input,
@@ -164,36 +166,36 @@ __kernel void force(
     __global PAPhysicsForce * force,
     const unsigned int count)
 {
-    int id = get_global_id(0);
     float4 fpoint, loc, accel, uv;
     float dist;
-    fpoint = loc = accel = uv = (float4)(0.0f);
+
+    int id = get_global_id(0);
 
     if(id > count || input[id].lifetime == 0)
         return;
 
+    // Load location of force and current point
     loc = (float4)(input[id].x, input[id].y,
                    input[id].z, 0.0f);
     fpoint = (float4)(force->particle.x,
                       force->particle.y,
                       force->particle.z, 0.0f);
+
+    // Compute acceleration on particle
     uv = normalize(loc - fpoint);
     accel = force->data.normal.strength * uv;
     dist = distance(loc, fpoint);
     accel = accel * (1.0f / powr(dist + 1.0f,
         force->data.normal.falloff.strength));
 
-    if(dist < force->data.normal.falloff.min ||
-       dist > force->data.normal.falloff.max)
-        accel = (float4)(0.0f);
-
+    // Accumulate acceleration on particle
     newtonOut[id].ax += accel.x;
     newtonOut[id].ay += accel.y;
     newtonOut[id].az += accel.z;
 }
     \end{lstlisting}
 
-    \caption{A simple sample force, which pushes outward on particles from a point, with falloff}
+    \caption{A simplified version of our 'normal' force kernel, which pushes outward on particles from a point, with falloff}
     \label{forceCode}
 \end{figure}
 
