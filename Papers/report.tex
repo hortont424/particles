@@ -44,9 +44,11 @@ It is important to understand that the system we've developed is purely for offl
 
 \section{Prior Art}
 
+\cite{1281670} discusses a system quite similar to ours --- they use the GPU to simulate large-particle-count systems, including computationally-intensive forces like n-body gravity --- however, they make one simplification which drastically improves performance: they assume that the particle data never needs to return to the CPU. This means that the extremely expensive copying to and from video memory which is done continually within our system is completely unnecessary, but also removes the ability to use the particle data in any flexible way (i.e. copying it to a file to be rendered later, etc.).
+
 \section{Implementation}
 
-The code for this paper is available under the 2-clause BSD license at:
+The code for this paper is available under the two-clause BSD license at:
 
 \url{http://github.com/hortont424/particles}
 
@@ -116,7 +118,33 @@ The primary design tool, which can be seen in figure \ref{fig:interpolator}, is 
 
 \subsection{Simulation}
 
-\subsubsection{Physics}
+The simulation phase is the heart of our project. Starting from a system description file (as shown in figure \ref{curveListing}), it eventually provides the position of each particle to either the previewing or rendering subsystems in a frame-by-frame manner. It involves various steps, which we'll outline below.
+
+\subsubsection{Parsing the .psys}
+
+The particle system description file, in JSON format, is parsed with Michael Clark's MIT-licensed {\bf json-c} library. All of the properties are read into internal data structures and validated, with reasonable defaults being filled in for missing values.
+
+\subsubsection{Load necessary kernels}
+
+There are quite a few OpenCL kernels included with this project; since the program now knows which ones it needs, it can now instantiate one kernel for each force, as well as one copy of the interpolator kernel.
+
+This is done by making a copy of the appropriate master kernel, all of which are loaded into a kernel library at the beginning of the process.
+
+\subsubsection{Randomly generate default particles}
+
+Some particle system have an initial set of particles --- some, because they don't include any emitters, others, because they simply want to start with some particles displayed. At the moment, the only parameter of the initial particles that can be controlled is the number; they are placed randomly in the unit cube with zero initial velocity. Eventually, it would be ideal to support manipulation of the range and location of random positions, as well as of the mass and initial velocity.
+
+\subsubsection{Evaluate emitters}
+
+Evaluation of emitters primarily involves adding new particles at the location of the particle and giving them an initial velocity (depending on the emitter's settings).
+
+Emitters are evaluated on the CPU (instead of the GPU). This is done primarily because of a limitation in OpenCL where one cannot resize a buffer from inside a kernel --- so, there would be no way to allocate space from inside an emitter kernel.
+
+One key performance consideration while evaluating emitters is how many new particles to allocate space for. If we're given a constant emitter, we don't want to allocate {\it just} enough space during each frame to fit the new particles, because then we'd have to allocate more space on each new frame. Instead, we allocate enough space for 10 frames of said emitter plus 1024 extra particles, which seems to stave off the performance-crushing problem of constant buffer reallocation, at least for the systems we've tested.
+
+\subsubsection{Evaluate forces}
+
+\subsubsection{Integrate positions}
 
 \subsection{Preview}
 
@@ -125,6 +153,8 @@ The primary design tool, which can be seen in figure \ref{fig:interpolator}, is 
     \caption{Example frame of preview output (simple gravity system); approximately 15,000 particles}
     \label{fig:preview}
 \end{figure}
+
+The preview subsystem takes the output from the simulator and uses an OpenGL view to draw all of the particles as uniformly sized red dots.
 
 \subsection{Rendering}
 
@@ -153,6 +183,8 @@ The primary design tool, which can be seen in figure \ref{fig:interpolator}, is 
 One improvement which would massively improve the performance of both the renderer and some of the forces would be the inclusion of a spatial hashing mechanism.
 
 For example, the renderer currently iterates over all of the particles to find the few which are very close to the pixel currently being rendered --- this operation is currently implemented in the most na\"{i}ve way possible, which is $O(n^2)$. The implementation of a kd-tree would make this $O(n^{2/3})$ instead --- quite a significant improvement, though at the expense of a measurable increase in complexity.
+
+Alternatively, \cite{1281670}'s "force splatting" approach might make even better use of the optimized hardware available, though it's unclear to me that the summing operation (which their approach improves) is actually the primary bottleneck.
 
 \subsection{Design Tools}
 

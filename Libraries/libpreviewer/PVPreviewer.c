@@ -126,18 +126,10 @@ static void display()
 
     if(simulator)
     {
-        glBegin(GL_POINTS);
-        for(unsigned long i = 0; i < simulator->elementCount; i++)
-        {
-            PAPhysicsParticle p = simulator->particles[i];
-            glVertex3f(p.x, p.y, p.z);
-            //printf("%d %f %f %f\n", i, p.x, p.y, p.z);
-        }
-        glEnd();
-        /*glEnableClientState(GL_VERTEX_ARRAY);
-        glVertexPointer(3, GL_FLOAT, sizeof(float) * 4, (float *)simulator->particles);
+        glEnableClientState(GL_VERTEX_ARRAY);
+        glVertexPointer(3, GL_FLOAT, sizeof(float) * 4, (float *)simulator->particles + 1);
         glDrawArrays(GL_POINTS, 0, simulator->elementCount);
-        glDisableClientState(GL_VERTEX_ARRAY);*/
+        glDisableClientState(GL_VERTEX_ARRAY);
     }
 
     // TODO: MAKE AN OPTION FOR IMAGE EXPORT
