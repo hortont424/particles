@@ -75,7 +75,7 @@ void REExportImage(int frame)
     }
 
     png_init_io(png_ptr, file);
-    png_set_IHDR(png_ptr, info_ptr, RESOLUTION, RESOLUTION, 8, PNG_COLOR_TYPE_GRAY,
+    png_set_IHDR(png_ptr, info_ptr, RESOLUTION, RESOLUTION, 8, PNG_COLOR_TYPE_RGBA,
                  PNG_INTERLACE_NONE, PNG_COMPRESSION_TYPE_DEFAULT,
                  PNG_FILTER_TYPE_DEFAULT);
     png_write_info(png_ptr, info_ptr);
@@ -110,14 +110,14 @@ void RERendererStart()
     showBuildLog(ctx, prog);
     COProgramSetGlobalCount(prog, RESOLUTION * RESOLUTION);
 
-    COBuffer * output = COBufferNew(ctx, RESOLUTION * RESOLUTION,
+    COBuffer * output = COBufferNew(ctx, RESOLUTION * RESOLUTION * 4,
                                     sizeof(PAFloat), false);
 
-    PAFloat * image = (PAFloat *)calloc(RESOLUTION * RESOLUTION, sizeof(PAFloat));
-    GLbyte * imageGL = (GLbyte *)calloc(RESOLUTION * RESOLUTION, sizeof(GLbyte));
+    PAFloat * image = (PAFloat *)calloc(RESOLUTION * RESOLUTION * 4, sizeof(PAFloat));
+    GLbyte * imageGL = (GLbyte *)calloc(RESOLUTION * RESOLUTION * 4, sizeof(GLbyte));
 
     for(unsigned int i = 0; i < RESOLUTION; i++)
-        rowPtrs[i] = &imageGL[i * RESOLUTION];
+        rowPtrs[i] = &imageGL[i * RESOLUTION * 4];
 
     printf("\n");
     gettimeofday(&startTime, NULL);
@@ -146,7 +146,7 @@ void RERendererStart()
 
         reSimulator = reFrameCallback();
 
-        //doRender = (step % 100 == 0);
+        doRender = (step % 100 == 0);
 
         if(doRender)
         {
@@ -160,7 +160,7 @@ void RERendererStart()
             COBufferGet(output, (void **)&image);
 
             // This whole nonsense is due to a bug in (maybe) the Apple-ATI OpenCL
-            for(int a = 0; a < RESOLUTION * RESOLUTION; a++)
+            for(int a = 0; a < RESOLUTION * RESOLUTION * 4; a++)
                 imageGL[a] = (GLbyte)image[a];
 
             REExportImage(step);

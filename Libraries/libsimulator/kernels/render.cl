@@ -36,6 +36,9 @@ __kernel void render(__global PAPhysicsParticle * input,
     float4 iloc, loc, realLoc;
     float dist;
 
+    if(id >= (resolution * resolution))
+        return;
+
     loc = (float4)((float)(id % resolution), (float)id / (float)resolution, 0.0f, 0.0f);
     realLoc = loc / ((float)resolution);
 
@@ -44,9 +47,12 @@ __kernel void render(__global PAPhysicsParticle * input,
     realLoc.x += (0.5 - (scale / 2.0f));
     realLoc.y += (0.5 - (scale / 2.0f));
 
-    output[id] = 0;
+    output[(id * 4) + 0] = 0;
+    output[(id * 4) + 1] = 0;
+    output[(id * 4) + 2] = 0;
+    output[(id * 4) + 3] = 255;
 
-    float colorVal = 0.0;
+    float mag = 0.0;
 
     for(int i = 0; i < count; i++)
     {
@@ -57,11 +63,12 @@ __kernel void render(__global PAPhysicsParticle * input,
         dist = distance(realLoc, iloc);
 
         if(dist < 0.1)
-            colorVal += (0.1 - dist) * 20;
+            mag = (0.1f - dist) * 20.0f;
+
+        output[(id * 4) + 0] += mag;
+        output[(id * 4) + 1] += mag * input[i].z;
     }
 
-    if(colorVal > 255)
-        output[id] = 255;
-    else
-        output[id] = colorVal;
+    for(int i = 0; i < 4; i++)
+        output[(id * 4) + i] = fmin(output[(id * 4) + i], 255.0f);
 }
