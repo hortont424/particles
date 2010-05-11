@@ -53,7 +53,7 @@ The code for this paper is available under the two-clause BSD license at:
 
 \url{http://github.com/hortont424/particles}
 
-It consists of about 3000 lines\footnote{According to {\it sloccount}} of C and Objective C, which encompass the curve editor and other design tools, an abstraction layer on top of OpenCL\footnote{the Open Computing Language, a framework for creating programs using a language similar to GLSL and run on the GPU}, and all of the code to drive simulation, preview, and rendering. In addition, there are about 350 {\bf [UPDATE THIS]} lines of OpenCL Kernel Language, which includes the code to apply each of the forces as well as the renderer.
+It consists of about 3000 lines\footnote{According to {\it sloccount}} of C and Objective C, which encompass the curve editor and other design tools, an abstraction layer on top of OpenCL\footnote{the Open Computing Language, a framework for creating programs using a language similar to GLSL and run on the GPU}, and all of the code to drive simulation, preview, and rendering. In addition, there are well over 300 lines of OpenCL Kernel Language, which includes the code to apply each of the forces as well as the renderer.
 
 \subsection{Particle Systems}
 
@@ -146,7 +146,7 @@ Evaluation of emitters primarily involves adding new particles at the location o
 
 Emitters are evaluated on the CPU (instead of the GPU). This is done primarily because of a limitation in OpenCL where one cannot resize a buffer from inside a kernel --- so, there would be no way to allocate space from inside an emitter kernel.
 
-One key performance consideration while evaluating emitters is how many new particles to allocate space for. If we're given a constant emitter, we don't want to allocate {\it just} enough space during each frame to fit the new particles, because then we'd have to allocate more space on each new frame. Instead, we allocate enough space for 10 frames of said emitter plus 1024 extra particles, which seems to stave off the performance-crushing problem of constant buffer reallocation, at least for the systems we've tested.
+One key performance consideration while evaluating emitters is how many new particles to allocate space for. If we're given a constant emitter, we don't want to allocate {\it just} enough space during each frame to fit the new particles, because then we'd have to allocate more space on each new frame. Instead, we allocate enough space for 10 frames of said emitter plus 1024\footnote{This is completely arbitrary, chosen by random dice roll!} extra particles, which seems to stave off the performance-crushing problem of constant buffer reallocation, at least for the systems we've tested.
 
 \subsubsection{Evaluate forces}
 
@@ -236,9 +236,15 @@ There are two main rendering modes at the moment: {\bf smooth}, and {\bf cloudy}
 
 {\bf Cloudy} simply increments the luminance of the pixel for each particle it finds that's within $\epsilon$ units, leading to 'circles of influence' around each particle, as seen in figure \ref{titlefig}.
 
-{\bf Smooth} weights the increase in luminance by the distance to the particle, according to $(0.1 - dist) \cdot 50$, as seen in figure \ref{smoothfig}.
+{\bf Smooth} weights the increase in luminance by the distance to the particle, according to $(0.1 - dist) \cdot k$, as seen in figure \ref{smoothfig}. $k$ is an 'exposure' constant, and is determined by the number of particles likely to be near each other at any given time.
 
 We've asked numerous people which of the two rendering modes they prefer, and have come up almost completely split, so they're both included for the time being.
+
+\begin{figure}
+    \includegraphics[width=84.5mm]{soft.png}
+    \caption{{\bf Smooth} rendering mode}
+    \label{smoothfig}
+\end{figure}
 
 \section{Performance \& Results}
 
@@ -276,6 +282,10 @@ Both the preview and rendering subsystems have the ability to output a PNG file 
 
 \section{Applications}
 
+The most likely application for GPU-side particle systems is games; however, our approach isn't targeted at games --- primarily because we copy the particle data back to the CPU, something unnecessarily expensive for a live game. Instead, our approach would more likely be useful to augment the current particle system tools within Blender, Apple's Motion, or Adobe's After Effects, all of which are meant for semi-offline work where the particle data is at some point needed for more generic computation on the CPU.
+
+All three of these tools currently have advanced particle systems, but it seems reasonable, given the speedup demonstrated within this paper, that they might benefit significantly by offloading at least some of their physical simulation to the GPU.
+
 \section{Future Work}
 
 \subsection{Spatial Hashing}
@@ -288,13 +298,25 @@ Alternatively, \cite{1281670}'s "force splatting" approach might make even bette
 
 \subsection{Design Tools}
 
-\subsection{Extended Properties}
+The design tools need a significant amount of work before they're usable. Most importantly, a method for exporting curves to files which the simulator can import and use to manipulate properties must be implemented.
+
+Additionally, there's no rulers on either axis in {\it Interpolator} --- these would be necessary before one could even imagine using it as a design tool.
+
+Really, the time constraints on this project made the implementation of both {\it Interpolator} {\bf and} the remainder of the project very unlikely, and, as such, there's a lot left to do. We're actually planning on continuing work in our free time over the summer, as this has turned out to be an eye-opening project.
 
 \subsection{Rendering Improvements}
 
-\subsection{Blender Integration}
+In the future, the renderer could be improved visually through a few means. Firstly, it would be a significant advantage to be able to support color image buffers --- this way, various sorts of information could be represented. For example, depth data could be encoded in one of the color channels, providing an easier way to understand the data.
+
+In addition, the ability to move the camera (and script the camera's movements with {\it Interpolator} curves) would make for much-improved visualizations, but would also require significant additional complication. However, we were planning on implementing raytracing through the particles in order to provide self-shadowing and other useful features, which would also imply the ability to move the camera.
 
 \section{Conclusion}
+
+After consuming quite a bit of processing power doing experiments, and after writing a few thousand lines of code, I think it's safe to say that we've introduced a feasible implementation of very-parallel particle simulation on the GPU. It's also quite clear that it's very possible to use this technology in order to speed up highly-physically-accurate simulations, especially ones with high algorithmic complexity, like the n-body problem.
+
+It's also clear that our implementation is not the be-all-end-all of particle simulators. There are many missing cases, and a few conditions in which our simulation actually negatively impacts performance, but it seems that an intelligent algorithm could certainly switch between target devices depending on the nature of the system, massively improving performance for many cases.
+
+We would have liked to have an extra month or two to work on this; it's likely that such time would have made for a much more interesting final result... alas, a semester is short, so we only had time for minor successes. There's always the summer...
 
 \bibliographystyle{acmsiggraph}
 \nocite{*}
