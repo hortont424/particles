@@ -1,4 +1,4 @@
-/* particles - simulator - main.c
+/* particles - simulator - wind.cl
  *
  * Copyright 2010 Tim Horton. All rights reserved.
  *
@@ -24,51 +24,37 @@
  * EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#include <stdio.h>
-#include <stdlib.h>
+#include "libparticles/PATypes.h"
 
-#include <liblog/liblog.h>
-#include <libparticles/libparticles.h>
-#include <libcomputer/libcomputer.h>
-#include <libsimulator/libsimulator.h>
-#include <libpreviewer/libpreviewer.h>
-#include <librenderer/librenderer.h>
-
-#define BENCHMARK_FRAMES 500
-
-static SMSimulator * simulator;
-
-SMSimulator * simulateFrame()
+__kernel void wind(__global PAPhysicsParticle * input,
+                   __global PAPhysicsParticle * output,
+                   __global PAPhysicsNewtonian * newtonIn,
+                   __global PAPhysicsNewtonian * newtonOut,
+                   __global PAPhysicsForce * force,
+                   const unsigned int count)
 {
-    SMSimulatorSimulate(simulator);
-    SMSimulatorPullData(simulator);
+    int id = get_global_id(0);
+    float4 fpoint, loc, accel;
+    float dist;
+    fpoint = loc = accel = (float4)(0.0f);
 
-    return simulator;
-}
+    if(id > count || input[id].lifetime == 0)
+        return;
 
-int main(int argc, const char ** argv)
-{
-    SMOptionsParse(argc, argv);
+    loc = (float4)(input[id].x, input[id].y, input[id].z, 0.0f);
+    fpoint = (float4)(force->particle.x, force->particle.y,
+                      force->particle.z, 0.0f);
 
-    simulator = SMSimulatorNewFromFile("../Systems/sample.psys");
-    SMSimulatorPushData(simulator);
+    accel = force->data.wind.strength * fpoint;
+    dist = distance(loc, fpoint);
+    accel = accel * (1.0f / powr(dist + 1.0f,
+                                 force->data.wind.falloff.strength));
 
-    if(simulatorOutputMode == SM_PREVIEWER_OUTPUT)
-    {
-        PVPreviewerInit(&argc, argv);
-        PVPreviewerSetFrameCallback(simulateFrame);
-        PVPreviewerStart();
-    }
-    else if(simulatorOutputMode == SM_RENDERER_OUTPUT)
-    {
-        RERendererSetFrameCallback(simulateFrame);
-        RERendererStart();
-    }
-    else if(simulatorOutputMode == SM_NO_OUTPUT)
-    {
-        for(unsigned int i = 0; i < BENCHMARK_FRAMES; i++)
-            SMSimulatorSimulate(simulator);
-    }
+    if(dist < force->data.wind.falloff.min ||
+       dist > force->data.wind.falloff.max)
+        accel = (float4)(0.0f);
 
-    return EXIT_SUCCESS;
+    newtonOut[id].ax += accel.x;
+    newtonOut[id].ay += accel.y;
+    newtonOut[id].az += accel.z;
 }

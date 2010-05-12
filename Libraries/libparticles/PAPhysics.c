@@ -92,6 +92,16 @@ PAPhysicsForce * PAPhysicsForceNewFromJSON(json_object * jsForce)
         if((jsFalloff = json_object_object_get(jsForce, "falloff")))
             readFalloff(jsFalloff, force->data.normal.falloff);
     }
+    else if(strcmp(typestr, "wind") == 0)
+    {
+        force = PAPhysicsForceNew(PAPhysicsWindType);
+
+        readJSONProperty(jsForce, force->data.normal, strength, 1.0);
+        readJSONProperty(jsForce, force->data.normal, noise, 0.0);
+
+        if((jsFalloff = json_object_object_get(jsForce, "falloff")))
+            readFalloff(jsFalloff, force->data.normal.falloff);
+    }
     else if(strcmp(typestr, "gravity") == 0)
     {
         force = PAPhysicsForceNew(PAPhysicsGravityType);

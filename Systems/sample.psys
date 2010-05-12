@@ -1,35 +1,39 @@
 {
     "initialParticles": {
-        "count": 16.0
+        "count": 16384
     },
     "forces": [
         {
-            "kernel": "normal",
-            "strength": 15.0,
+            "kernel": "wind",
+            "strength": 1.0,
             "noise": 0.0,
             "falloff" : {
-                "strength": 2.0
+                "strength": 0.0
             },
             "particle": {
                 "fixed": true,
-                "x": 0.5,
+                "x": 1.0,
+                "y": 0.0,
+                "z": 0.0
+            }
+        },
+        {
+            "kernel": "normal",
+            "strength": 200.0,
+            "noise": 0.0,
+            "falloff" : {
+                "strength": 5.0,
+                "max": 0.5
+            },
+            "particle": {
+                "fixed": true,
+                "x": 2.0,
                 "y": 0.5,
                 "z": 0.5
             }
         }
     ],
     "emitters": [
-        {
-            "birthRate": 20.0,
-            "lifetime": 40.0,
-            "initialVelocity": 0.1,
-            "particle": {
-                "fixed": true,
-                "x": 0.5,
-                "y": 0.5,
-                "z": 0.5
-            }
-        }
     ],
     "integration": {
         "kernel": "verlet",
