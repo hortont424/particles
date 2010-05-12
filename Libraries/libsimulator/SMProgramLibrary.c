@@ -37,6 +37,7 @@ extern const char * SMKernelSource_gravity;
 extern const char * SMKernelSource_nbody;
 extern const char * SMKernelSource_verlet;
 extern const char * SMKernelSource_wind;
+extern const char * SMKernelSource_boids;
 
 /**
  * Allocate the space required for an SMProgramLibrary, construct a mapping of
@@ -67,6 +68,8 @@ SMProgramLibrary * SMProgramLibraryNew(COContext * ctx)
                                 SMKernelSource_verlet);
     SMProgramLibraryLoadProgram(lib, PAPhysicsWindType, "wind",
                                 SMKernelSource_wind);
+    SMProgramLibraryLoadProgram(lib, PAPhysicsBoidsType, "boids",
+                                SMKernelSource_boids);
 
     return lib;
 }

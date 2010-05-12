@@ -1,35 +1,29 @@
 {
     "initialParticles": {
-        "count": 32768
+        "count": 1024
     },
     "forces": [
         {
-            "kernel": "wind",
-            "strength": 1.0,
-            "noise": 0.0,
-            "falloff" : {
-                "strength": 0.0
-            },
+            "kernel": "boids",
             "particle": {
                 "fixed": true,
-                "x": 1.0,
+                "x": 0.0,
                 "y": 0.0,
                 "z": 0.0
             }
         },
         {
             "kernel": "normal",
-            "strength": 200.0,
+            "strength": 50.0,
             "noise": 0.0,
             "falloff" : {
-                "strength": 5.0,
-                "max": 0.5
+                "strength": 2.0
             },
             "particle": {
                 "fixed": true,
-                "x": 2.0,
-                "y": 0.5,
-                "z": 0.0
+                "x": 1.0,
+                "y": 1.0,
+                "z": 0.5
             }
         }
     ],
