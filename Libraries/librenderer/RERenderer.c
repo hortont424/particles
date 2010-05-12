@@ -59,7 +59,7 @@ void REExportImage(int frame)
     png_structp png_ptr;
     png_infop info_ptr;
 
-    snprintf(filename, 1024, "/tmp/particles/%09d.png", frame);
+    snprintf(filename, 1024, "/Users/hortont/Desktop/particles-out/%09d.png", frame);
 
     file = fopen(filename, "wb");
     if(!file)

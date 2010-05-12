@@ -33,8 +33,10 @@ __kernel void render(__global PAPhysicsParticle * input,
                      int resolution)
 {
     int id = get_global_id(0);
-    float4 iloc, loc, realLoc;
+    float4 iloc, loc, realLoc, position, oldPosition;
     float dist;
+
+    position = oldPosition = (float4)(0.0f);
 
     if(id >= (resolution * resolution))
         return;
@@ -59,14 +61,26 @@ __kernel void render(__global PAPhysicsParticle * input,
         if(input[i].lifetime == 0)
             continue;
 
-        iloc = (float4)(input[i].x, input[i].y, 0.0f/*input[i].z*/, 0.0f);
+        iloc = (float4)(input[i].x, input[i].y, 0.0f, 0.0f);
         dist = distance(realLoc, iloc);
 
-        if(dist < 0.1)
-            mag = (0.1f - dist) * 20.0f;
+        position.x = input[i].x;
+        position.y = input[i].y;
+        position.z = input[i].z;
+        oldPosition.x = newton[i].ox;
+        oldPosition.y = newton[i].oy;
+        oldPosition.z = newton[i].oz;
 
-        output[(id * 4) + 0] += mag;
-        output[(id * 4) + 1] += mag * input[i].z;
+        float veloc = distance(position, oldPosition) * 8.0;
+
+        if(dist < 0.005)
+        {
+            mag = (0.005 - dist) * 200000.0f;
+
+            output[(id * 4) + 0] += mag;
+            output[(id * 4) + 1] += fabs(0.5f + input[i].z) * 50.0f;
+            output[(id * 4) + 2] += veloc;
+        }
     }
 
     for(int i = 0; i < 4; i++)
