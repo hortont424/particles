@@ -73,12 +73,12 @@ __kernel void render(__global PAPhysicsParticle * input,
 
         float veloc = distance(position, oldPosition) * 8.0;
 
-        if(dist < 0.005)
+        if(dist < 0.1)
         {
-            mag = (0.005 - dist) * 200000.0f;
+            mag = (0.1 - dist) * 20.0f;
 
             output[(id * 4) + 0] += mag;
-            output[(id * 4) + 1] += fabs(0.5f + input[i].z) * 50.0f;
+            output[(id * 4) + 1] += input[i].z * 0.5f;
             output[(id * 4) + 2] += veloc;
         }
     }
