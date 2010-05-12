@@ -109,7 +109,7 @@ void timer(int extra)
 
 static void display()
 {
-    float zoom = 1.0;
+    float zoom = 0.2;
 
     glClearColor(1.0, 1.0, 1.0, 1.0);
     glClear(GL_COLOR_BUFFER_BIT);
