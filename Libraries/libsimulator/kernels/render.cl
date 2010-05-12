@@ -26,6 +26,80 @@
 
 #include "libparticles/PATypes.h"
 
+// HSV2RGB from http://snipplr.com/view/14590/hsv-to-rgb/
+float4 HSV2RGB(float h, float s, float v)
+{
+    float4 rgb = (float4)0.0f;
+
+    float r, g, b;
+    float f, p, q, t;
+    float i;
+
+    h = fmax(0.0f, fmin(360.0f, h));
+    s = fmax(0.0f, fmin(100.0f, s));
+    v = fmax(0.0f, fmin(100.0f, v));
+
+    s /= 100.0f;
+    v /= 100.0f;
+
+    if(s == 0)
+    {
+        r = g = b = v;
+    }
+    else
+    {
+        h /= 60.0f;
+        i = floor(h);
+        f = h - i;
+        p = v * (1.0f - s);
+        q = v * (1.0f - s * f);
+        t = v * (1.0f - s * (1.0f - f));
+
+        if(i == 0)
+        {
+            r = v;
+            g = t;
+            b = p;
+        }
+        else if(i == 1)
+        {
+            r = q;
+            g = v;
+            b = p;
+        }
+        else if(i == 2)
+        {
+            r = p;
+            g = v;
+            b = t;
+        }
+        else if(i == 3)
+        {
+            r = p;
+            g = q;
+            b = v;
+        }
+        else if(i == 4)
+        {
+            r = t;
+            g = p;
+            b = v;
+        }
+        else
+        {
+            r = v;
+            g = p;
+            b = q;
+        }
+    }
+
+    rgb.x = r;
+    rgb.y = g;
+    rgb.z = b;
+
+    return rgb;
+}
+
 __kernel void render(__global PAPhysicsParticle * input,
                      __global PAPhysicsNewtonian * newton,
                      __global PAFloat * output,
@@ -49,12 +123,15 @@ __kernel void render(__global PAPhysicsParticle * input,
     realLoc.x += (0.5 - (scale / 2.0f));
     realLoc.y += (0.5 - (scale / 2.0f));
 
+    realLoc.x += 1.5;/// WRONGGGGGGGG
+
     output[(id * 4) + 0] = 0;
     output[(id * 4) + 1] = 0;
     output[(id * 4) + 2] = 0;
     output[(id * 4) + 3] = 255;
 
     float mag = 0.0;
+    float4 color;
 
     for(int i = 0; i < count; i++)
     {
@@ -73,13 +150,24 @@ __kernel void render(__global PAPhysicsParticle * input,
 
         float veloc = distance(position, oldPosition) * 8.0;
 
-        if(dist < 0.1)
+        if(dist < 0.2)
         {
-            mag = (0.1 - dist) * 20.0f;
+            mag = (0.2 - dist) * 1.0f;
+            float zpos = input[i].z;
+            /*if(zpos >= 0.0 && zpos <= 0.7)
+                zpos = 0.0;
+            else
+                zpos = fabs(zpos * 10.0f);*/
 
-            output[(id * 4) + 0] += mag;
-            output[(id * 4) + 1] += input[i].z * 0.5f;
-            output[(id * 4) + 2] += veloc;
+            color = HSV2RGB(zpos * 300, 100, 100 * (mag + (zpos / 3.0)));
+
+            //output[(id * 4) + 0] += mag;
+            //output[(id * 4) + 1] += input[i].z * 0.5f;
+            //output[(id * 4) + 2] += veloc;
+
+            output[(id * 4) + 0] += color.x;
+            output[(id * 4) + 1] += color.y;
+            output[(id * 4) + 2] += color.z;
         }
     }
 
