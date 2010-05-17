@@ -554,6 +554,15 @@ NSInteger controlPointSort(id point1, id point2, void * ctx)
     [[NSColor whiteColor] setFill];
     NSRectFill(dirtyRect);
 
+    NSRect gridFrame = [self frame];
+    // Draw horizontal grid (vertical lines)
+    for(unsigned int i = 0; i < gridFrame.size.width; i += 30)
+    {
+        NSRect lineRect = NSMakeRect(gridFrame.origin.x + i, gridFrame.origin.y, 1, gridFrame.size.height);
+        [[NSColor colorWithDeviceWhite:0.9 alpha:1.0] setFill];
+        NSRectFill(lineRect);
+    }
+
     for(IPCurve * curve in curves)
         [self drawCurve:curve];
 
